@@ -1,36 +1,21 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+title: Your awesome title
+email: your-email@domain.com
+description: > # this means to ignore newlines until "baseurl:"
+  Write an awesome description for your new site here. You can edit this
+  line in _config.yml. It will appear in your document head meta (for
+  Google search results) and in your feed.xml site description.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://yourdomain.com" # the base hostname & protocol for your site
+twitter_username: jekyllrb
+github_username:  jekyll
+
+# Build settings
 markdown: kramdown
-pygments: true
-safe: false
-permalink: /posts/:title.html
-exclude:
-  - README.md
-
-name: codelover
-host: http://liguobao.github.io/
-desc: 白日梦.码农.软狗
-
-custom:
-    category:
-        default: Default Category
-        another: Another Category
-    categories:
-      - name:  default
-        title: Default Category
-
-      - name:  another
-        title: Another Category
-
-    scrollingLoadCount: 2                          # 滚屏自动加载文章数量，“0”为关闭
-
-meta:
-    author:
-        name: liguobao
-        email: codelover@qq.com
-        disqus: your-disqus-short-name              # Disqus缩略标识
-        gcse: 000346898720731947188:13h55x32l0y     # Google自定义搜索标识ID
-        github: liguobao                 # GitHub账号
-        gravatar: 1cd8c12591616d8c22aaa624f8c07834  # Gravatar头像标识
-
-    disqus: disqus.com/embed.js                     # Disqus评论的JS地址
-    gapi: http://www.google.com/jsapi               # Google API地址
-    gravatar: http://en.gravatar.com/avatar/        # Gravatar头像服务器地址
