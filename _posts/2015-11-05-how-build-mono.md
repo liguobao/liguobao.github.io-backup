@@ -1,3 +1,10 @@
+---
+layout: post
+title: how to build mono
+category: default
+---
+
+
  从github上下载了mono的源码，然后打算编译了。
 百度了一下教程，我去...居然没有教程。
 换bing搜索一下，我去...还是没有。
