@@ -20,7 +20,7 @@ custom:
       - name:  another
         title: Another Category
 
-    scrollingLoadCount: 5                          # 滚屏自动加载文章数量，“0”为关闭
+    scrollingLoadCount: 3                          # 滚屏自动加载文章数量，“0”为关闭
 
 meta:
     author:
