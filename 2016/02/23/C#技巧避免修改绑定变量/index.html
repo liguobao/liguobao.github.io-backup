@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hexo</title>
+  <title>.NET lmabda避免修改绑定变量 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##.NET lmabda避免修改绑定变量
+  <meta name="description" content="先看一段代码
 #region test1 闭包
 
 public static void test1()
@@ -14,12 +14,12 @@ public static void test1()
     Func&amp;lt;IEnumerable&amp;lt;int&amp;gt;&amp;gt; sequence =()=&amp;gt;GetEnumrableInt(index);
 
     index = 20;
-    foreach(int">
+    foreach(int n in sequence(">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/2016/02/22/避免修改绑定变量/index.html">
+<meta property="og:title" content=".NET lmabda避免修改绑定变量">
+<meta property="og:url" content="http://yoursite.com/2016/02/23/C#技巧避免修改绑定变量/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="##.NET lmabda避免修改绑定变量
+<meta property="og:description" content="先看一段代码
 #region test1 闭包
 
 public static void test1()
@@ -28,11 +28,11 @@ public static void test1()
     Func&amp;lt;IEnumerable&amp;lt;int&amp;gt;&amp;gt; sequence =()=&amp;gt;GetEnumrableInt(index);
 
     index = 20;
-    foreach(int">
-<meta property="og:updated_time" content="2016-02-22T14:52:41.902Z">
+    foreach(int n in sequence(">
+<meta property="og:updated_time" content="2016-02-23T14:27:28.783Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="##.NET lmabda避免修改绑定变量
+<meta name="twitter:title" content=".NET lmabda避免修改绑定变量">
+<meta name="twitter:description" content="先看一段代码
 #region test1 闭包
 
 public static void test1()
@@ -41,21 +41,18 @@ public static void test1()
     Func&amp;lt;IEnumerable&amp;lt;int&amp;gt;&amp;gt; sequence =()=&amp;gt;GetEnumrableInt(index);
 
     index = 20;
-    foreach(int">
+    foreach(int n in sequence(">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="/css/style.css" type="text/css">
   
 
 </head>
-
 <body>
   <div id="container">
     <div id="wrap">
@@ -81,7 +78,7 @@ public static void test1()
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -90,19 +87,33 @@ public static void test1()
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-避免修改绑定变量" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-C#技巧避免修改绑定变量" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/02/22/避免修改绑定变量/" class="article-date">
-  <time datetime="2016-02-22T15:02:37.441Z" itemprop="datePublished">2016-02-22</time>
+    <a href="/2016/02/23/C#技巧避免修改绑定变量/" class="article-date">
+  <time datetime="2016-02-23T14:45:12.250Z" itemprop="datePublished">2016-02-23</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/net/">.net</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      .NET lmabda避免修改绑定变量
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##.NET lmabda避免修改绑定变量</p>
+        <p>先看一段代码</p>
 <pre><code>#region test1 闭包
 
 public static void test1()
@@ -316,7 +327,7 @@ public void test2_1()
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/02/22/避免修改绑定变量/" data-id="ciky6yj6e0003kounltn5u7h5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/02/23/C#技巧避免修改绑定变量/" data-id="cikzixvwq0003z8un0lxxdibo" class="article-share-link">Share</a>
       
       
     </footer>
@@ -325,7 +336,7 @@ public void test2_1()
     
 <nav id="article-nav">
   
-    <a href="/2016/02/22/LINQ 优点 总结(转载)/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/02/23/C#-LINQ优点总结(转载)/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
@@ -335,9 +346,9 @@ public void test2_1()
     </a>
   
   
-    <a href="/2016/02/22/NET-Join/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2016/02/23/C#-类字段与类属性/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">.net-join</div>
+      <div class="article-nav-title">.NET 类字段与类属性</div>
     </a>
   
 </nav>
@@ -351,49 +362,46 @@ public void test2_1()
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">分類</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/another/">another</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/net/">.net</a><span class="category-list-count">4</span></li></ul>
     </div>
   </div>
 
-
   
     
-
   
     
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">彙整</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
-
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
+    <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2016/02/22/hello-world/">Hello World</a>
+            <a href="/2016/02/23/C#-Join/">.NET join用法</a>
           </li>
         
           <li>
-            <a href="/2016/02/22/LINQ 优点 总结(转载)/">.net LINQ</a>
+            <a href="/2016/02/23/C#-LINQ优点总结(转载)/">.net LINQ</a>
           </li>
         
           <li>
-            <a href="/2016/02/22/避免修改绑定变量/">(no title)</a>
+            <a href="/2016/02/23/C#技巧避免修改绑定变量/">.NET lmabda避免修改绑定变量</a>
           </li>
         
           <li>
-            <a href="/2016/02/22/NET-Join/">.net-join</a>
+            <a href="/2016/02/23/C#-类字段与类属性/">.NET 类字段与类属性</a>
           </li>
         
       </ul>

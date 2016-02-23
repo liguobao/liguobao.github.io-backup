@@ -3,38 +3,35 @@
 <head>
   <meta charset="utf-8">
   
-  <title>.net-join | Hexo</title>
+  <title>.NET join用法 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="#.NET   Join 连接：内连接、外连接、左连接、右连接。SQL的Join这里就不多说了，今天主要是看一下LINQ的Join用法，以及Enumerable.Join()的用法。
 Join用于连接数据，首先就是数据之间有联系咯。
 先说Enumerable.Join()。参数类型如下：            public static IEnumerable Join            (">
 <meta property="og:type" content="article">
-<meta property="og:title" content=".net-join">
-<meta property="og:url" content="http://yoursite.com/2016/02/22/NET-Join/index.html">
+<meta property="og:title" content=".NET join用法">
+<meta property="og:url" content="http://yoursite.com/2016/02/23/C#-Join/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="#.NET   Join 连接：内连接、外连接、左连接、右连接。SQL的Join这里就不多说了，今天主要是看一下LINQ的Join用法，以及Enumerable.Join()的用法。
 Join用于连接数据，首先就是数据之间有联系咯。
 先说Enumerable.Join()。参数类型如下：            public static IEnumerable Join            (">
-<meta property="og:updated_time" content="2015-11-06T14:34:07.639Z">
+<meta property="og:updated_time" content="2016-02-23T14:15:44.428Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content=".net-join">
+<meta name="twitter:title" content=".NET join用法">
 <meta name="twitter:description" content="#.NET   Join 连接：内连接、外连接、左连接、右连接。SQL的Join这里就不多说了，今天主要是看一下LINQ的Join用法，以及Enumerable.Join()的用法。
 Join用于连接数据，首先就是数据之间有联系咯。
 先说Enumerable.Join()。参数类型如下：            public static IEnumerable Join            (">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="/css/style.css" type="text/css">
   
 
 </head>
-
 <body>
   <div id="container">
     <div id="wrap">
@@ -60,7 +57,7 @@ Join用于连接数据，首先就是数据之间有联系咯。
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -69,14 +66,14 @@ Join用于连接数据，首先就是数据之间有联系咯。
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-NET-Join" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-C#-Join" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/02/22/NET-Join/" class="article-date">
-  <time datetime="2016-02-22T15:02:37.441Z" itemprop="datePublished">2016-02-22</time>
+    <a href="/2016/02/23/C#-Join/" class="article-date">
+  <time datetime="2016-02-23T14:45:23.220Z" itemprop="datePublished">2016-02-23</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/another/">another</a>
+    <a class="article-category-link" href="/categories/net/">.net</a>
   </div>
 
   </div>
@@ -87,7 +84,7 @@ Join用于连接数据，首先就是数据之间有联系咯。
         
   
     <h1 class="article-title" itemprop="name">
-      .net-join
+      .NET join用法
     </h1>
   
 
@@ -139,7 +136,7 @@ Join用于连接数据，首先就是数据之间有联系咯。
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/02/22/NET-Join/" data-id="ciky6yj6j0004koun2hagdnrb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/02/23/C#-Join/" data-id="cikzixvvv0000z8unsw0ywb0i" class="article-share-link">Share</a>
       
       
     </footer>
@@ -148,15 +145,11 @@ Join用于连接数据，首先就是数据之间有联系咯。
     
 <nav id="article-nav">
   
-    <a href="/2016/02/22/避免修改绑定变量/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          (no title)
-        
-      </div>
-    </a>
   
+    <a href="/2016/02/23/C#-LINQ优点总结(转载)/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">.net LINQ</div>
+    </a>
   
 </nav>
 
@@ -169,49 +162,46 @@ Join用于连接数据，首先就是数据之间有联系咯。
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">分類</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/another/">another</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/net/">.net</a><span class="category-list-count">4</span></li></ul>
     </div>
   </div>
 
-
   
     
-
   
     
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">彙整</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
-
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
+    <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2016/02/22/hello-world/">Hello World</a>
+            <a href="/2016/02/23/C#-Join/">.NET join用法</a>
           </li>
         
           <li>
-            <a href="/2016/02/22/LINQ 优点 总结(转载)/">.net LINQ</a>
+            <a href="/2016/02/23/C#-LINQ优点总结(转载)/">.net LINQ</a>
           </li>
         
           <li>
-            <a href="/2016/02/22/避免修改绑定变量/">(no title)</a>
+            <a href="/2016/02/23/C#技巧避免修改绑定变量/">.NET lmabda避免修改绑定变量</a>
           </li>
         
           <li>
-            <a href="/2016/02/22/NET-Join/">.net-join</a>
+            <a href="/2016/02/23/C#-类字段与类属性/">.NET 类字段与类属性</a>
           </li>
         
       </ul>
