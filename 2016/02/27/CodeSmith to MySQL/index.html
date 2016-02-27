@@ -17,7 +17,7 @@
 <meta property="og:image" content="http://a3.qpic.cn/psb?/V13bZOxq1m5DxB/ikI1fSxAYklZgi1PmtPVTQqpHcZ0KTQHgN7LrPJaKNo!/b/dG4AAAAAAAAA&bo=fgLGAH4CxgADCSw!&rf=viewer_4">
 <meta property="og:image" content="http://a1.qpic.cn/psb?/V13bZOxq1m5DxB/1XlywVcAyPW6y*6sO1QU.gkuidIqPkx.f70JsaijlU0!/b/dIwBAAAAAAAA&bo=MQIcAjECHAIDCSw!&rf=viewer_4">
 <meta property="og:image" content="http://a2.qpic.cn/psb?/V13bZOxq1m5DxB/CGQI8amVPz7K7Vyb05kp*0ti3mbnPWz4Q5xdUPBQSl0!/b/dHIBAAAAAAAA&bo=MQK0AjECtAIDCSw!&rf=viewer_4">
-<meta property="og:updated_time" content="2016-02-27T09:54:00.729Z">
+<meta property="og:updated_time" content="2016-02-27T10:09:10.670Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CodeSmith for MySQL template">
 <meta name="twitter:description" content="对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。
@@ -70,7 +70,7 @@
         <section id="main"><article id="post-CodeSmith to MySQL" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/02/27/CodeSmith to MySQL/" class="article-date">
-  <time datetime="2016-02-27T09:54:00.729Z" itemprop="datePublished">2016-02-27</time>
+  <time datetime="2016-02-27T10:09:10.670Z" itemprop="datePublished">2016-02-27</time>
 </a>
     
   <div class="article-category">
@@ -125,7 +125,7 @@
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;%@ CodeTemplate Language=&#34;C#&#34; TargetLanguage=&#34;C#&#34; &#10;Src=&#34;ToolsCodeTemplate.cs&#34; Inherits=&#34;ToolsCodeTemplate&#34;%&#62;&#10;&#60;%@ Property Name=&#34;TargetTable&#34; Type=&#34;SchemaExplorer.TableSchema&#34; &#10;Category=&#34;Context&#34; Description=&#34;TargetTable that the object is &#10;based on.&#34; %&#62;&#10;&#60;%@ Property Name=&#34;ModelsNamespace&#34; Default=&#34;Model&#34; &#10;Type=&#34;System.String&#34; Category=&#34;Context&#34; Description=&#34;TargetTable &#10;that the object is based on.&#34; %&#62;&#10;&#60;%@ Assembly Name=&#34;SchemaExplorer&#34; %&#62;&#10;&#60;%@ Assembly Name=&#34;System.Data&#34; %&#62;&#10;&#60;%@ Import Namespace=&#34;SchemaExplorer&#34; %&#62;&#10;&#60;%@ Import Namespace=&#34;System.Data&#34; %&#62;&#10;&#60;% PrintHeader(); %&#62;&#10;using System;&#10;using System.Collections.Generic;&#10;using System.Text;&#10;&#10;namespace &#60;%= ModelsNamespace %&#62;&#10;&#123;&#9;&#10;&#9;[Serializable()]&#10;&#9;public class &#60;%= GetModelClassName() %&#62;&#10;&#9;&#123;&#10;&#9;    &#60;% &#10;&#9;&#9;foreach (ColumnSchema column in TargetTable.Columns)&#10;&#9;   &#123;&#10;&#9;&#9;%&#62;&#10;&#9;&#9;&#9;private &#60;%= GetPropertyType(column) %&#62;  _&#60;%= &#10;&#9;&#9;&#9;GetPropertyName(column) %&#62;;&#9;&#9;&#9;&#10;&#9;&#9;&#60;%&#10;&#9;&#9;&#125;&#10;&#9;&#9;%&#62;&#10;&#9;    &#10;&#9;&#9;&#60;% &#10;&#9;&#9;foreach (ColumnSchema column in TargetTable.Columns)&#10;&#9;&#9;&#123;&#10;&#9;&#9;%&#62;&#10;&#9;&#9;&#9;public &#60;%= GetPropertyType(column) %&#62; &#60;%= &#10;&#9;&#9;&#9;GetPropertyName(column) %&#62;&#10;&#9;&#9;&#9;&#123;&#10;&#9;&#9;&#9;&#9; get &#123; return _&#60;%= GetPropertyName(column) %&#62;; &#125;&#10;&#9;             set &#123; _&#60;%= GetPropertyName(column) %&#62; = value; &#125;&#10;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#60;%&#10;&#9;&#9;&#125;&#10;&#9;&#9;%&#62;&#9;&#10;&#9;&#125;&#10;&#125;&#10;&#60;script runat=&#34;template&#34;&#62;&#10;public string GetModelClassName()&#10;&#123;&#10;&#9;return GetModelClassName(TargetTable);&#10;&#125;&#10;&#10;public override string GetFileName()&#10;&#123;&#10;&#9;return this.GetModelClassName(this.TargetTable) + &#34;.cs&#34;;&#10;&#125;&#10;&#10;&#60;/script&#62;</span><br></pre></td></tr></table></figure>
 <p>获取表中字段名使用的是GetPropertyName(column)，咦，在哪实现了这个东西呢？回去翻一下文件，哦，还有一个ToolsCodeTemplate.cs文一直没管呢。</p>
 <p>果然，GetPropertyName(column)在这里。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public string GetPropertyName(ColumnSchema column)&#10;&#123;&#10;&#10;    return GetNameFromDBFieldName(column);&#10;&#125;&#10;public string GetNameFromDBFieldName(ColumnSchema column)&#10;&#123;&#10;&#9;return column.Name;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public string GetPropertyName(ColumnSchema column)&#10;&#123;&#10;   return GetNameFromDBFieldName(column);&#10;&#125;&#10;public string GetNameFromDBFieldName(ColumnSchema column)&#10;&#123;&#10;&#9;return column.Name;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>读取列名就是这么简单，那么我们对应写一个函数读取一下列注释，然后再model里面调用一下不好了。</p>
 <p>又查了一下资料，</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public string GetColumnComment(ColumnSchema column)&#10;&#123;&#10;     return column.Description;&#10;&#125;</span><br></pre></td></tr></table></figure>
@@ -143,7 +143,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/02/27/CodeSmith to MySQL/" data-id="cil4xwjrh0000hgundv1qpzhb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/02/27/CodeSmith to MySQL/" data-id="cil4yk3iv0000ncun11z8ahxb" class="article-share-link">Share</a>
       
       
     </footer>
