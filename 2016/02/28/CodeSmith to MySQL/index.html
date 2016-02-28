@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   
-  <title>CodeSmith for MySQL template | Hexo</title>
+  <title>CodeSmith for MySQL template | codelover&#39;t blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。
 以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CodeSmith for MySQL template">
-<meta property="og:url" content="http://yoursite.com/2016/02/28/CodeSmith to MySQL/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://codelover.link/2016/02/28/CodeSmith to MySQL/index.html">
+<meta property="og:site_name" content="codelover't blog">
 <meta property="og:description" content="对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。
 以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑">
 <meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/20160228-1.png">
@@ -23,7 +23,7 @@
 <meta name="twitter:description" content="对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。
 以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="codelover&#39;t blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -41,7 +41,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">codelover&#39;t blog</a>
       </h1>
       
     </div>
@@ -61,7 +61,7 @@
         <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://codelover.link"></form>
       </div>
     </div>
   </div>
@@ -97,7 +97,7 @@
 <p><br><br>以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。<br><br><br>不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。<br><br><br>再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑合能用。起初也懒，codesmith语法不熟，就没想过去修改一下了。<br><br> 最近又要用到这套东西，于是决定还是去修改一番，更便于使用。</p>
 <p>这个文章就主要讲一下修改过程，顺便说一下codesmith的简单语法。</p>
 <p>先说一下操作步骤：</p>
-<p>把模板的文件夹扔到codesmith模板文件的路径下，接着打开Codesmith，找到刚扔过去的文件夹，选择Main.cst,右键-execute-选择对应的MySQL库-选中表。<br><br>（注：codesmith连接MySQL有问题的话，<br><br>移步这里解决 <a href="http://codelover.link/2016/02/25/CodeSmith%E8%BF%9E%E6%8E%A5MySQL%E6%8A%A5%E9%94%99%E2%80%9C%E6%89%BE%E4%B8%8D%E5%88%B0%E8%AF%B7%E6%B1%82%E7%9A%84%20.Net%20Framework%20Data%20Provider%E3%80%82%E5%8F%AF%E8%83%BD%E6%B2%A1%E6%9C%89%E5%AE%89%E8%A3%85%E3%80%82%E2%80%9D%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" target="_blank" rel="external">CodeSmith 连接MySQL数据库报“can’t find .net framework data provider”</a></p>
+<p>把模板的文件夹扔到codesmith模板文件的路径下，接着打开Codesmith，找到刚扔过去的文件夹，选择Main.cst,右键-execute-选择对应的MySQL库-选中表。<br><br>（注：codesmith连接MySQL有问题的话，<br><br>移步这里解决 <a href="http://codelover.link/2016/02/25/CodeSmith%E8%BF%9E%E6%8E%A5MySQL%E6%8A%A5%E9%94%99%E2%80%9C%E6%89%BE%E4%B8%8D%E5%88%B0%E8%AF%B7%E6%B1%82%E7%9A%84%20.Net%20Framework%20Data%20Provider%E3%80%82%E5%8F%AF%E8%83%BD%E6%B2%A1%E6%9C%89%E5%AE%89%E8%A3%85%E3%80%82%E2%80%9D%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">CodeSmith 连接MySQL数据库报“can’t find .net framework data provider”</a></p>
 <p>如下图：<br><img src="http://7xrayk.com1.z0.glb.clouddn.com/20160228-1.png" alt="1"></p>
 <p>然后点击Generate就能顺利生成model/dal/bll了。</p>
 <p>生成代码结构如下：<br><img src="http://7xrayk.com1.z0.glb.clouddn.com/20160228-2.png" alt="2"></p>
@@ -143,7 +143,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/02/28/CodeSmith to MySQL/" data-id="cil4z1cd60000scun5vz5zzw9" class="article-share-link">Share</a>
+      <a data-url="http://codelover.link/2016/02/28/CodeSmith to MySQL/" data-id="cil6pb6uw0000cgunh8g2o00f" class="article-share-link">Share</a>
       
       
     </footer>
@@ -163,7 +163,26 @@
   
 </article>
 
-</section>
+
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-CodeSmith to MySQL" data-title="CodeSmith for MySQL template" data-url="http://codelover.link/2016/02/28/CodeSmith to MySQL/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'codelover'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
+ </section>
         
           <aside id="sidebar">
   
@@ -184,7 +203,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a><span class="archive-list-count">9</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">9</span></li></ul>
     </div>
   </div>
 
@@ -227,7 +246,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 John Doe<br>
+      &copy; 2016 李国宝<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
