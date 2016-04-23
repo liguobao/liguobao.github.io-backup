@@ -61,6 +61,110 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-类字段与类属性" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/01/类字段与类属性/" class="article-date">
+  <time datetime="2016-03-01T12:49:34.588Z" itemprop="datePublished">2016-03-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/net/">.net</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/01/类字段与类属性/">.NET 类字段与类属性</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#.NET 类字段与类属性<br>@(.NET)[基础|字段|属性]</p>
+<p>##字段<br>字段表示只读或可读/可写的数据值。<br>字段可以是静态的，这种字段被认为是类型状态的一部分。<br>字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。<br>强烈建议把字段声明为私有，防止类型或对象的状态被类型外部代码破坏。</p>
+<p>##属性<br>属性允许用简单的、字段风格的语法设置或查询类型或对象的逻辑状态，同时保证状态不被破坏。<br>作用于类型称为静态属性，作用于对象称为实例属性。<br>属性可以无参，也可以有多个参数（相当少见，但集合类用的多）。 </p>
+<pre><code>using System;
+
+public sealed class SomeType
+{                            //  1  
+// Nested class  
+   private class SomeNestedType { }                //  2  
+
+   // Constant, read­only, and static read/write field   
+   private const Int32 c_SomeConstant = 1;            //  3     
+
+   private readonly String m_SomeReadOnlyField = &quot;2&quot;;     //  4    
+
+   private static Int32 s_SomeReadWriteField = 3;      //  5  
+
+   // Type constructor  
+   static SomeType() { }                                  //  6  
+
+   // Instance constructors  
+   public SomeType(Int32 x) { }                           //  7  
+
+   public SomeType() { }                                  //  8 
+
+   // Instance and static methods  
+   private String InstanceMethod() { return null; }       // 9   
+
+   public static void Main() { }                        // 10 
+
+   // Instance property  
+   public Int32 SomeProp
+   {                                // 11      
+       get { return 0; }                                // 12      
+       set { }                                          // 13  
+   }
+
+   // Instance parameterful property (indexer) 
+   public Int32 this[String s]
+   {                          // 14       
+       get { return 0; }                                // 15        
+       set { }                                          // 16  
+   }
+
+   // Instance event  
+   public event EventHandler SomeEvent;                  // 17  
+}
+</code></pre><p><img src="https://kekaeq-ch3301.files.1drv.com/y3meEWWaK-o9SNfr_fT71Xr3YrPqO1LIswWqMvlHyUxWeH8P0PtXsQlfRkDnGshlMJIy2gPsxNet14efOPOuX-dHmZhCTg8PXyELJR9tnayye4LeEQ6F997b8pSI84wBR6nmmOF8IAr92oKWk36-f8alkEj9TrDQbiMoKGQwO5MTFY/20150105.jpg?psid=1" alt="enter image description here"></p>
+<p><img src="https://kekaeq-ch3301.files.1drv.com/y3mN8FseIEbAaQfT8ynEIc4nYsOUK0p0IN7Hp39imVSZXNQXlSfAYmvaC-9bDM3Hq6rPCV1XgrgvoST8wXejwARXaDmXptZpb_nyWwUzWK1rzaJ6fSsYfnP0icRKUclaVxnlltOJSQiuTFO7_fCfabmv0AsrgL5sLo6GdVJmpd-L10/QQ%E5%9B%BE%E7%89%8720151003165909.jpg?psid=1" alt="enter image description here"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://codelover.link/2016/03/01/类字段与类属性/" data-id="cilgg02a00003s0unhqc6j549" class="article-share-link">Share</a>
+      
+      
+	  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+	  
+    </footer>
+  </div>
+  
+</article>
+
+
+
+ 
+  
     <article id="post-CodeSmith连接MySQL报错“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/03/01/CodeSmith连接MySQL报错“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法/" class="article-date">
@@ -239,7 +343,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/net/">.net</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/CodeSmith/">CodeSmith</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GC/">GC</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/jexus/">jexus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nothing/">nothing</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ubuntu/">ubuntu</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/net/">.net</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/CodeSmith/">CodeSmith</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GC/">GC</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/jexus/">jexus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nothing/">nothing</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ubuntu/">ubuntu</a><span class="category-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -252,7 +356,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">8</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -264,23 +368,23 @@
       <ul>
         
           <li>
+            <a href="/2016/04/23/mono-webreques-https-exception/">mono webreques https exception</a>
+          </li>
+        
+          <li>
+            <a href="/2016/04/23/Jexus支持HTTPS协议/">Jexus支持HTTPS协议</a>
+          </li>
+        
+          <li>
+            <a href="/2016/04/23/ubuntu使用jexus搭建mywebsql/">ubuntu使用Jexus搭建MyWebSQL</a>
+          </li>
+        
+          <li>
             <a href="/2016/04/20/技巧避免修改绑定变量/">.NET-lmabda避免修改绑定变量</a>
           </li>
         
           <li>
             <a href="/2016/04/20/LINQ优点总结(转载)/">C#LINQ 优点 总结(转载)</a>
-          </li>
-        
-          <li>
-            <a href="/2016/04/20/Join/">.NET-join用法</a>
-          </li>
-        
-          <li>
-            <a href="/2016/04/20/Jexus支持HTTPS协议/">Jexus支持HTTPS协议</a>
-          </li>
-        
-          <li>
-            <a href="/2016/03/06/ubuntu使用jexus搭建mywebsql/">ubuntu使用Jexus搭建MyWebSQL</a>
           </li>
         
       </ul>

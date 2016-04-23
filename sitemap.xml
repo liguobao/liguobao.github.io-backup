@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://codelover.link/2016/04/23/mono-webreques-https-exception/</loc>
+    
+    <lastmod>2016-04-23T13:59:16.810Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/04/23/Jexus%E6%94%AF%E6%8C%81HTTPS%E5%8D%8F%E8%AE%AE/</loc>
+    
+    <lastmod>2016-04-23T13:58:57.937Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/04/23/ubuntu%E4%BD%BF%E7%94%A8jexus%E6%90%AD%E5%BB%BAmywebsql/</loc>
+    
+    <lastmod>2016-04-23T13:58:46.283Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://codelover.link/2016/04/20/%E6%8A%80%E5%B7%A7%E9%81%BF%E5%85%8D%E4%BF%AE%E6%94%B9%E7%BB%91%E5%AE%9A%E5%8F%98%E9%87%8F/</loc>
     
     <lastmod>2016-04-20T13:19:01.001Z</lastmod>
@@ -19,20 +40,6 @@
     <loc>http://codelover.link/2016/04/20/Join/</loc>
     
     <lastmod>2016-04-20T13:19:00.980Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://codelover.link/2016/04/20/Jexus%E6%94%AF%E6%8C%81HTTPS%E5%8D%8F%E8%AE%AE/</loc>
-    
-    <lastmod>2016-04-20T12:51:39.773Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://codelover.link/2016/03/06/ubuntu%E4%BD%BF%E7%94%A8jexus%E6%90%AD%E5%BB%BAmywebsql/</loc>
-    
-    <lastmod>2016-03-06T10:57:35.423Z</lastmod>
     
   </url>
   
