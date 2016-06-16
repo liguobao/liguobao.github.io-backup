@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://codelover.link/"/>
-  <updated>2016-06-16T14:10:43.918Z</updated>
+  <updated>2016-06-16T15:10:11.876Z</updated>
   <id>http://codelover.link/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>C#避免在函数或者操作中抛出异常</title>
-    <link href="http://codelover.link/2016/06/16/C#%E9%81%BF%E5%85%8D%E5%9C%A8%E5%87%BD%E6%95%B0%E6%88%96%E8%80%85%E6%93%8D%E4%BD%9C%E4%B8%AD%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8/"/>
-    <id>http://codelover.link/2016/06/16/C#避免在函数或者操作中抛出异常/</id>
-    <published>2016-06-16T14:10:43.918Z</published>
-    <updated>2016-06-16T14:10:43.918Z</updated>
+    <title>避免在函数或者操作中抛出异常</title>
+    <link href="http://codelover.link/2016/06/16/%E9%81%BF%E5%85%8D%E5%9C%A8%E5%87%BD%E6%95%B0%E6%88%96%E8%80%85%E6%93%8D%E4%BD%9C%E4%B8%AD%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8/"/>
+    <id>http://codelover.link/2016/06/16/避免在函数或者操作中抛出异常/</id>
+    <published>2016-06-16T15:10:11.876Z</published>
+    <updated>2016-06-16T15:10:11.876Z</updated>
     
     <content type="html">&lt;h2 id=&quot;1、引言&quot;&gt;&lt;a href=&quot;#1、引言&quot; class=&quot;headerlink&quot; title=&quot;1、引言&quot;&gt;&lt;/a&gt;1、引言&lt;/h2&gt;&lt;p&gt;如某个场景下，你的函数或操作需要操作一个序列的对象，且在处理的过程中抛出了异常。这时如果没有一些状态记录之类的数据，我们不了解已经处理了多少的数据，也不知道应该采用怎么样的策略回滚，因此根本无法返回到之前的状态。&lt;br&gt;我们看一下下面的一个代码：&lt;br&gt;&lt;figure class=&quot;highlight csharp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; allEmp = FindAllEmployees();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;allEmp.ForEach(e =&amp;gt; e.MonthlySalary *=&lt;span class=&quot;number&quot;&gt;1.05&lt;/span&gt;M);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;这样的代码看起来没什么问题。可是某一天，这个程序运行时抛出了异常。抛出异常的位置可能未知，导致部分员工得到了加薪，另外的一些员工却没有。结果是除了人工检查数据，我们已经没有办法重新找回丢失的状态。&lt;/p&gt;
