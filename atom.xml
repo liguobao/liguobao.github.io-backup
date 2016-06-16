@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://codelover.link/"/>
-  <updated>2016-04-23T13:59:16.810Z</updated>
+  <updated>2016-06-16T14:10:43.918Z</updated>
   <id>http://codelover.link/</id>
   
   <author>
@@ -14,6 +14,40 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>C#避免在函数或者操作中抛出异常</title>
+    <link href="http://codelover.link/2016/06/16/C#%E9%81%BF%E5%85%8D%E5%9C%A8%E5%87%BD%E6%95%B0%E6%88%96%E8%80%85%E6%93%8D%E4%BD%9C%E4%B8%AD%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8/"/>
+    <id>http://codelover.link/2016/06/16/C#避免在函数或者操作中抛出异常/</id>
+    <published>2016-06-16T14:10:43.918Z</published>
+    <updated>2016-06-16T14:10:43.918Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;1、引言&quot;&gt;&lt;a href=&quot;#1、引言&quot; class=&quot;headerlink&quot; title=&quot;1、引言&quot;&gt;&lt;/a&gt;1、引言&lt;/h2&gt;&lt;p&gt;如某个场景下，你的函数或操作需要操作一个序列的对象，且在处理的过程中抛出了异常。这时如果没有一些状态记录之类的数据，我们不了解已经处理了多少的数据，也不知道应该采用怎么样的策略回滚，因此根本无法返回到之前的状态。&lt;br&gt;我们看一下下面的一个代码：&lt;br&gt;&lt;figure class=&quot;highlight csharp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; allEmp = FindAllEmployees();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;allEmp.ForEach(e =&amp;gt; e.MonthlySalary *=&lt;span class=&quot;number&quot;&gt;1.05&lt;/span&gt;M);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;这样的代码看起来没什么问题。可是某一天，这个程序运行时抛出了异常。抛出异常的位置可能未知，导致部分员工得到了加薪，另外的一些员工却没有。结果是除了人工检查数据，我们已经没有办法重新找回丢失的状态。&lt;/p&gt;
+&lt;p&gt;这样的代码修改元素的方式导致发生了上面的问题。这段代码并没有遵循“强异常安全保证”规则。换而言之，在运行时遇到错误，我们无法得知具体发生了什么，没有发生什么。&lt;/p&gt;
+&lt;h3 id=&quot;原则：如果我们能保证当方法无法完成时，程序的状态不会发生改变，这样的问题就不会发生。&quot;&gt;&lt;a href=&quot;#原则：如果我们能保证当方法无法完成时，程序的状态不会发生改变，这样的问题就不会发生。&quot; class=&quot;headerlink&quot; title=&quot;原则：如果我们能保证当方法无法完成时，程序的状态不会发生改变，这样的问题就不会发生。&quot;&gt;&lt;/a&gt;原则：如果我们能保证当方法无法完成时，程序的状态不会发生改变，这样的问题就不会发生。&lt;/h3&gt;&lt;p&gt;我们有几种方法都可以实现这样的需求，但是每种方法都有各自的优势和风险。&lt;/p&gt;
+&lt;h2 id=&quot;2、在函数-操作中抛出异常&quot;&gt;&lt;a href=&quot;#2、在函数-操作中抛出异常&quot; class=&quot;headerlink&quot; title=&quot;2、在函数/操作中抛出异常&quot;&gt;&lt;/a&gt;2、在函数/操作中抛出异常&lt;/h2&gt;&lt;p&gt;显而易见的，不是所有的方法都会遇到这样的问题（异常导致状态丢失）。很多时候我们只是检查了一下序列中的元素，访问之后并不会修改其中的元素。这类的行为我们其实并不需要太过于小心。现在我们回到最开始的地方，对于上面的场景（为每位员工加薪百分之五），如果我们想遵循“强异常安全保证”原则，那应该如何修改这个方法呢？&lt;/p&gt;
+&lt;h4 id=&quot;第一种异常：获取数据的时候异常&quot;&gt;&lt;a href=&quot;#第一种异常：获取数据的时候异常&quot; class=&quot;headerlink&quot; title=&quot;第一种异常：获取数据的时候异常&quot;&gt;&lt;/a&gt;第一种异常：获取数据的时候异常&lt;/h4&gt;&lt;p&gt;在上面的例子中，即使FindAllEmployees()函数抛出异常，导致我们无法正确让员工加薪。虽然这样的情况并不是导致我们的数据产生问题，但是该加薪的大家没有得到加薪，这是一个多么沮丧的事情呢。&lt;/p&gt;
+&lt;h4 id=&quot;解决方法：重写前面以lambda表达式给出的操作方法（即FindAllEmployees-方法），让其永远不会抛出异常。&quot;&gt;&lt;a href=&quot;#解决方法：重写前面以lambda表达式给出的操作方法（即FindAllEmployees-方法），让其永远不会抛出异常。&quot; class=&quot;headerlink&quot; title=&quot;解决方法：重写前面以lambda表达式给出的操作方法（即FindAllEmployees()方法），让其永远不会抛出异常。&quot;&gt;&lt;/a&gt;解决方法：重写前面以lambda表达式给出的操作方法（即FindAllEmployees()方法），让其永远不会抛出异常。&lt;/h4&gt;&lt;p&gt;很多时候，我们在开始修改数据之前，先校验数据的合法性以及剔除错误数据（如果允许剔除的话）并不是非常困难。我们是可以采取这样的方法来实现我们的目的。不过在这里的话，我们就必须严格处理操作方法，使得它能满足所有情况下的需求。&lt;/p&gt;
+&lt;h4 id=&quot;第二种异常：lambda表达式中操作数据异常&quot;&gt;&lt;a href=&quot;#第二种异常：lambda表达式中操作数据异常&quot; class=&quot;headerlink&quot; title=&quot;第二种异常：lambda表达式中操作数据异常&quot;&gt;&lt;/a&gt;第二种异常：lambda表达式中操作数据异常&lt;/h4&gt;&lt;p&gt;同样是上面的例子，如果我们在执行加薪操作的时候，提升了那些已经离职的员工薪资导致了异常，使得程序中断，状态丢失。这样的情况，我们在执行加薪操作前先过滤掉已离职的员工便是一种正确的做法。&lt;/p&gt;
+&lt;h4 id=&quot;解决方法：操作数据前通过校验过滤后再执行操作&quot;&gt;&lt;a href=&quot;#解决方法：操作数据前通过校验过滤后再执行操作&quot; class=&quot;headerlink&quot; title=&quot;解决方法：操作数据前通过校验过滤后再执行操作&quot;&gt;&lt;/a&gt;解决方法：操作数据前通过校验过滤后再执行操作&lt;/h4&gt;&lt;p&gt;如：&lt;br&gt;&lt;figure class=&quot;highlight csharp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;allEmp.Where(emp=&amp;gt;emp.Active).ForEach(e =&amp;gt; e.MonthlySalary *=&lt;span class=&quot;number&quot;&gt;1.05&lt;/span&gt;M);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;h4 id=&quot;第三种异常：执行操作的时候抛出异常&quot;&gt;&lt;a href=&quot;#第三种异常：执行操作的时候抛出异常&quot; class=&quot;headerlink&quot; title=&quot;第三种异常：执行操作的时候抛出异常&quot;&gt;&lt;/a&gt;第三种异常：执行操作的时候抛出异常&lt;/h4&gt;&lt;p&gt;有时候，我们根本无法保证处理方法的时候会不会抛出异常。这个时候就必须采取一些代价更加昂贵的处理方法了。&lt;/p&gt;
+&lt;h4 id=&quot;解决方法：创建副本尝试执行操作，副本无误后执行真正操作&quot;&gt;&lt;a href=&quot;#解决方法：创建副本尝试执行操作，副本无误后执行真正操作&quot; class=&quot;headerlink&quot; title=&quot;解决方法：创建副本尝试执行操作，副本无误后执行真正操作&quot;&gt;&lt;/a&gt;解决方法：创建副本尝试执行操作，副本无误后执行真正操作&lt;/h4&gt;&lt;p&gt;我们在编写这类代码的时候，应该考虑抛出异常之后的处理方案。这就意味着，我们的操作应该先在原数据副本上执行，随后仅在操作成功之后再将其替换原有的数据。&lt;br&gt;如:&lt;/p&gt;
+&lt;figure class=&quot;highlight csharp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; updatas = (&lt;span class=&quot;keyword&quot;&gt;from&lt;/span&gt; e &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt; allEmp &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;              &lt;span class=&quot;keyword&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; Emp&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;              &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                  EmpID=e.EmpID,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                  .....&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                  MonthlySalary =e.MonthlySalary *=&lt;span class=&quot;number&quot;&gt;1.05&lt;/span&gt;M&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;              &amp;#125;).ToList();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;allEmp = updatas;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;但是这样的修改也引发了其他的问题：代码量增加了，同时生成副本也消耗了大量的资源。这样的做法也有一个好处，我们在操作副本数据时遇到异常之后，有充分的”空间”来处理这些数据。&lt;/p&gt;
+&lt;p&gt;实际中，这意味着我们让查询表达式返回了新序列，而不是去修改原先序列中的元素。这样的话，我们在尝试完成所有的操作的同时，即使失败了，也不会影响到我们程序的原有状态。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;1、引言&quot;&gt;&lt;a href=&quot;#1、引言&quot; class=&quot;headerlink&quot; title=&quot;1、引言&quot;&gt;&lt;/a&gt;1、引言&lt;/h2&gt;&lt;p&gt;如某个场景下，你的函数或操作需要操作一个序列的对象，且在处理的过程中抛出了异常。这时如果没有一些状态记录之类的数据，我们不了
+    
+    </summary>
+    
+      <category term=".net" scheme="http://codelover.link/categories/net/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>mono webreques https exception</title>
@@ -189,6 +223,76 @@
     </summary>
     
       <category term="ubuntu" scheme="http://codelover.link/categories/ubuntu/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>.NET 类字段与类属性</title>
+    <link href="http://codelover.link/2016/04/20/%E7%B1%BB%E5%AD%97%E6%AE%B5%E4%B8%8E%E7%B1%BB%E5%B1%9E%E6%80%A7/"/>
+    <id>http://codelover.link/2016/04/20/类字段与类属性/</id>
+    <published>2016-04-20T13:19:01.005Z</published>
+    <updated>2016-04-20T13:19:01.005Z</updated>
+    
+    <content type="html">&lt;p&gt;#.NET 类字段与类属性&lt;br&gt;@(.NET)[基础|字段|属性]&lt;/p&gt;
+&lt;p&gt;##字段&lt;br&gt;字段表示只读或可读/可写的数据值。&lt;br&gt;字段可以是静态的，这种字段被认为是类型状态的一部分。&lt;br&gt;字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。&lt;br&gt;强烈建议把字段声明为私有，防止类型或对象的状态被类型外部代码破坏。&lt;/p&gt;
+&lt;p&gt;##属性&lt;br&gt;属性允许用简单的、字段风格的语法设置或查询类型或对象的逻辑状态，同时保证状态不被破坏。&lt;br&gt;作用于类型称为静态属性，作用于对象称为实例属性。&lt;br&gt;属性可以无参，也可以有多个参数（相当少见，但集合类用的多）。 &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;using System;
+
+public sealed class SomeType
+{                            //  1  
+// Nested class  
+   private class SomeNestedType { }                //  2  
+
+   // Constant, read­only, and static read/write field   
+   private const Int32 c_SomeConstant = 1;            //  3     
+
+   private readonly String m_SomeReadOnlyField = &amp;quot;2&amp;quot;;     //  4    
+
+   private static Int32 s_SomeReadWriteField = 3;      //  5  
+
+   // Type constructor  
+   static SomeType() { }                                  //  6  
+
+   // Instance constructors  
+   public SomeType(Int32 x) { }                           //  7  
+
+   public SomeType() { }                                  //  8 
+
+   // Instance and static methods  
+   private String InstanceMethod() { return null; }       // 9   
+
+   public static void Main() { }                        // 10 
+
+   // Instance property  
+   public Int32 SomeProp
+   {                                // 11      
+       get { return 0; }                                // 12      
+       set { }                                          // 13  
+   }
+
+   // Instance parameterful property (indexer) 
+   public Int32 this[String s]
+   {                          // 14       
+       get { return 0; }                                // 15        
+       set { }                                          // 16  
+   }
+
+   // Instance event  
+   public event EventHandler SomeEvent;                  // 17  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&quot;https://kekaeq-ch3301.files.1drv.com/y3meEWWaK-o9SNfr_fT71Xr3YrPqO1LIswWqMvlHyUxWeH8P0PtXsQlfRkDnGshlMJIy2gPsxNet14efOPOuX-dHmZhCTg8PXyELJR9tnayye4LeEQ6F997b8pSI84wBR6nmmOF8IAr92oKWk36-f8alkEj9TrDQbiMoKGQwO5MTFY/20150105.jpg?psid=1&quot; alt=&quot;enter image description here&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://kekaeq-ch3301.files.1drv.com/y3mN8FseIEbAaQfT8ynEIc4nYsOUK0p0IN7Hp39imVSZXNQXlSfAYmvaC-9bDM3Hq6rPCV1XgrgvoST8wXejwARXaDmXptZpb_nyWwUzWK1rzaJ6fSsYfnP0icRKUclaVxnlltOJSQiuTFO7_fCfabmv0AsrgL5sLo6GdVJmpd-L10/QQ%E5%9B%BE%E7%89%8720151003165909.jpg?psid=1&quot; alt=&quot;enter image description here&quot;&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;#.NET 类字段与类属性&lt;br&gt;@(.NET)[基础|字段|属性]&lt;/p&gt;
+&lt;p&gt;##字段&lt;br&gt;字段表示只读或可读/可写的数据值。&lt;br&gt;字段可以是静态的，这种字段被认为是类型状态的一部分。&lt;br&gt;字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。&lt;br&gt;强
+    
+    </summary>
+    
+      <category term=".net" scheme="http://codelover.link/categories/net/"/>
     
     
   </entry>
@@ -430,6 +534,152 @@ public static void test1()
   </entry>
   
   <entry>
+    <title>C#.NET托管堆和垃圾回收</title>
+    <link href="http://codelover.link/2016/04/20/%E6%89%98%E7%AE%A1%E5%A0%86%E5%92%8C%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"/>
+    <id>http://codelover.link/2016/04/20/托管堆和垃圾回收/</id>
+    <published>2016-04-20T13:19:00.998Z</published>
+    <updated>2016-04-20T13:19:00.998Z</updated>
+    
+    <content type="html">&lt;p&gt;###托管堆基础&lt;br&gt; 简述：每个程序都要使用这样或那样的资源，包括文件、内存缓冲区、屏幕空间、网络连接…..事实上，在面向对象的环境中，每个类型都代表可供程序使用的一种资源。要使用这些资源，必须为代表资源的类型分配内存。&lt;/p&gt;
+&lt;p&gt; 以下是访问一个资源所需步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;调用IL指令newobj，为代表资源的类型分配内存。(C# new操作符)&lt;/li&gt;
+&lt;li&gt;初始化内存，设置资源的初始状态。（一般指构造函数）&lt;/li&gt;
+&lt;li&gt;访问类型的成员来使用资源。（使用成员变量、方法、属性等）&lt;/li&gt;
+&lt;li&gt;摧毁资源的状态以进行清除。（Dispose？？？）&lt;/li&gt;
+&lt;li&gt;释放内存。（GC） &lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;###从托管堆分配资源&lt;/p&gt;
+&lt;p&gt;CLR要求所有的对象都从托管堆分配。&lt;br&gt;进程初始化，CLR划出一个地址空间区域作为托管堆。CLR还要维护一个指针，姑且叫NextObjPtr，该指针指向下一个对象在堆中的分配位置。刚开始的时候， NextObjPtr 设为地址空间区域的基地址。&lt;br&gt;一个区域被非垃圾对象填满后，CLR会分配更多的区域。&lt;/p&gt;
+&lt;p&gt;这一个过程一直重复，直至整个进程地址空间被填满。所以，应用程序内存收进程的虚拟地址空间的限制。&lt;/p&gt;
+&lt;p&gt;32位进程最多能分配1.5GB，64位进程最多能分配8T。&lt;br&gt;注：进程内存大小的相关资料&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/windows/hardware/Dn613959(v=vs.85&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Memory Support and Windows Operating Systems&lt;/a&gt;.aspx)&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/ms189334.aspx&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;进程地址空间&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/yusiguyuan/article/details/12405799&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt; 32位模式下C/C++程序可用最大内存&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;###C# 的new操作符导致CLR执行以下操作：&lt;/p&gt;
+&lt;p&gt;1、计算类型的字段（以及从基类型继承的字段）所需要的字节数。&lt;/p&gt;
+&lt;p&gt;2、加上对象的开销所需的字节数。每个对象都有两个开销字段：类型对象指针和同步块索引。对于32位应用程序，这两个字段各需要32位，所以每个对象需要增加8字节。对于64位应用程序，这两个字段各需要64位，所以每个对象要增加16字节。&lt;/p&gt;
+&lt;p&gt;3、CLR检查区域中是否有分配对象所需的字节数。如果托管堆有足够的可用空间，就在NetxObjPtr指针指向的地址处放入对象，为对象分配的字节会被清零。接着调用类型的构造器（为this参数传递NextObjPtr），new操作符返回对象引用。就在返回这个对象引用之前，NextObjPtr指针的值会加上这个对象占用的字节数来得到一个新值，即下个对象放入托管堆时的地址。如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/i3rlSCPAcnT9pL0El0BptPIBpuvnxHpBw9Nkp*UqIjw!/o/dJMAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=LwKNAC8CjQADACU!&amp;amp;su=1199793361&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;###垃圾回收算法&lt;/p&gt;
+&lt;p&gt;####CLR使用引用跟踪算法。&lt;br&gt;引用跟踪算法只关心引用类型的变量，因为只有这种变量才能引用堆上面的对象；&lt;br&gt;值类型变量直接包含值类型实例。引用类型变量可在许多场合使用，包括类的静态和实例字段，或者方法的参数和局部变量。这里我们将所有引用类型的变量都称为根。&lt;br&gt;CLR开始GC时，首先暂停所有的线程。(这样可以防止线程在CLR检查期间访问对象并更改其状态。) 然后CLR进入GC标记阶段。在这个阶段，CLR遍历堆中的所有对象，将同步块索引字段中的一位设为0。这表明所有的对象都应删除。然后，CLR检查所有的活动根，查看他们引用了哪些对象。这正是CLR的GC被称作引用跟踪GC的原因。如果一个根包含null，CLR忽略这个根并继续检查下一个根。&lt;br&gt;下图展示一个堆，其中包含几个对象。&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/eVBVeXGrNAfoWfyRgl4aC2RRSGgiDpmbrocv4lTSJMA!/o/dJIAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=gAIFAYACBQEDACU!&amp;amp;su=1176931729&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;图片1&quot;&gt;&lt;/p&gt;
+&lt;p&gt;应用程序的根直接引用对象A 、C、D 、F。所有的对象都已经被标记。标记对象D时，GC发现这个对象含有一个引用对象H的字段，造成对象H也被标记。标记过程会持续，直至应用程序的所有根所有检查完毕。&lt;br&gt;检查完毕后，堆中的对象要么已标记，要么未标记。已标记的对象不能被垃圾回收，因为至少有一个根在引用它。我们说这种对象是可达的，因为应用程序可以通过引用它的变量抵达它。 未标记的对象是不可达的，因为应用程序中不存在使对象能被再次访问的根。&lt;/p&gt;
+&lt;p&gt;CLR知道哪些对象可以幸存，哪些可以被删除后，进入GC的压缩（类似于碎片整理）阶段。在压缩阶段，CLR对堆中已标记的对象进行“乾坤大挪移”，整理所有幸存下来的对象，使他们占用连续的内存。&lt;/p&gt;
+&lt;p&gt;这样做的好处在于：&lt;/p&gt;
+&lt;p&gt;1、所有幸存对象在内存中紧挨在一起，恢复了引用的“局部性”，减少了应用程序的工作集，从而提升了将来访问这些对象时的性能；&lt;/p&gt;
+&lt;p&gt;2、经过整理后，可用空间也是连续的，整个地址空间区段得到了解放，允许其他东西进驻。&lt;/p&gt;
+&lt;p&gt;在内存中移动了对象之后有一个问题亟待解决。引用幸存对象的根现在引用的还是对象最初在内存中的位置，而非移动后的位置。被暂停的线程恢复执行时，将访问旧的内存位置，会造成内存损坏。 这显然是不能容忍的，所以作为压缩阶段的一部分，CLR还要从每个根减去所引用对象在内存中偏移的字节数。这样就能保证每个根还是引用和之前一样的对象，只是对象在内存中变换了位置。&lt;br&gt;如图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/FyP2yk1O6kMsq3.u4e4x3qrAxpwbajgSHOd4QHTJOhE!/o/dJIAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=TQI*AU0CPwEDACU!&amp;amp;su=1202148209&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;##代：提升性能 (待续)&lt;br&gt;CLR的GC是基于代的垃圾回收器，它对你的代码做出了以下几点假设：&lt;/p&gt;
+&lt;p&gt;1、对象越新，生存周期越短。&lt;/p&gt;
+&lt;p&gt;2、对象越老，生存周期越长。&lt;/p&gt;
+&lt;p&gt;3、回收堆的一部分 ，速度快于回收整个堆。&lt;/p&gt;
+&lt;p&gt;大量研究表明，这些假设对于现今大多数的应用程序都是成立的，它们影响了垃圾回收器的实现方式。这里将解释代的工作原理。&lt;/p&gt;
+&lt;p&gt;托管堆在初始化时不包括对象。添加到堆的对象成为第0代对象。简单来说，第0代对象就是那些新构造的对象，垃圾回收器从未检查过它们。如下图，新启动的应用程序，分配了5个对象（从A到E）。过了一会，C和E变得不可达了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/77WJus7lssJpEJ2RZREQoNx.5CL31HLdboJbAgCqS0E!/o/dJMAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=tQIVAbUCFQEDACU!&amp;amp;su=172682065&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;CLR初始化第0代对象选择一个预算容量。如果分配一个新对象造成第0代超预算，就必须启动一次GC。假设对象A到E刚好用完了第0代的空间，那么分配对象F就必须启动GC。GC之后存活的对象现场成为第1代对象。如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/GEDzaV4pNFNQUuDwl2EQrv*eD9Sk9OJCzx5SpRRI2fk!/o/dGUBAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=OAL5ADgC.QADACU!&amp;amp;su=1155276897&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;br&gt;一次GC之后，第0代就不包含任何对象。和前面一样，新对象会分配到第0代。新分配对象F到对象K都到了第0代。&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/Op0QokzBTNYCFR6zzm2tpc2V7U70IsIJTeWrd0UAUb0!/o/dGUBAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=yAJeAcgCXgEDACU!&amp;amp;su=1124261217&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;之后，程序继续运行，B、H、J变得不可达，它们的内存将在某一个时刻回收。&lt;/p&gt;
+&lt;p&gt;假设现在新分配对象L会造成第0代超出预算,造成必须启动垃圾回收。&lt;/p&gt;
+&lt;p&gt;开始垃圾回收时,垃圾回收器必须决定检查哪些代。前面说过,CLR初始化时会为第0代对象选择预算.事实上,它还必须为第1代选择预算.&lt;/p&gt;
+&lt;p&gt;开始一次垃圾回收时,垃圾回收器还会检查第一代占用了多少内存。在本例中,由于第1代占用内存远少于预算,所以垃圾回收器只检查第0代对象。回顾之前基于代的垃圾回收器做出的第一个假设：对象越新，生存期越短。 因此，第0代包含更多的垃圾的可能性更大，能回收更多的内存。由于忽略第1代中的对象，所以加快了垃圾回收速度。&lt;/p&gt;
+&lt;p&gt;显然，忽略第1代中的对象能提升垃圾回收器的性能。但对性能有更大提振作用的是现在不必遍历托管堆中的每个对象。如果根或对象引用了老一代的某个对象，垃圾回收器就可以忽略老对象内部的所有引用，能在更短的时间内构造好可达对象图。当然，如果老对象的字段也可能引用新对象。为了确保对老对象的已更新字段进行检查，垃圾回收器利用了JIT编译器内部的一个机制。这个机制在对象的引用字段发生变化时，会设置一个对应的标志位。这样，垃圾回收器就知道自上一次垃圾回收以来，哪些老对象（如果有的话）已被写入。只有字段发生变化的老对象才需要检查是否引用了第0代中的任何新对象。&lt;/p&gt;
+&lt;p&gt;基于代的垃圾回收器还假设越老的对象活得越长。也就是说，第1代对象在应用程序中有可能是继续可达的。如果垃圾回收器检查第1代的对象，很有可能找不到多少垃圾，结果是也回收不了多少内存。因此，对第1代进行垃圾回收很可能是浪费时间的。如果第一代真有垃圾，垃圾将留在那里。如下图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/Do.yRCBJEnaOfZaUOdxj4II9*pX2BEcX2QmIG6NQPBE!/o/dGUBAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=qAI5AagCOQEDACU!&amp;amp;su=187009937&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;程序继续运行，继续往第0代分配对象，同时程序停止对第1代某对象的使用。&lt;/p&gt;
+&lt;p&gt;如下图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/YEqIM16xFsSgXdvEzgrerLnKw7fEItnrSqEzlaYnUfE!/o/dGUBAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=egJPAXoCTwEDACU!&amp;amp;su=1118118497&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;br&gt;分配对象P导致第0代超预算，开始GC。第1代的所有对象占据内存仍小于预算，垃圾回收器再次决定只回收第0代。忽略第1代中的垃圾对象。如下图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/EcdSNU5AatqRERWtVdlJ7LiIPHHXe8.mklN.0hHDK9U!/o/dJQAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=aAIxAWgCMQEDACU!&amp;amp;su=1214124305&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;程序继续运行，假设第一代的增长导致它的全部对象占用了全部预算。这时候应用程序分配对象P到对象S，使第0代对象达到它的预算总和。如下图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/6dB68RIUYrqMZ4p0VIY3REJZPg.g3ybkZFIazJ3h.CQ!/o/dJIAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=jwIiAY8CIgEDACU!&amp;amp;su=177976657&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;这时候，应用程序准备分配对象T，由于第一代已满，所以必须开始GC。但这一次垃圾回收器发现第一代占用了太多内存，以至于用完了预算。由于前几次对第0代进行GC时，第1代中可能已经有很多对象变得不可达。所以这次垃圾回收器决定检查第1代和第0代中的所有对象。两代都被垃圾回收后，堆的情况如下图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/bxdZDsZi2Y6FSDWs7RXNPkkJK8dCzMD.cfnjwNY2Mjs!/o/dJIAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=tgI2AbYCNgEDACU!&amp;amp;su=197762641&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;托管堆只支持三代：第0代、第1代和第2代。&lt;/p&gt;
+&lt;p&gt;CLR初始化时，会为每一代选择预算。&lt;/p&gt;
+&lt;p&gt;然而，CLR的垃圾回收是自调节的。&lt;/p&gt;
+&lt;p&gt;这意味着垃圾回收器会在执行垃圾回收的过程了解程序的行为。&lt;/p&gt;
+&lt;p&gt;例如：假设应用程序构造了许多对象，但每个对象的时间都很短。&lt;br&gt;在这种情况下，对第0代的垃圾回收会回收到大量的内存。事实上，第0代的所有对象都可能被回收。&lt;/p&gt;
+&lt;p&gt;如果垃圾回收器发现在回收第0代后存活下来的对象很少，就可能减少第0代的预算。已分配空间的减少意味着垃圾回收将更频繁地发生，但垃圾回收器每次做的事情也减少，这减少了进程的工作集。&lt;/p&gt;
+&lt;p&gt;另一方面，如果垃圾回收器回收了第0代，发现还有很多对象存活，没多少内存可以被回收，就会增大第0代的预算。&lt;/p&gt;
+&lt;p&gt;同样的启发性算法调整预算适用于了第1代和第2代的预算。&lt;/p&gt;
+&lt;p&gt;引自：《CLR VIA C# -21章》&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/vstudio/f144e03t(v=vs.100&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;自动内存管理&lt;/a&gt;.aspx)&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/vstudio/ee787088(v=vs.100&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;垃圾回收的基础&lt;/a&gt;.aspx)&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/vstudio/ee787088(v=vs.100&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;代数&lt;/a&gt;.aspx#generations )&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;###托管堆基础&lt;br&gt; 简述：每个程序都要使用这样或那样的资源，包括文件、内存缓冲区、屏幕空间、网络连接…..事实上，在面向对象的环境中，每个类型都代表可供程序使用的一种资源。要使用这些资源，必须为代表资源的类型分配内存。&lt;/p&gt;
+&lt;p&gt; 以下是访问一个资源所需步骤：&lt;/
+    
+    </summary>
+    
+      <category term="GC" scheme="http://codelover.link/categories/GC/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>C#.NET托管堆和垃圾回收(续)</title>
+    <link href="http://codelover.link/2016/04/20/%E6%89%98%E7%AE%A1%E5%A0%86%E5%92%8C%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6(%E7%BB%AD)/"/>
+    <id>http://codelover.link/2016/04/20/托管堆和垃圾回收(续)/</id>
+    <published>2016-04-20T13:19:00.995Z</published>
+    <updated>2016-04-20T13:19:00.995Z</updated>
+    
+    <content type="html">&lt;p&gt;##大对象&lt;br&gt; CLR将对象分成大对象和小对象。目前认为85000字节或者更大的对象是大对象。CLR以不同方式对待大小对象。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;大对象不是在小对象的地址空间分配的，而是在进程地址空间的其他地方分配。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;目前版本的GC不“压缩”大对象，因为在内存中移动它们代价过高。但这可能在进程中的大对象之间造成地址空间碎片化，以至于抛出OutMemoryException。CLR将来的版本可能会压缩大对象。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;大对象总是第2代，绝不可能是第0代或者第1代。所以只能为需要长时间存活的资源创建大对象。分配短时间存活的大对象会导致第2代被更频繁地回收，损失性能。大对象一般是大字符串（XML/JSON）或者用于I/O操作的字节数组（从文件/网络将字节读入缓冲区以便处理）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;##垃圾回收模式&lt;br&gt; CLR启动时会选择一个GC模式，进程中之前该模式都不会改变。&lt;/p&gt;
+&lt;p&gt; 有两个基本GC模式。&lt;/p&gt;
+&lt;p&gt;###工作站&lt;br&gt;该模式针对客户端应用程序优化GC。GC造成的延时很低，应用程序线程挂起时间很短，避免用户感到焦虑。在该模式中,GC假定机器上运行的其他应用程序都不会消耗太多的CPU资源。&lt;/p&gt;
+&lt;p&gt;###服务器&lt;br&gt; 该模式针对服务器端应用程序优化GC。被优化的主要是吞吐量和资源利用。GC假定机器上没有运行其他应用程序（无论客户端还是服务器应用程序），并假定机器的所有CPU都可以用来辅助完成GC。该模式造成托管堆被拆分成几个区域，每个CPU一个。开始垃圾回收时，垃圾回收器在每个CPU上运行一个特殊线程；每个线程都和其他线程并发回收它自己的区域。对于工作者线程行为一致的服务器应用程序，并发回收能很好进行。这个功能要求应用程序在多CPU计算机上运行，是线程能真正同时工作，从而得到性能上的提升。&lt;/p&gt;
+&lt;p&gt;应用程序默认以“工作站”GC模式运行。寄宿了CLR的服务器应用程序（如ASP.NET ）可请求CLR加载服务器 GC.但如果应用程序在单处理器计算机上运行，CLR总是使用“工作站”GC模式。&lt;/p&gt;
+&lt;p&gt;独立应用程序可以创建一个配置文件告诉CLR 使用CLR使用服务器回收器。配置文件要为应用程序添加gcServer元素。下面是一个示例配置文件：&lt;/p&gt;
+&lt;p&gt;&lt;configuration&gt;&lt;br&gt;       &lt;runtime&gt;&lt;br&gt;             &lt;gcserver enabled=&quot;true&quot;&gt;&lt;br&gt;      &lt;/gcserver&gt;&lt;/runtime&gt;&lt;br&gt;&lt;/configuration&gt;&lt;br&gt;可以使用GCSettings类的只读Boolean属性IsServerGC得到CLR是否处于“服务器”GC模式。&lt;/p&gt;
+&lt;p&gt;除了这两种模式，GC还支持两种子模式：并发(默认)或者非并发。&lt;br&gt;在并发方式中，垃圾回收器有一个额外的后台线程，它能在应用程序运行时并发标记对象。 程序运行时，垃圾回收器运行一个普通优先级的后台线程来查找不可达对象。找到之后，垃圾回收器再次挂起所以线程，判断是否要“压缩”内存。如决定压缩，内存会被压缩，根引用会被修正，应用程序线程恢复运行。这一次垃圾回收花费的时间比平常少，因为不可达对象集合已构造好了。但垃圾回收器也可能决定不压缩内存；事实上，垃圾回收器更倾向不压缩。可用内存多，垃圾回收器便不会压缩堆；这有利于增强性能，但会增大程序的工作集。使用并发垃圾回收器，应用程序消耗的内存通常比使用非并发垃圾回收器多。&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;##大对象&lt;br&gt; CLR将对象分成大对象和小对象。目前认为85000字节或者更大的对象是大对象。CLR以不同方式对待大小对象。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;大对象不是在小对象的地址空间分配的，而是在进程地址空间的其他地方分配。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;目前版
+    
+    </summary>
+    
+      <category term="GC" scheme="http://codelover.link/categories/GC/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>一些有用的网站</title>
+    <link href="http://codelover.link/2016/04/20/%E4%B8%80%E4%BA%9B%E6%9C%89%E7%94%A8%E7%9A%84%E7%BD%91%E7%AB%99/"/>
+    <id>http://codelover.link/2016/04/20/一些有用的网站/</id>
+    <published>2016-04-20T13:19:00.991Z</published>
+    <updated>2016-04-20T13:19:00.991Z</updated>
+    
+    <content type="html">&lt;p&gt;&lt;a href=&quot;http://wowubuntu.com/markdown/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Markdown 语法说明 (简体中文版)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://wowubuntu.com/markdown/basic.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Markdown: Basics （快速入门）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://wsgzao.github.io/post/hexo-guide/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;使用GitHub和Hexo搭建免费静态Blog(本博客案例)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.mxgw.info/t/filename-too-long-in-git.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;win下面的git客户端提示FIlename too long解决方法&lt;/a&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;http://wowubuntu.com/markdown/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Markdown 语法说明 (简体中文版)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://wowubuntu.com/ma
+    
+    </summary>
+    
+      <category term="nothing" scheme="http://codelover.link/categories/nothing/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>C#LINQ 优点 总结(转载)</title>
     <link href="http://codelover.link/2016/04/20/LINQ%E4%BC%98%E7%82%B9%E6%80%BB%E7%BB%93(%E8%BD%AC%E8%BD%BD)/"/>
     <id>http://codelover.link/2016/04/20/LINQ优点总结(转载)/</id>
@@ -554,263 +804,11 @@ public static void test1()
   </entry>
   
   <entry>
-    <title>bytes to string</title>
-    <link href="http://codelover.link/2016/03/03/Bytes%20-To-String/"/>
-    <id>http://codelover.link/2016/03/03/Bytes -To-String/</id>
-    <published>2016-03-03T15:19:50.488Z</published>
-    <updated>2016-03-03T15:19:50.488Z</updated>
-    
-    <content type="html">&lt;p&gt;有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。&lt;/p&gt;
-&lt;p&gt;在C#里面，Byte数组转String字符串我们一般用Convert.ToBase64()完成。&lt;/p&gt;
-&lt;p&gt;代码如下：&lt;br&gt;&lt;figure class=&quot;highlight csharp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;BytesToString&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] buff&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; Convert.ToBase64String(buff);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] StringToBytes(&lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt; input)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; Encoding.UTF8.GetBytes(input);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
-&lt;p&gt; 一般来说这样也没撒问题了，不过，如果这个数据是通过URL的方式给出去的，这时候就要考虑一下特殊字符编码问题了。+、空格、%之类的特殊字符可能会导致切断URL传参的数据，导致得到的数据不一致。这样的话，解密也做不下去了。&lt;/p&gt;
-&lt;p&gt; 相关资料：&lt;br&gt; &lt;br&gt;1、&lt;a href=&quot;http://www.ruanyifeng.com/blog/2010/02/url_encoding.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;关于URL编码&lt;/a&gt;&lt;br&gt; &lt;br&gt;2、&lt;a href=&quot;http://blog.csdn.net/luo_deng/article/details/12186535&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;URL编码—-url参数中有+、空格、=、%、&amp;amp;、#等特殊符号的问题解决&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt; 不过也好在，C#提供了一个HttpUtility.UrlEncode(input)和HttpUtility.UrlEncode(input)这两个函数，让我们直接把上面的特殊字符转换成URL可识别的转义字符。&lt;br&gt; 数据出去之后先Encode一下，回来之后Decode一下，好像问题都解决了吧。&lt;/p&gt;
-&lt;p&gt;然而我们都忘了一件事情，URL到了浏览器之后，自然会对URL里面的东西Decode一次。&lt;br&gt;我实现的时候，在后台验证的时候又Decode一次,这就出问题了。&lt;/p&gt;
-&lt;p&gt;问题在哪呢？一个encode的字符被decode两次，内容已经被改掉了…&lt;br&gt;这就导致解密的时候直接挂了….&lt;/p&gt;
-&lt;p&gt;这样看来，&lt;br&gt;Convert.ToBase64String()这个不够靠谱，出来的数据可能会有特殊字符的问题。&lt;br&gt;怎么解决呢？那天晚上和老大/CTO都在看这个bug。一下子都没撒好办法….&lt;/p&gt;
-&lt;p&gt;后来CTO想了一下，说byte不就是最大不久255么？直接转16进制字符就是嘛。&lt;br&gt;于是有了下面的代码：&lt;/p&gt;
-&lt;figure class=&quot;highlight csharp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;summary&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; byte数组转string&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/summary&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;param name=&quot;bytes&quot;&amp;gt;&lt;/span&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/param&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;returns&amp;gt;&lt;/span&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/returns&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;BytesToString&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] bytes&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (bytes == &lt;span class=&quot;keyword&quot;&gt;null&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;.Empty;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;.Join(&lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;.Empty, &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   bytes.Select(b =&amp;gt; &lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;.Format(&lt;span class=&quot;string&quot;&gt;&quot;&amp;#123;0:x2&amp;#125;&quot;&lt;/span&gt;, b)).ToArray());&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;summary&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; string转byte数组&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/summary&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;param name=&quot;str&quot;&amp;gt;&lt;/span&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/param&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;returns&amp;gt;&lt;/span&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/returns&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] StringToBytes(&lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt; str)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (&lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;.IsNullOrEmpty(str))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;null&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] bytes = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[str.Length / &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; (&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; i = &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;; i &amp;lt; str.Length; i += &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        bytes[i / &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;] = Convert.ToByte(&lt;span class=&quot;string&quot;&gt;&quot;0x&quot;&lt;/span&gt; + str[i] + str[i + &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;], &lt;span class=&quot;number&quot;&gt;16&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; bytes;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;问题解决。&lt;/p&gt;
-&lt;p&gt;关于base64的实现，下面这个链接是相关资料，有兴趣自己看啦。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.hejingzong.cn/blog/ViewBlog_36.aspx&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;C#/ASP.NET Base64编码原理及实现&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.cnblogs.com/tuyile006/archive/2008/01/17/1043178.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;C＃实现Base64编码与解码&lt;/a&gt;&lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。&lt;/p&gt;
-&lt;p&gt;在C#里面，Byte数组转String字符串我
-    
-    </summary>
-    
-      <category term=".net" scheme="http://codelover.link/categories/net/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>C#.NET托管堆和垃圾回收</title>
-    <link href="http://codelover.link/2016/03/01/%E6%89%98%E7%AE%A1%E5%A0%86%E5%92%8C%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"/>
-    <id>http://codelover.link/2016/03/01/托管堆和垃圾回收/</id>
-    <published>2016-03-01T12:49:34.588Z</published>
-    <updated>2016-02-23T15:25:15.626Z</updated>
-    
-    <content type="html">&lt;p&gt;###托管堆基础&lt;br&gt; 简述：每个程序都要使用这样或那样的资源，包括文件、内存缓冲区、屏幕空间、网络连接…..事实上，在面向对象的环境中，每个类型都代表可供程序使用的一种资源。要使用这些资源，必须为代表资源的类型分配内存。&lt;/p&gt;
-&lt;p&gt; 以下是访问一个资源所需步骤：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;调用IL指令newobj，为代表资源的类型分配内存。(C# new操作符)&lt;/li&gt;
-&lt;li&gt;初始化内存，设置资源的初始状态。（一般指构造函数）&lt;/li&gt;
-&lt;li&gt;访问类型的成员来使用资源。（使用成员变量、方法、属性等）&lt;/li&gt;
-&lt;li&gt;摧毁资源的状态以进行清除。（Dispose？？？）&lt;/li&gt;
-&lt;li&gt;释放内存。（GC） &lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;###从托管堆分配资源&lt;/p&gt;
-&lt;p&gt;CLR要求所有的对象都从托管堆分配。&lt;br&gt;进程初始化，CLR划出一个地址空间区域作为托管堆。CLR还要维护一个指针，姑且叫NextObjPtr，该指针指向下一个对象在堆中的分配位置。刚开始的时候， NextObjPtr 设为地址空间区域的基地址。&lt;br&gt;一个区域被非垃圾对象填满后，CLR会分配更多的区域。&lt;/p&gt;
-&lt;p&gt;这一个过程一直重复，直至整个进程地址空间被填满。所以，应用程序内存收进程的虚拟地址空间的限制。&lt;/p&gt;
-&lt;p&gt;32位进程最多能分配1.5GB，64位进程最多能分配8T。&lt;br&gt;注：进程内存大小的相关资料&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/windows/hardware/Dn613959(v=vs.85&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Memory Support and Windows Operating Systems&lt;/a&gt;.aspx)&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/ms189334.aspx&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;进程地址空间&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/yusiguyuan/article/details/12405799&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt; 32位模式下C/C++程序可用最大内存&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;###C# 的new操作符导致CLR执行以下操作：&lt;/p&gt;
-&lt;p&gt;1、计算类型的字段（以及从基类型继承的字段）所需要的字节数。&lt;/p&gt;
-&lt;p&gt;2、加上对象的开销所需的字节数。每个对象都有两个开销字段：类型对象指针和同步块索引。对于32位应用程序，这两个字段各需要32位，所以每个对象需要增加8字节。对于64位应用程序，这两个字段各需要64位，所以每个对象要增加16字节。&lt;/p&gt;
-&lt;p&gt;3、CLR检查区域中是否有分配对象所需的字节数。如果托管堆有足够的可用空间，就在NetxObjPtr指针指向的地址处放入对象，为对象分配的字节会被清零。接着调用类型的构造器（为this参数传递NextObjPtr），new操作符返回对象引用。就在返回这个对象引用之前，NextObjPtr指针的值会加上这个对象占用的字节数来得到一个新值，即下个对象放入托管堆时的地址。如下图：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/i3rlSCPAcnT9pL0El0BptPIBpuvnxHpBw9Nkp*UqIjw!/o/dJMAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=LwKNAC8CjQADACU!&amp;amp;su=1199793361&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;###垃圾回收算法&lt;/p&gt;
-&lt;p&gt;####CLR使用引用跟踪算法。&lt;br&gt;引用跟踪算法只关心引用类型的变量，因为只有这种变量才能引用堆上面的对象；&lt;br&gt;值类型变量直接包含值类型实例。引用类型变量可在许多场合使用，包括类的静态和实例字段，或者方法的参数和局部变量。这里我们将所有引用类型的变量都称为根。&lt;br&gt;CLR开始GC时，首先暂停所有的线程。(这样可以防止线程在CLR检查期间访问对象并更改其状态。) 然后CLR进入GC标记阶段。在这个阶段，CLR遍历堆中的所有对象，将同步块索引字段中的一位设为0。这表明所有的对象都应删除。然后，CLR检查所有的活动根，查看他们引用了哪些对象。这正是CLR的GC被称作引用跟踪GC的原因。如果一个根包含null，CLR忽略这个根并继续检查下一个根。&lt;br&gt;下图展示一个堆，其中包含几个对象。&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/eVBVeXGrNAfoWfyRgl4aC2RRSGgiDpmbrocv4lTSJMA!/o/dJIAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=gAIFAYACBQEDACU!&amp;amp;su=1176931729&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;图片1&quot;&gt;&lt;/p&gt;
-&lt;p&gt;应用程序的根直接引用对象A 、C、D 、F。所有的对象都已经被标记。标记对象D时，GC发现这个对象含有一个引用对象H的字段，造成对象H也被标记。标记过程会持续，直至应用程序的所有根所有检查完毕。&lt;br&gt;检查完毕后，堆中的对象要么已标记，要么未标记。已标记的对象不能被垃圾回收，因为至少有一个根在引用它。我们说这种对象是可达的，因为应用程序可以通过引用它的变量抵达它。 未标记的对象是不可达的，因为应用程序中不存在使对象能被再次访问的根。&lt;/p&gt;
-&lt;p&gt;CLR知道哪些对象可以幸存，哪些可以被删除后，进入GC的压缩（类似于碎片整理）阶段。在压缩阶段，CLR对堆中已标记的对象进行“乾坤大挪移”，整理所有幸存下来的对象，使他们占用连续的内存。&lt;/p&gt;
-&lt;p&gt;这样做的好处在于：&lt;/p&gt;
-&lt;p&gt;1、所有幸存对象在内存中紧挨在一起，恢复了引用的“局部性”，减少了应用程序的工作集，从而提升了将来访问这些对象时的性能；&lt;/p&gt;
-&lt;p&gt;2、经过整理后，可用空间也是连续的，整个地址空间区段得到了解放，允许其他东西进驻。&lt;/p&gt;
-&lt;p&gt;在内存中移动了对象之后有一个问题亟待解决。引用幸存对象的根现在引用的还是对象最初在内存中的位置，而非移动后的位置。被暂停的线程恢复执行时，将访问旧的内存位置，会造成内存损坏。 这显然是不能容忍的，所以作为压缩阶段的一部分，CLR还要从每个根减去所引用对象在内存中偏移的字节数。这样就能保证每个根还是引用和之前一样的对象，只是对象在内存中变换了位置。&lt;br&gt;如图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/FyP2yk1O6kMsq3.u4e4x3qrAxpwbajgSHOd4QHTJOhE!/o/dJIAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=TQI*AU0CPwEDACU!&amp;amp;su=1202148209&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;##代：提升性能 (待续)&lt;br&gt;CLR的GC是基于代的垃圾回收器，它对你的代码做出了以下几点假设：&lt;/p&gt;
-&lt;p&gt;1、对象越新，生存周期越短。&lt;/p&gt;
-&lt;p&gt;2、对象越老，生存周期越长。&lt;/p&gt;
-&lt;p&gt;3、回收堆的一部分 ，速度快于回收整个堆。&lt;/p&gt;
-&lt;p&gt;大量研究表明，这些假设对于现今大多数的应用程序都是成立的，它们影响了垃圾回收器的实现方式。这里将解释代的工作原理。&lt;/p&gt;
-&lt;p&gt;托管堆在初始化时不包括对象。添加到堆的对象成为第0代对象。简单来说，第0代对象就是那些新构造的对象，垃圾回收器从未检查过它们。如下图，新启动的应用程序，分配了5个对象（从A到E）。过了一会，C和E变得不可达了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/77WJus7lssJpEJ2RZREQoNx.5CL31HLdboJbAgCqS0E!/o/dJMAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=tQIVAbUCFQEDACU!&amp;amp;su=172682065&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;CLR初始化第0代对象选择一个预算容量。如果分配一个新对象造成第0代超预算，就必须启动一次GC。假设对象A到E刚好用完了第0代的空间，那么分配对象F就必须启动GC。GC之后存活的对象现场成为第1代对象。如下图：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/GEDzaV4pNFNQUuDwl2EQrv*eD9Sk9OJCzx5SpRRI2fk!/o/dGUBAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=OAL5ADgC.QADACU!&amp;amp;su=1155276897&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;br&gt;一次GC之后，第0代就不包含任何对象。和前面一样，新对象会分配到第0代。新分配对象F到对象K都到了第0代。&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/Op0QokzBTNYCFR6zzm2tpc2V7U70IsIJTeWrd0UAUb0!/o/dGUBAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=yAJeAcgCXgEDACU!&amp;amp;su=1124261217&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;之后，程序继续运行，B、H、J变得不可达，它们的内存将在某一个时刻回收。&lt;/p&gt;
-&lt;p&gt;假设现在新分配对象L会造成第0代超出预算,造成必须启动垃圾回收。&lt;/p&gt;
-&lt;p&gt;开始垃圾回收时,垃圾回收器必须决定检查哪些代。前面说过,CLR初始化时会为第0代对象选择预算.事实上,它还必须为第1代选择预算.&lt;/p&gt;
-&lt;p&gt;开始一次垃圾回收时,垃圾回收器还会检查第一代占用了多少内存。在本例中,由于第1代占用内存远少于预算,所以垃圾回收器只检查第0代对象。回顾之前基于代的垃圾回收器做出的第一个假设：对象越新，生存期越短。 因此，第0代包含更多的垃圾的可能性更大，能回收更多的内存。由于忽略第1代中的对象，所以加快了垃圾回收速度。&lt;/p&gt;
-&lt;p&gt;显然，忽略第1代中的对象能提升垃圾回收器的性能。但对性能有更大提振作用的是现在不必遍历托管堆中的每个对象。如果根或对象引用了老一代的某个对象，垃圾回收器就可以忽略老对象内部的所有引用，能在更短的时间内构造好可达对象图。当然，如果老对象的字段也可能引用新对象。为了确保对老对象的已更新字段进行检查，垃圾回收器利用了JIT编译器内部的一个机制。这个机制在对象的引用字段发生变化时，会设置一个对应的标志位。这样，垃圾回收器就知道自上一次垃圾回收以来，哪些老对象（如果有的话）已被写入。只有字段发生变化的老对象才需要检查是否引用了第0代中的任何新对象。&lt;/p&gt;
-&lt;p&gt;基于代的垃圾回收器还假设越老的对象活得越长。也就是说，第1代对象在应用程序中有可能是继续可达的。如果垃圾回收器检查第1代的对象，很有可能找不到多少垃圾，结果是也回收不了多少内存。因此，对第1代进行垃圾回收很可能是浪费时间的。如果第一代真有垃圾，垃圾将留在那里。如下图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/Do.yRCBJEnaOfZaUOdxj4II9*pX2BEcX2QmIG6NQPBE!/o/dGUBAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=qAI5AagCOQEDACU!&amp;amp;su=187009937&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;程序继续运行，继续往第0代分配对象，同时程序停止对第1代某对象的使用。&lt;/p&gt;
-&lt;p&gt;如下图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/YEqIM16xFsSgXdvEzgrerLnKw7fEItnrSqEzlaYnUfE!/o/dGUBAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=egJPAXoCTwEDACU!&amp;amp;su=1118118497&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;br&gt;分配对象P导致第0代超预算，开始GC。第1代的所有对象占据内存仍小于预算，垃圾回收器再次决定只回收第0代。忽略第1代中的垃圾对象。如下图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/EcdSNU5AatqRERWtVdlJ7LiIPHHXe8.mklN.0hHDK9U!/o/dJQAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=aAIxAWgCMQEDACU!&amp;amp;su=1214124305&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;程序继续运行，假设第一代的增长导致它的全部对象占用了全部预算。这时候应用程序分配对象P到对象S，使第0代对象达到它的预算总和。如下图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/6dB68RIUYrqMZ4p0VIY3REJZPg.g3ybkZFIazJ3h.CQ!/o/dJIAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=jwIiAY8CIgEDACU!&amp;amp;su=177976657&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;这时候，应用程序准备分配对象T，由于第一代已满，所以必须开始GC。但这一次垃圾回收器发现第一代占用了太多内存，以至于用完了预算。由于前几次对第0代进行GC时，第1代中可能已经有很多对象变得不可达。所以这次垃圾回收器决定检查第1代和第0代中的所有对象。两代都被垃圾回收后，堆的情况如下图：&lt;br&gt;&lt;img src=&quot;http://r.photo.store.qq.com/psb?/4d3e65a5-4593-42bc-88f9-7bbb2e647ebe/bxdZDsZi2Y6FSDWs7RXNPkkJK8dCzMD.cfnjwNY2Mjs!/o/dJIAAAAAAAAA&amp;amp;ek=1&amp;amp;kp=1&amp;amp;pt=0&amp;amp;bo=tgI2AbYCNgEDACU!&amp;amp;su=197762641&amp;amp;sce=0-12-12&amp;amp;rf=2-9&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;托管堆只支持三代：第0代、第1代和第2代。&lt;/p&gt;
-&lt;p&gt;CLR初始化时，会为每一代选择预算。&lt;/p&gt;
-&lt;p&gt;然而，CLR的垃圾回收是自调节的。&lt;/p&gt;
-&lt;p&gt;这意味着垃圾回收器会在执行垃圾回收的过程了解程序的行为。&lt;/p&gt;
-&lt;p&gt;例如：假设应用程序构造了许多对象，但每个对象的时间都很短。&lt;br&gt;在这种情况下，对第0代的垃圾回收会回收到大量的内存。事实上，第0代的所有对象都可能被回收。&lt;/p&gt;
-&lt;p&gt;如果垃圾回收器发现在回收第0代后存活下来的对象很少，就可能减少第0代的预算。已分配空间的减少意味着垃圾回收将更频繁地发生，但垃圾回收器每次做的事情也减少，这减少了进程的工作集。&lt;/p&gt;
-&lt;p&gt;另一方面，如果垃圾回收器回收了第0代，发现还有很多对象存活，没多少内存可以被回收，就会增大第0代的预算。&lt;/p&gt;
-&lt;p&gt;同样的启发性算法调整预算适用于了第1代和第2代的预算。&lt;/p&gt;
-&lt;p&gt;引自：《CLR VIA C# -21章》&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/vstudio/f144e03t(v=vs.100&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;自动内存管理&lt;/a&gt;.aspx)&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/vstudio/ee787088(v=vs.100&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;垃圾回收的基础&lt;/a&gt;.aspx)&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://msdn.microsoft.com/zh-cn/library/vstudio/ee787088(v=vs.100&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;代数&lt;/a&gt;.aspx#generations )&lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;###托管堆基础&lt;br&gt; 简述：每个程序都要使用这样或那样的资源，包括文件、内存缓冲区、屏幕空间、网络连接…..事实上，在面向对象的环境中，每个类型都代表可供程序使用的一种资源。要使用这些资源，必须为代表资源的类型分配内存。&lt;/p&gt;
-&lt;p&gt; 以下是访问一个资源所需步骤：&lt;/
-    
-    </summary>
-    
-      <category term="GC" scheme="http://codelover.link/categories/GC/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>C#.NET托管堆和垃圾回收(续)</title>
-    <link href="http://codelover.link/2016/03/01/%E6%89%98%E7%AE%A1%E5%A0%86%E5%92%8C%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6(%E7%BB%AD)/"/>
-    <id>http://codelover.link/2016/03/01/托管堆和垃圾回收(续)/</id>
-    <published>2016-03-01T12:49:34.588Z</published>
-    <updated>2016-02-23T15:29:23.104Z</updated>
-    
-    <content type="html">&lt;p&gt;##大对象&lt;br&gt; CLR将对象分成大对象和小对象。目前认为85000字节或者更大的对象是大对象。CLR以不同方式对待大小对象。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;大对象不是在小对象的地址空间分配的，而是在进程地址空间的其他地方分配。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;目前版本的GC不“压缩”大对象，因为在内存中移动它们代价过高。但这可能在进程中的大对象之间造成地址空间碎片化，以至于抛出OutMemoryException。CLR将来的版本可能会压缩大对象。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;大对象总是第2代，绝不可能是第0代或者第1代。所以只能为需要长时间存活的资源创建大对象。分配短时间存活的大对象会导致第2代被更频繁地回收，损失性能。大对象一般是大字符串（XML/JSON）或者用于I/O操作的字节数组（从文件/网络将字节读入缓冲区以便处理）。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;##垃圾回收模式&lt;br&gt; CLR启动时会选择一个GC模式，进程中之前该模式都不会改变。&lt;/p&gt;
-&lt;p&gt; 有两个基本GC模式。&lt;/p&gt;
-&lt;p&gt;###工作站&lt;br&gt;该模式针对客户端应用程序优化GC。GC造成的延时很低，应用程序线程挂起时间很短，避免用户感到焦虑。在该模式中,GC假定机器上运行的其他应用程序都不会消耗太多的CPU资源。&lt;/p&gt;
-&lt;p&gt;###服务器&lt;br&gt; 该模式针对服务器端应用程序优化GC。被优化的主要是吞吐量和资源利用。GC假定机器上没有运行其他应用程序（无论客户端还是服务器应用程序），并假定机器的所有CPU都可以用来辅助完成GC。该模式造成托管堆被拆分成几个区域，每个CPU一个。开始垃圾回收时，垃圾回收器在每个CPU上运行一个特殊线程；每个线程都和其他线程并发回收它自己的区域。对于工作者线程行为一致的服务器应用程序，并发回收能很好进行。这个功能要求应用程序在多CPU计算机上运行，是线程能真正同时工作，从而得到性能上的提升。&lt;/p&gt;
-&lt;p&gt;应用程序默认以“工作站”GC模式运行。寄宿了CLR的服务器应用程序（如ASP.NET ）可请求CLR加载服务器 GC.但如果应用程序在单处理器计算机上运行，CLR总是使用“工作站”GC模式。&lt;/p&gt;
-&lt;p&gt;独立应用程序可以创建一个配置文件告诉CLR 使用CLR使用服务器回收器。配置文件要为应用程序添加gcServer元素。下面是一个示例配置文件：&lt;/p&gt;
-&lt;p&gt;&lt;configuration&gt;&lt;br&gt;       &lt;runtime&gt;&lt;br&gt;             &lt;gcserver enabled=&quot;true&quot;&gt;&lt;br&gt;      &lt;/gcserver&gt;&lt;/runtime&gt;&lt;br&gt;&lt;/configuration&gt;&lt;br&gt;可以使用GCSettings类的只读Boolean属性IsServerGC得到CLR是否处于“服务器”GC模式。&lt;/p&gt;
-&lt;p&gt;除了这两种模式，GC还支持两种子模式：并发(默认)或者非并发。&lt;br&gt;在并发方式中，垃圾回收器有一个额外的后台线程，它能在应用程序运行时并发标记对象。 程序运行时，垃圾回收器运行一个普通优先级的后台线程来查找不可达对象。找到之后，垃圾回收器再次挂起所以线程，判断是否要“压缩”内存。如决定压缩，内存会被压缩，根引用会被修正，应用程序线程恢复运行。这一次垃圾回收花费的时间比平常少，因为不可达对象集合已构造好了。但垃圾回收器也可能决定不压缩内存；事实上，垃圾回收器更倾向不压缩。可用内存多，垃圾回收器便不会压缩堆；这有利于增强性能，但会增大程序的工作集。使用并发垃圾回收器，应用程序消耗的内存通常比使用非并发垃圾回收器多。&lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;##大对象&lt;br&gt; CLR将对象分成大对象和小对象。目前认为85000字节或者更大的对象是大对象。CLR以不同方式对待大小对象。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;大对象不是在小对象的地址空间分配的，而是在进程地址空间的其他地方分配。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;目前版
-    
-    </summary>
-    
-      <category term="GC" scheme="http://codelover.link/categories/GC/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>一些有用的网站</title>
-    <link href="http://codelover.link/2016/03/01/%E4%B8%80%E4%BA%9B%E6%9C%89%E7%94%A8%E7%9A%84%E7%BD%91%E7%AB%99/"/>
-    <id>http://codelover.link/2016/03/01/一些有用的网站/</id>
-    <published>2016-03-01T12:49:34.588Z</published>
-    <updated>2016-02-25T15:11:56.106Z</updated>
-    
-    <content type="html">&lt;p&gt;&lt;a href=&quot;http://wowubuntu.com/markdown/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Markdown 语法说明 (简体中文版)&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://wowubuntu.com/markdown/basic.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Markdown: Basics （快速入门）&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://wsgzao.github.io/post/hexo-guide/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;使用GitHub和Hexo搭建免费静态Blog(本博客案例)&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.mxgw.info/t/filename-too-long-in-git.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;win下面的git客户端提示FIlename too long解决方法&lt;/a&gt;&lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;a href=&quot;http://wowubuntu.com/markdown/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Markdown 语法说明 (简体中文版)&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://wowubuntu.com/ma
-    
-    </summary>
-    
-      <category term="nothing" scheme="http://codelover.link/categories/nothing/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>.NET 类字段与类属性</title>
-    <link href="http://codelover.link/2016/03/01/%E7%B1%BB%E5%AD%97%E6%AE%B5%E4%B8%8E%E7%B1%BB%E5%B1%9E%E6%80%A7/"/>
-    <id>http://codelover.link/2016/03/01/类字段与类属性/</id>
-    <published>2016-03-01T12:49:34.588Z</published>
-    <updated>2016-02-23T15:58:47.116Z</updated>
-    
-    <content type="html">&lt;p&gt;#.NET 类字段与类属性&lt;br&gt;@(.NET)[基础|字段|属性]&lt;/p&gt;
-&lt;p&gt;##字段&lt;br&gt;字段表示只读或可读/可写的数据值。&lt;br&gt;字段可以是静态的，这种字段被认为是类型状态的一部分。&lt;br&gt;字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。&lt;br&gt;强烈建议把字段声明为私有，防止类型或对象的状态被类型外部代码破坏。&lt;/p&gt;
-&lt;p&gt;##属性&lt;br&gt;属性允许用简单的、字段风格的语法设置或查询类型或对象的逻辑状态，同时保证状态不被破坏。&lt;br&gt;作用于类型称为静态属性，作用于对象称为实例属性。&lt;br&gt;属性可以无参，也可以有多个参数（相当少见，但集合类用的多）。 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;using System;
-
-public sealed class SomeType
-{                            //  1  
-// Nested class  
-   private class SomeNestedType { }                //  2  
-
-   // Constant, read­only, and static read/write field   
-   private const Int32 c_SomeConstant = 1;            //  3     
-
-   private readonly String m_SomeReadOnlyField = &amp;quot;2&amp;quot;;     //  4    
-
-   private static Int32 s_SomeReadWriteField = 3;      //  5  
-
-   // Type constructor  
-   static SomeType() { }                                  //  6  
-
-   // Instance constructors  
-   public SomeType(Int32 x) { }                           //  7  
-
-   public SomeType() { }                                  //  8 
-
-   // Instance and static methods  
-   private String InstanceMethod() { return null; }       // 9   
-
-   public static void Main() { }                        // 10 
-
-   // Instance property  
-   public Int32 SomeProp
-   {                                // 11      
-       get { return 0; }                                // 12      
-       set { }                                          // 13  
-   }
-
-   // Instance parameterful property (indexer) 
-   public Int32 this[String s]
-   {                          // 14       
-       get { return 0; }                                // 15        
-       set { }                                          // 16  
-   }
-
-   // Instance event  
-   public event EventHandler SomeEvent;                  // 17  
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&quot;https://kekaeq-ch3301.files.1drv.com/y3meEWWaK-o9SNfr_fT71Xr3YrPqO1LIswWqMvlHyUxWeH8P0PtXsQlfRkDnGshlMJIy2gPsxNet14efOPOuX-dHmZhCTg8PXyELJR9tnayye4LeEQ6F997b8pSI84wBR6nmmOF8IAr92oKWk36-f8alkEj9TrDQbiMoKGQwO5MTFY/20150105.jpg?psid=1&quot; alt=&quot;enter image description here&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://kekaeq-ch3301.files.1drv.com/y3mN8FseIEbAaQfT8ynEIc4nYsOUK0p0IN7Hp39imVSZXNQXlSfAYmvaC-9bDM3Hq6rPCV1XgrgvoST8wXejwARXaDmXptZpb_nyWwUzWK1rzaJ6fSsYfnP0icRKUclaVxnlltOJSQiuTFO7_fCfabmv0AsrgL5sLo6GdVJmpd-L10/QQ%E5%9B%BE%E7%89%8720151003165909.jpg?psid=1&quot; alt=&quot;enter image description here&quot;&gt;&lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;#.NET 类字段与类属性&lt;br&gt;@(.NET)[基础|字段|属性]&lt;/p&gt;
-&lt;p&gt;##字段&lt;br&gt;字段表示只读或可读/可写的数据值。&lt;br&gt;字段可以是静态的，这种字段被认为是类型状态的一部分。&lt;br&gt;字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。&lt;br&gt;强
-    
-    </summary>
-    
-      <category term=".net" scheme="http://codelover.link/categories/net/"/>
-    
-    
-  </entry>
-  
-  <entry>
     <title>CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”</title>
-    <link href="http://codelover.link/2016/03/01/CodeSmith%E8%BF%9E%E6%8E%A5MySQL%E6%8A%A5%E9%94%99%E2%80%9C%E6%89%BE%E4%B8%8D%E5%88%B0%E8%AF%B7%E6%B1%82%E7%9A%84%20.Net%20Framework%20Data%20Provider%E3%80%82%E5%8F%AF%E8%83%BD%E6%B2%A1%E6%9C%89%E5%AE%89%E8%A3%85%E3%80%82%E2%80%9D%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"/>
-    <id>http://codelover.link/2016/03/01/CodeSmith连接MySQL报错“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法/</id>
-    <published>2016-03-01T12:49:34.572Z</published>
-    <updated>2016-02-27T09:41:40.501Z</updated>
+    <link href="http://codelover.link/2016/04/20/CodeSmith%E8%BF%9E%E6%8E%A5MySQL%E6%8A%A5%E9%94%99%E2%80%9C%E6%89%BE%E4%B8%8D%E5%88%B0%E8%AF%B7%E6%B1%82%E7%9A%84%20.Net%20Framework%20Data%20Provider%E3%80%82%E5%8F%AF%E8%83%BD%E6%B2%A1%E6%9C%89%E5%AE%89%E8%A3%85%E3%80%82%E2%80%9D%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"/>
+    <id>http://codelover.link/2016/04/20/CodeSmith连接MySQL报错“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法/</id>
+    <published>2016-04-20T13:19:00.977Z</published>
+    <updated>2016-04-20T13:19:00.977Z</updated>
     
     <content type="html">&lt;p&gt;1、下载 mysql-connector-net 安装&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/downloads/connector/net/6.9.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;mysql-connector-net&lt;/a&gt;&lt;/p&gt;
@@ -837,10 +835,10 @@ public sealed class SomeType
   
   <entry>
     <title>CodeSmith for MySQL template</title>
-    <link href="http://codelover.link/2016/03/01/CodeSmith%20to%20MySQL/"/>
-    <id>http://codelover.link/2016/03/01/CodeSmith to MySQL/</id>
-    <published>2016-03-01T12:49:34.572Z</published>
-    <updated>2016-02-27T16:32:58.683Z</updated>
+    <link href="http://codelover.link/2016/04/20/CodeSmith%20to%20MySQL/"/>
+    <id>http://codelover.link/2016/04/20/CodeSmith to MySQL/</id>
+    <published>2016-04-20T13:19:00.974Z</published>
+    <updated>2016-04-20T13:19:00.974Z</updated>
     
     <content type="html">&lt;p&gt;对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。&lt;/p&gt;
 &lt;p&gt;&lt;br&gt;&lt;br&gt;以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。&lt;br&gt;&lt;br&gt;&lt;br&gt;不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。&lt;br&gt;&lt;br&gt;&lt;br&gt;再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑合能用。起初也懒，codesmith语法不熟，就没想过去修改一下了。&lt;br&gt;&lt;br&gt; 最近又要用到这套东西，于是决定还是去修改一番，更便于使用。&lt;/p&gt;
@@ -898,6 +896,42 @@ public sealed class SomeType
     </summary>
     
       <category term="CodeSmith" scheme="http://codelover.link/categories/CodeSmith/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>bytes to string</title>
+    <link href="http://codelover.link/2016/04/20/Bytes%20-To-String/"/>
+    <id>http://codelover.link/2016/04/20/Bytes -To-String/</id>
+    <published>2016-04-20T13:19:00.971Z</published>
+    <updated>2016-04-20T13:19:00.971Z</updated>
+    
+    <content type="html">&lt;p&gt;有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。&lt;/p&gt;
+&lt;p&gt;在C#里面，Byte数组转String字符串我们一般用Convert.ToBase64()完成。&lt;/p&gt;
+&lt;p&gt;代码如下：&lt;br&gt;&lt;figure class=&quot;highlight csharp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;BytesToString&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] buff&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; Convert.ToBase64String(buff);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] StringToBytes(&lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt; input)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; Encoding.UTF8.GetBytes(input);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt; 一般来说这样也没撒问题了，不过，如果这个数据是通过URL的方式给出去的，这时候就要考虑一下特殊字符编码问题了。+、空格、%之类的特殊字符可能会导致切断URL传参的数据，导致得到的数据不一致。这样的话，解密也做不下去了。&lt;/p&gt;
+&lt;p&gt; 相关资料：&lt;br&gt; &lt;br&gt;1、&lt;a href=&quot;http://www.ruanyifeng.com/blog/2010/02/url_encoding.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;关于URL编码&lt;/a&gt;&lt;br&gt; &lt;br&gt;2、&lt;a href=&quot;http://blog.csdn.net/luo_deng/article/details/12186535&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;URL编码—-url参数中有+、空格、=、%、&amp;amp;、#等特殊符号的问题解决&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt; 不过也好在，C#提供了一个HttpUtility.UrlEncode(input)和HttpUtility.UrlEncode(input)这两个函数，让我们直接把上面的特殊字符转换成URL可识别的转义字符。&lt;br&gt; 数据出去之后先Encode一下，回来之后Decode一下，好像问题都解决了吧。&lt;/p&gt;
+&lt;p&gt;然而我们都忘了一件事情，URL到了浏览器之后，自然会对URL里面的东西Decode一次。&lt;br&gt;我实现的时候，在后台验证的时候又Decode一次,这就出问题了。&lt;/p&gt;
+&lt;p&gt;问题在哪呢？一个encode的字符被decode两次，内容已经被改掉了…&lt;br&gt;这就导致解密的时候直接挂了….&lt;/p&gt;
+&lt;p&gt;这样看来，&lt;br&gt;Convert.ToBase64String()这个不够靠谱，出来的数据可能会有特殊字符的问题。&lt;br&gt;怎么解决呢？那天晚上和老大/CTO都在看这个bug。一下子都没撒好办法….&lt;/p&gt;
+&lt;p&gt;后来CTO想了一下，说byte不就是最大不久255么？直接转16进制字符就是嘛。&lt;br&gt;于是有了下面的代码：&lt;/p&gt;
+&lt;figure class=&quot;highlight csharp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;summary&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; byte数组转string&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/summary&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;param name=&quot;bytes&quot;&amp;gt;&lt;/span&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/param&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;returns&amp;gt;&lt;/span&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/returns&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;BytesToString&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] bytes&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (bytes == &lt;span class=&quot;keyword&quot;&gt;null&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;.Empty;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;.Join(&lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;.Empty, &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   bytes.Select(b =&amp;gt; &lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;.Format(&lt;span class=&quot;string&quot;&gt;&quot;&amp;#123;0:x2&amp;#125;&quot;&lt;/span&gt;, b)).ToArray());&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;summary&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; string转byte数组&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/summary&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;param name=&quot;str&quot;&amp;gt;&lt;/span&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/param&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;///&lt;/span&gt; &lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;returns&amp;gt;&lt;/span&gt;&lt;span class=&quot;xmlDocTag&quot;&gt;&amp;lt;/returns&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] StringToBytes(&lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt; str)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; (&lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;.IsNullOrEmpty(str))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;null&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] bytes = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[str.Length / &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; (&lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt; i = &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;; i &amp;lt; str.Length; i += &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        bytes[i / &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;] = Convert.ToByte(&lt;span class=&quot;string&quot;&gt;&quot;0x&quot;&lt;/span&gt; + str[i] + str[i + &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;], &lt;span class=&quot;number&quot;&gt;16&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; bytes;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;问题解决。&lt;/p&gt;
+&lt;p&gt;关于base64的实现，下面这个链接是相关资料，有兴趣自己看啦。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.hejingzong.cn/blog/ViewBlog_36.aspx&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;C#/ASP.NET Base64编码原理及实现&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.cnblogs.com/tuyile006/archive/2008/01/17/1043178.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;C＃实现Base64编码与解码&lt;/a&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。&lt;/p&gt;
+&lt;p&gt;在C#里面，Byte数组转String字符串我
+    
+    </summary>
+    
+      <category term=".net" scheme="http://codelover.link/categories/net/"/>
     
     
   </entry>

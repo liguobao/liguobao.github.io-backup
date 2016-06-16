@@ -3,17 +3,25 @@
 <head>
   <meta charset="utf-8">
   
-  <title>codelover&#39;s blog</title>
+  <title>CodeSmith for MySQL template | codelover&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一直走在吃软饭路上的软狗">
-<meta property="og:type" content="website">
-<meta property="og:title" content="codelover's blog">
-<meta property="og:url" content="http://codelover.link/page/2/index.html">
+  <meta name="description" content="对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。
+以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CodeSmith for MySQL template">
+<meta property="og:url" content="http://codelover.link/2016/04/20/CodeSmith to MySQL/index.html">
 <meta property="og:site_name" content="codelover's blog">
-<meta property="og:description" content="一直走在吃软饭路上的软狗">
+<meta property="og:description" content="对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。
+以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/20160228-1.png">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/20160228-2.png">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/20160228-1.png">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/20160228-4.png">
+<meta property="og:updated_time" content="2016-04-20T13:19:00.974Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="codelover's blog">
-<meta name="twitter:description" content="一直走在吃软饭路上的软狗">
+<meta name="twitter:title" content="CodeSmith for MySQL template">
+<meta name="twitter:description" content="对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。
+以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑">
   
     <link rel="alternative" href="/atom.xml" title="codelover&#39;s blog" type="application/atom+xml">
   
@@ -59,168 +67,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-Join" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/20/Join/" class="article-date">
-  <time datetime="2016-04-20T13:19:00.980Z" itemprop="datePublished">2016-04-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/net/">.net</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/20/Join/">.NET-join用法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>#.NET   Join<br> 连接：内连接、外连接、左连接、右连接。<br>SQL的Join这里就不多说了，<br>今天主要是看一下LINQ的Join用法，以及Enumerable.Join()的用法。</p>
-<p>Join用于连接数据，首先就是数据之间有联系咯。</p>
-<p>先说Enumerable.Join()。<br>参数类型如下：<br>            public static IEnumerable<tresult> Join<touter, tinner,="" tkey,="" tresult=""><br>            (<br>                     this IEnumerable<touter> outer,<br>                    IEnumerable<tinner> inner,<br>                    Func<touter, tkey=""> outerKeySelector,<br>                    Func<tinner, tkey=""> innerKeySelector,<br>                    Func<touter, tinner,="" tresult=""> resultSelector<br>            )<br>类型参数<br>TOuter<br>第一个序列中的元素的类型。<br>TInner<br>第二个序列中的元素的类型。<br>TKey<br>键选择器函数返回的键的类型。<br>TResult<br>结果元素的类型。<br>参数<br>outer<br>类型：System.Collections.Generic.IEnumerable<touter><br>要联接的第一个序列。<br>inner<br>类型：System.Collections.Generic.IEnumerable<tinner><br>要与第一个序列联接的序列。<br>outerKeySelector<br>类型：System.Func<touter, tkey=""><br>用于从第一个序列的每个元素提取联接键的函数。<br>innerKeySelector<br>类型：System.Func<tinner, tkey=""><br>用于从第二个序列的每个元素提取联接键的函数。<br>resultSelector<br>类型：System.Func<touter, tinner,="" tresult=""><br>用于从两个匹配元素创建结果元素的函数。<br>返回值<br>类型：System.Collections.Generic.IEnumerable<tresult><br>IEnumerable&lt;T&gt; that has elements of type TResult that are obtained by performing an inner join on two sequences.” xml:space=”preserve”&gt;一个具有 TResult 类型元素的 IEnumerable<t>，这些元素是通过对两个序列执行内部联接得来的。<br>使用说明<br>在 Visual Basic 和 C# 中，可以在 IEnumerable<touter> 类型的任何对象上将此方法作为实例方法来调用。当使用实例方法语法调用此方法时，请省略第一个参数。有关详细信息，请参阅 扩展方法 (Visual Basic) 或 扩展方法（C# 编程指南）。</touter></t></tresult></touter,></tinner,></touter,></tinner></touter></touter,></tinner,></touter,></tinner></touter></touter,></tresult></p>
-<p>先上一个MSDN的例子。</p>
-<pre><code>     public static void JoinEx1()         
-     {
-       Person magnus = new Person { Name = &quot;Hedlund, Magnus&quot; };
-       Pet barley = new Pet { Name = &quot;Barley&quot;, Owner = terry };
-       Person terry = new Person { Name = &quot;Adams, Terry&quot; };
-       Person charlotte = new Person { Name = &quot;Weiss, 
-       Charlotte&quot; };
-       Pet boots = new Pet { Name = &quot;Boots&quot;, Owner = terry };
-       Pet whiskers = new Pet { Name = &quot;Whiskers&quot;, 
-       Owner = charlotte};
-       Pet daisy = new Pet { Name = &quot;Daisy&quot;, Owner = magnus };
-
-    List&lt;Person&gt; people = new List&lt;Person&gt; 
-    { magnus, terry, charlotte };
-    List&lt;Pet&gt; pets = new List&lt;Pet&gt; 
-    { barley, boots, whiskers, daisy };
-
-    // Create a list of Person-Pet pairs where 
-    // each element is an anonymous type that contains a
-    // Pet&apos;s name and the name of the Person that owns the Pet.
-    var query =
-        people.Join(
-                    pets,//需要Join的另一个数据源
-          person =&gt; person,//自己用来比较的key， lambda 表达式
-     pet =&gt; pet.Owner,//另一个数据源用来比较的key， lambda 表达式
-(person, pet) =&gt;new { OwnerName = person.Name, Pet = pet.Name } 
-               //想要取出来的数据，支持匿名对象， lambda 表达式);
-    foreach (var obj in query)
-    {
-      Console.WriteLine( &quot;{0} - {1}&quot;,obj.OwnerName,obj.Pet);
-    }
-}
-</code></pre><p> LINQ的Join<br>同样是上面的数据，如果换成LINQ的Join，写法如下：<br>            var query = from person in people // 第一个数据源<br>                      join pet in pets            //第二个数据源<br>                      on person equals pet.Owner  //Join条件<br>                      select  new { OwnerName = person.Name, Pet = pet.Name };<br>                      //要到得到的数据。</p>
-<p>上面两种写法得到的结果都是内链接结果，至于左连接、右连接、外连接….<br>等我下次有心情再更新吧，再不走家里的键盘又要坏了。 </p>
-<p>一些资料链接：<br><a href="https://msdn.microsoft.com/zh-cn/library/bb311040.aspx" target="_blank" rel="external">https://msdn.microsoft.com/zh-cn/library/bb311040.aspx</a><br><a href="https://msdn.microsoft.com/zh-cn/library/bb534675%28v=vs.110%29.aspx?f=255&amp;MSPPError=-2147217396" target="_blank" rel="external">https://msdn.microsoft.com/zh-cn/library/bb534675%28v=vs.110%29.aspx?f=255&amp;MSPPError=-2147217396</a><br><a href="http://www.cnblogs.com/Ivony/archive/2008/08/18/1270555.html" target="_blank" rel="external">http://www.cnblogs.com/Ivony/archive/2008/08/18/1270555.html</a><br><a href="http://www.cnblogs.com/Ivony/archive/2008/08/28/1278643.html" target="_blank" rel="external">http://www.cnblogs.com/Ivony/archive/2008/08/28/1278643.html</a><br><a href="http://www.cnblogs.com/Ivony/archive/2008/10/14/1309807.html" target="_blank" rel="external">http://www.cnblogs.com/Ivony/archive/2008/10/14/1309807.html</a> ; </p>
-<p>LINQ GroupJoin 实现左连接<br>var queryGroup = from person in people // 第一个数据源<br>                                join pet in pets //第二个数据源<br>                                on person equals pet.Owner into ps //加了into,华丽变身GroupJoin<br>                                select new { OwnerName = person.Name, Pet = ps }; //要到得到的数据。 </p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://codelover.link/2016/04/20/Join/" data-id="cipidu3jt000m9kttfv1te3lx" class="article-share-link">Share</a>
-      
-      
-	  <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style">
-	<span class="jiathis_txt">分享到：</span>
-	<a class="jiathis_button_tools_1"></a>
-	<a class="jiathis_button_tools_2"></a>
-	<a class="jiathis_button_tools_3"></a>
-	<a class="jiathis_button_tools_4"></a>
-	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-	<a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
-	  
-    </footer>
-  </div>
-  
-</article>
-
-
-
- 
-  
-    <article id="post-CodeSmith连接MySQL报错“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/20/CodeSmith连接MySQL报错“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法/" class="article-date">
-  <time datetime="2016-04-20T13:19:00.977Z" itemprop="datePublished">2016-04-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/CodeSmith/">CodeSmith</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/20/CodeSmith连接MySQL报错“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法/">CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1、下载 mysql-connector-net 安装</p>
-<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
-<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
-<p>一般DLL所在目录是：</p>
-<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
-<p>3、重启CodeSmith生效</p>
-<p><br><br><br></p>
-<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
-<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://codelover.link/2016/04/20/CodeSmith连接MySQL报错“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法/" data-id="cipidu3jz000r9kttep2984gz" class="article-share-link">Share</a>
-      
-      
-	  <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style">
-	<span class="jiathis_txt">分享到：</span>
-	<a class="jiathis_button_tools_1"></a>
-	<a class="jiathis_button_tools_2"></a>
-	<a class="jiathis_button_tools_3"></a>
-	<a class="jiathis_button_tools_4"></a>
-	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-	<a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
-	  
-    </footer>
-  </div>
-  
-</article>
-
-
-
- 
-  
-    <article id="post-CodeSmith to MySQL" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-CodeSmith to MySQL" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/04/20/CodeSmith to MySQL/" class="article-date">
   <time datetime="2016-04-20T13:19:00.974Z" itemprop="datePublished">2016-04-20</time>
@@ -237,8 +84,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/20/CodeSmith to MySQL/">CodeSmith for MySQL template</a>
+    <h1 class="article-title" itemprop="name">
+      CodeSmith for MySQL template
     </h1>
   
 
@@ -315,88 +162,51 @@
     </footer>
   </div>
   
-</article>
-
-
-
- 
+    
+<nav id="article-nav">
   
-    <article id="post-Bytes -To-String" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/20/Bytes -To-String/" class="article-date">
-  <time datetime="2016-04-20T13:19:00.971Z" itemprop="datePublished">2016-04-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/net/">.net</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+    <a href="/2016/04/20/CodeSmith连接MySQL报错“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
         
+          CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”
+        
+      </div>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/20/Bytes -To-String/">bytes to string</a>
-    </h1>
   
+    <a href="/2016/04/20/Bytes -To-String/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">bytes to string</div>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。</p>
-<p>在C#里面，Byte数组转String字符串我们一般用Convert.ToBase64()完成。</p>
-<p>代码如下：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">BytesToString</span>(<span class="params"><span class="keyword">byte</span>[] buff</span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">   <span class="keyword">return</span> Convert.ToBase64String(buff);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">byte</span>[] StringToBytes(<span class="keyword">string</span> input)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> Encoding.UTF8.GetBytes(input);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p> 一般来说这样也没撒问题了，不过，如果这个数据是通过URL的方式给出去的，这时候就要考虑一下特殊字符编码问题了。+、空格、%之类的特殊字符可能会导致切断URL传参的数据，导致得到的数据不一致。这样的话，解密也做不下去了。</p>
-<p> 相关资料：<br> <br>1、<a href="http://www.ruanyifeng.com/blog/2010/02/url_encoding.html" target="_blank" rel="external">关于URL编码</a><br> <br>2、<a href="http://blog.csdn.net/luo_deng/article/details/12186535" target="_blank" rel="external">URL编码—-url参数中有+、空格、=、%、&amp;、#等特殊符号的问题解决</a></p>
-<p> 不过也好在，C#提供了一个HttpUtility.UrlEncode(input)和HttpUtility.UrlEncode(input)这两个函数，让我们直接把上面的特殊字符转换成URL可识别的转义字符。<br> 数据出去之后先Encode一下，回来之后Decode一下，好像问题都解决了吧。</p>
-<p>然而我们都忘了一件事情，URL到了浏览器之后，自然会对URL里面的东西Decode一次。<br>我实现的时候，在后台验证的时候又Decode一次,这就出问题了。</p>
-<p>问题在哪呢？一个encode的字符被decode两次，内容已经被改掉了…<br>这就导致解密的时候直接挂了….</p>
-<p>这样看来，<br>Convert.ToBase64String()这个不够靠谱，出来的数据可能会有特殊字符的问题。<br>怎么解决呢？那天晚上和老大/CTO都在看这个bug。一下子都没撒好办法….</p>
-<p>后来CTO想了一下，说byte不就是最大不久255么？直接转16进制字符就是嘛。<br>于是有了下面的代码：</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> byte数组转string</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="bytes"&gt;</span><span class="xmlDocTag">&lt;/param&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span><span class="xmlDocTag">&lt;/returns&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">BytesToString</span>(<span class="params"><span class="keyword">byte</span>[] bytes</span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (bytes == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">string</span>.Empty;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">string</span>.Join(<span class="keyword">string</span>.Empty, </span><br><span class="line">   bytes.Select(b =&gt; <span class="keyword">string</span>.Format(<span class="string">"&#123;0:x2&#125;"</span>, b)).ToArray());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> string转byte数组</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="str"&gt;</span><span class="xmlDocTag">&lt;/param&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span><span class="xmlDocTag">&lt;/returns&gt;</span></span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] StringToBytes(<span class="keyword">string</span> str)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">string</span>.IsNullOrEmpty(str))</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[str.Length / <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.Length; i += <span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        bytes[i / <span class="number">2</span>] = Convert.ToByte(<span class="string">"0x"</span> + str[i] + str[i + <span class="number">1</span>], <span class="number">16</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bytes;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>问题解决。</p>
-<p>关于base64的实现，下面这个链接是相关资料，有兴趣自己看啦。</p>
-<p><a href="http://www.hejingzong.cn/blog/ViewBlog_36.aspx" target="_blank" rel="external">C#/ASP.NET Base64编码原理及实现</a></p>
-<p><a href="http://www.cnblogs.com/tuyile006/archive/2008/01/17/1043178.html" target="_blank" rel="external">C＃实现Base64编码与解码</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://codelover.link/2016/04/20/Bytes -To-String/" data-id="cipidu3ir00009kttkwvnyhg4" class="article-share-link">Share</a>
-      
-      
-	  <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style">
-	<span class="jiathis_txt">分享到：</span>
-	<a class="jiathis_button_tools_1"></a>
-	<a class="jiathis_button_tools_2"></a>
-	<a class="jiathis_button_tools_3"></a>
-	<a class="jiathis_button_tools_4"></a>
-	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-	<a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
-	  
-    </footer>
-  </div>
   
 </article>
 
 
-
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-CodeSmith to MySQL" data-title="CodeSmith for MySQL template" data-url="http://codelover.link/2016/04/20/CodeSmith to MySQL/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'codelover'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
  
-  
-  
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-    </nav>
-  
-</section>
+
+ </section>
         
           <aside id="sidebar">
   
