@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://codelover.link/"/>
-  <updated>2016-07-08T16:06:49.252Z</updated>
+  <updated>2016-07-08T16:11:07.159Z</updated>
   <id>http://codelover.link/</id>
   
   <author>
@@ -19,8 +19,8 @@
     <title>ASP.NET Core Middleware</title>
     <link href="http://codelover.link/2016/07/09/ASP.NET-Core-Middleware/"/>
     <id>http://codelover.link/2016/07/09/ASP.NET-Core-Middleware/</id>
-    <published>2016-07-08T16:06:49.252Z</published>
-    <updated>2016-07-08T16:06:49.252Z</updated>
+    <published>2016-07-08T16:11:07.159Z</published>
+    <updated>2016-07-08T16:11:07.159Z</updated>
     
     <content type="html">&lt;p&gt;在ASP.NET 时代，一般来说我们很少会用到HttpModule/HttpHandler，然而有些场景我们使用HttpModule/HttpHandler倒方便快捷完成我们的需求。有兴趣了解HttpModule/HttpHandler以及使用场景的话，可以看下面这个链接的内容。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://www.cnblogs.com/fish-li/archive/2013/01/04/2844908.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;选择HttpHandler还是HttpModule？&lt;/a&gt;&lt;/p&gt;
