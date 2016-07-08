@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://codelover.link/2016/07/01/asp.net%20core%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F/</loc>
+    <loc>http://codelover.link/2016/07/09/ASP.NET-Core-Middleware/</loc>
     
-    <lastmod>2016-06-30T16:16:48.754Z</lastmod>
+    <lastmod>2016-07-08T16:06:49.252Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/07/09/asp.net-core-startup/</loc>
+    
+    <lastmod>2016-07-08T16:04:35.357Z</lastmod>
     
   </url>
   
