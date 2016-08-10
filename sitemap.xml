@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://codelover.link/2016/08/10/58CityHouse-Crawler/</loc>
+    
+    <lastmod>2016-08-10T14:22:37.901Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://codelover.link/2016/07/09/ASP.NET-Core-Middleware/</loc>
     
     <lastmod>2016-07-08T16:14:36.916Z</lastmod>
