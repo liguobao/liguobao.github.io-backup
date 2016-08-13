@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Jexus支持HTTPS协议 | codelover&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="众所周知，在HTTPS页面请求HTTP资料的时候，现代浏览器会拦截，提示用户是否继续，或者直接拦截，提示都不出来。
+最近给自己做了个快速书签工具，点击书签就直接把书签发送到服务器地址，然后保存到我的网站中。
+一开始一切都挺正常的，不过遇到了https的网站的时候，就跪掉了。
+开始的时候看到HTTPS证书是收费的，想想还是算了，反正凑合能用就是。前几天偶尔看到有一个免费申请HTTPS的开源软件，喵了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jexus支持HTTPS协议">
+<meta property="og:url" content="http://codelover.link/2016/08/13/Jexus-support-HTTPS/index.html">
+<meta property="og:site_name" content="codelover's blog">
+<meta property="og:description" content="众所周知，在HTTPS页面请求HTTP资料的时候，现代浏览器会拦截，提示用户是否继续，或者直接拦截，提示都不出来。
+最近给自己做了个快速书签工具，点击书签就直接把书签发送到服务器地址，然后保存到我的网站中。
+一开始一切都挺正常的，不过遇到了https的网站的时候，就跪掉了。
+开始的时候看到HTTPS证书是收费的，想想还是算了，反正凑合能用就是。前几天偶尔看到有一个免费申请HTTPS的开源软件，喵了">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/60e4f29a-6da5-40e1-ae32-453a3bbf2455">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/d306d9c5-6391-421d-86fc-053b97d1b489">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/0800dc87-2500-42d2-a3c5-a75a2c819330">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/24842774-311e-4e55-a6b5-b88a89edc754">
+<meta property="og:updated_time" content="2016-04-23T13:58:57.937Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jexus支持HTTPS协议">
+<meta name="twitter:description" content="众所周知，在HTTPS页面请求HTTP资料的时候，现代浏览器会拦截，提示用户是否继续，或者直接拦截，提示都不出来。
+最近给自己做了个快速书签工具，点击书签就直接把书签发送到服务器地址，然后保存到我的网站中。
+一开始一切都挺正常的，不过遇到了https的网站的时候，就跪掉了。
+开始的时候看到HTTPS证书是收费的，想想还是算了，反正凑合能用就是。前几天偶尔看到有一个免费申请HTTPS的开源软件，喵了">
+  
+    <link rel="alternative" href="/atom.xml" title="codelover&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">codelover&#39;s blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://codelover.link"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Jexus-support-HTTPS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/13/Jexus-support-HTTPS/" class="article-date">
+  <time datetime="2016-08-13T06:51:37.382Z" itemprop="datePublished">2016-08-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/jexus/">jexus</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Jexus支持HTTPS协议
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>众所周知，在HTTPS页面请求HTTP资料的时候，现代浏览器会拦截，提示用户是否继续，或者直接拦截，提示都不出来。</p>
+<p>最近给自己做了个快速书签工具，点击书签就直接把书签发送到服务器地址，然后保存到我的网站中。</p>
+<p>一开始一切都挺正常的，不过遇到了https的网站的时候，就跪掉了。</p>
+<p>开始的时候看到HTTPS证书是收费的，想想还是算了，反正凑合能用就是。前几天偶尔看到有一个免费申请HTTPS的开源软件，喵了一下看起来还不错，这几天有空了立马开干。下面有一个教程，我申请证书差不多就是按照这个来处理的。</p>
+<p><a href="https://www.paulyang.cn/blog/archives/39?spm=5176.blog2666.yqblogcon1.12.Nu0TgL" target="_blank" rel="external">用Let’s Encrypt获取免费证书</a></p>
+<p>关于这个Let’s Encrypt，维基百科是这样介绍的：</p>
+<blockquote>
+<p>Let’s Encrypt 是一个将于2015年末推出的数字证书认证机构，将通过旨在消除当前手动创建和安装证书的复杂过程的自动化流程，为安全网站提供免费的SSL/TLS证书。  Let’s Encrypt 是由互联网安全研究小组（ISRG，一个公益组织）提供的服务。主要赞助商包括电子前哨基金会，Mozilla基金会，Akamai以及思科。2015年4月9日，ISRG与Linux基金会宣布合作。用以实现这一新的数字证书认证机构的协议被称为自动证书管理环境（ACME）。  GitHub上有这一规范的草案，且提案的一个版本已作为一个Internet草案发布。Let’s Encrypt 宣称这一过程将十分简单、自动化并且免费。  2015年8月7日，该服务更新其推出计划，预计将在2015年9月7日当周某时发布首个证书，随后向列入白名单的域名发行少量证书并逐渐扩大发行。若一切按计划进行，该服务预计将在2015年11月16日当周某时全面开始提供.</p>
+</blockquote>
+<p>整个项目在Github有代码，主要是通过客户端来为我们的网站生成https证书。<br>首先我们先下载客户端，如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/letsencrypt/letsencrypt.git</span><br></pre></td></tr></table></figure></p>
+<p>接着进入这个仓库内，执行下面代码：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./letsencrypt-auto certonly -a &#10;webroot\ --webroot-path &#32593;&#31449;&#25152;&#22312;&#36335;&#24452;(&#22914;&#65306;/var/www/web/) \ &#10;-d &#20320;&#30340;&#22495;&#21517;(&#22914;&#65306;test.online) -d www.&#20320;&#30340;&#22495;&#21517;(&#22914;ww.test.online)</span><br></pre></td></tr></table></figure></p>
+<p>这里需要注意的事，我这里为了排版，给上面的命令加了换行，运行这个命令的时候记得把换行符去掉。<br>换行符在webroot、-d 前面各有一个。</p>
+<p>一切顺利的话，我们在<code>/etc/letsencrypt/live/域名/</code>这个目录下能看到四个文件，分别是：</p>
+<ol>
+<li>域名证书文件</li>
+<li>签发域名证书的证书链文件</li>
+<li>域名证书+证书链文件</li>
+<li>私钥文件</li>
+</ol>
+<p>如下图：<br><img src="http://7xread.com1.z0.glb.clouddn.com/60e4f29a-6da5-40e1-ae32-453a3bbf2455" alt="letsencrypt文件"></p>
+<p>接着就是为网站设置证书了。</p>
+<p>Jexus设置HTTPS要更改jws.conf文档以及网站的配置文档。</p>
+<p>操作步骤如下：</p>
+<ol>
+<li>修改jws.conf<br>进入Jexus文件夹中，打开 “jws.conf”，添加下面两句：</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CertificateFile    = /etc/letsencrypt/live/&#22495;&#21517;/fullchain.pem&#10;CertificateKeyFile = /etc/letsencrypt/live/&#22495;&#21517;/privkey.pem</span><br></pre></td></tr></table></figure>
+<p>修改之后效果图如下：<br><img src="http://7xread.com1.z0.glb.clouddn.com/d306d9c5-6391-421d-86fc-053b97d1b489" alt="图片描述"></p>
+<ol>
+<li>开启网站的HTTPS功能</li>
+</ol>
+<p>进入siteconf/文件夹，找到对应的网站conf文件，</p>
+<p>把网站服务端口改为443：<br>port=443</p>
+<p>启用https：<br>UseHttps=true</p>
+<p>修改之后的效果图如下：<br><img src="http://7xread.com1.z0.glb.clouddn.com/0800dc87-2500-42d2-a3c5-a75a2c819330" alt="图片描述"></p>
+<p>然后重启jexus即可。</p>
+<p>完了之后，通过HTTPS即可访问。</p>
+<p>最后上一个HTTPS证书的图证明一下这个是可行的。<br><img src="http://7xread.com1.z0.glb.clouddn.com/24842774-311e-4e55-a6b5-b88a89edc754" alt="图片描述"></p>
+<p>撒花，下次再见。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://codelover.link/2016/08/13/Jexus-support-HTTPS/" data-id="cirstyafj000ppcula0fn2ngi" class="article-share-link">Share</a>
+      
+      
+	  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+	  
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/13/ubuntu-jexus-mywebsql/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          ubuntu使用Jexus搭建MyWebSQL
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/13/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-Jexus-support-HTTPS" data-title="Jexus支持HTTPS协议" data-url="http://codelover.link/2016/08/13/Jexus-support-HTTPS/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'codelover'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
+ 
+
+ </section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/net/">.net</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/net-core/">.net core</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/CodeSmith/">CodeSmith</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GC/">GC</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/jexus/">jexus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nothing/">nothing</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ubuntu/">ubuntu</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/08/13/58City-House-Crawler-JS/">58同城高德搜房项目JS相关知识</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/13/58City-House-Crawler/">.NET_58同城品牌公寓爬虫</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/13/GC-1/">C#.NET托管堆和垃圾回收</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/13/GC-2/">C#.NET托管堆和垃圾回收(续)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/13/something/">一些有用的网站</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul class="entry">
+		 <li class='link'><a href='http://www.1234.sh'>あまみや ゆうこ blog</a></li>
+		 <li class='link'><a href="http://www.linuxdot.net">Linux DotNET大本营</a></li>
+		 <li class='link'><a href="http://piratf.ml/">潘雄飞的博客 - 我是魔法师啦啦啦。</a></li>
+		  <li class='link'><a href="http://codesky.me/">CodeSky 代码之空</a></li>
+		 
+		 
+      </ul>
+    </div>
+</div>
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 李国宝<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

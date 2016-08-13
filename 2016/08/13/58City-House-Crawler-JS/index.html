@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>58同城高德搜房项目JS相关知识 | codelover&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在线地址：58同城品牌公寓高德搜房
+Github地址：https://github.com/liguobao/58HouseSearch
+知乎专栏(点赞用的)：高德API+Python解决租房问题(.NET版)
+经过了一个星期的修补补，以及小伙伴奉献的代码，整个项目基本处于基本稳定运行的状态。
+同时加入了一下新功能：
+
+IP定位：调用高德地图IP定位功能实现
+移动地图中心定位：调用高德地图移动地图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="58同城高德搜房项目JS相关知识">
+<meta property="og:url" content="http://codelover.link/2016/08/13/58City-House-Crawler-JS/index.html">
+<meta property="og:site_name" content="codelover's blog">
+<meta property="og:description" content="在线地址：58同城品牌公寓高德搜房
+Github地址：https://github.com/liguobao/58HouseSearch
+知乎专栏(点赞用的)：高德API+Python解决租房问题(.NET版)
+经过了一个星期的修补补，以及小伙伴奉献的代码，整个项目基本处于基本稳定运行的状态。
+同时加入了一下新功能：
+
+IP定位：调用高德地图IP定位功能实现
+移动地图中心定位：调用高德地图移动地图">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/c01c293a-d5cc-4f58-80dc-13aa05d47b01">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/fe425992-e7c4-4cae-800e-319eff3b17e8">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/e7900aba-5a56-417c-9dd9-63527583e84b">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/c9947d97-1b76-42bf-82b3-aca817e84e13">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/941809ae-aa37-4a3b-89c7-10646cc7e3e7">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/86712397-27ec-4b37-bbf8-81191e530ef6">
+<meta property="og:updated_time" content="2016-08-13T06:48:30.759Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="58同城高德搜房项目JS相关知识">
+<meta name="twitter:description" content="在线地址：58同城品牌公寓高德搜房
+Github地址：https://github.com/liguobao/58HouseSearch
+知乎专栏(点赞用的)：高德API+Python解决租房问题(.NET版)
+经过了一个星期的修补补，以及小伙伴奉献的代码，整个项目基本处于基本稳定运行的状态。
+同时加入了一下新功能：
+
+IP定位：调用高德地图IP定位功能实现
+移动地图中心定位：调用高德地图移动地图">
+  
+    <link rel="alternative" href="/atom.xml" title="codelover&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">codelover&#39;s blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://codelover.link"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-58City-House-Crawler-JS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/13/58City-House-Crawler-JS/" class="article-date">
+  <time datetime="2016-08-13T06:57:06.718Z" itemprop="datePublished">2016-08-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      58同城高德搜房项目JS相关知识
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在线地址：<a href="http://codelover.link:8080/">58同城品牌公寓高德搜房</a></p>
+<p>Github地址：<a href="https://github.com/liguobao/58HouseSearch" target="_blank" rel="external">https://github.com/liguobao/58HouseSearch</a></p>
+<p>知乎专栏(点赞用的)：<a href="https://zhuanlan.zhihu.com/p/21960329" target="_blank" rel="external">高德API+Python解决租房问题(.NET版)</a></p>
+<p>经过了一个星期的修补补，以及小伙伴奉献的代码，整个项目基本处于基本稳定运行的状态。</p>
+<p>同时加入了一下新功能：</p>
+<ol>
+<li>IP定位：调用高德地图IP定位功能实现</li>
+<li>移动地图中心定位：调用高德地图移动地图定位实现</li>
+<li>定位城市名转58同城城市名以获得准确58同城城市域名：抓取58同城城市分类信息</li>
+<li>优化数据源、去除广告数据：小伙伴奉献代码</li>
+</ol>
+<p>今天主要简单讲解一下其中使用的一些高德地图API接口。</p>
+<p>#####高德地图JavaScript API 主体为map对象，基本所有的操作都是通过map对象来实现的。<br>map对象实例化是通过 Amap类来做的。如以下代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">map = <span class="keyword">new</span> AMap.Map(<span class="string">"container"</span>, &#123;</span><br><span class="line">        resizeEnable: <span class="literal">true</span>,</span><br><span class="line">        zoomEnable: <span class="literal">true</span>,</span><br><span class="line">        center: [<span class="number">121.297428</span>, <span class="number">31.1345</span>],<span class="comment">//经纬度，此处为上海</span></span><br><span class="line">        zoom: <span class="number">11</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="IP定位"><a href="#IP定位" class="headerlink" title="IP定位"></a>IP定位</h4><p>调用Map.CitySearch()获得当前IP所在城市，直接将地图显示成当前城市。代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">showCityInfo</span>(<span class="params">map</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//实例化城市查询类</span></span><br><span class="line">    <span class="keyword">var</span> citysearch = <span class="keyword">new</span> AMap.CitySearch();</span><br><span class="line">    <span class="comment">//自动获取用户IP，返回当前城市</span></span><br><span class="line">    citysearch.getLocalCity(<span class="function"><span class="keyword">function</span> (<span class="params">status, result</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (status === <span class="string">'complete'</span> &amp;&amp; result.info === <span class="string">'OK'</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (result &amp;&amp; result.city &amp;&amp; result.bounds) &#123;</span><br><span class="line">                <span class="keyword">var</span> cityinfo = result.city;<span class="comment">//获得XX市</span></span><br><span class="line">                <span class="keyword">var</span> citybounds = result.bounds;<span class="comment">//用于设置地图显示位置的实例</span></span><br><span class="line">                cityName = cityinfo.substring(<span class="number">0</span>, cityinfo.length - <span class="number">1</span>);<span class="comment">//去掉市这个字</span></span><br><span class="line">                ConvertCityCNNameToShortCut();<span class="comment">//城市名转换成58同城城市域名字母，如上海-&gt;sh,苏州-&gt;su,</span></span><br><span class="line">                                              <span class="comment">//下面会有实现代码</span></span><br><span class="line"></span><br><span class="line">                <span class="built_in">document</span>.getElementById(<span class="string">'IPLocation'</span>).innerHTML = <span class="string">'您当前所在城市：'</span> + cityName;</span><br><span class="line">                <span class="comment">//地图显示当前城市</span></span><br><span class="line">                map.setBounds(citybounds);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">document</span>.getElementById(<span class="string">'IPLocation'</span>).innerHTML = result.info;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="移动地图自动中心定位"><a href="#移动地图自动中心定位" class="headerlink" title="移动地图自动中心定位"></a>移动地图自动中心定位</h4><p>之前有一版是让用户输入城市名，然后直接定位到输入的城市的。<br>这个功能卡在了设置地图显示位置上，如果是使用高德地图提供的搜索控件的话，又存在输入结果之后搜索结果可能是多个的问题。而且这点我只是要取到用户想要定位的城市而已，感觉没必要做得太复杂。<br>昨晚在看高德地图API的时候发现，有一个移动地图获得地图中心所在位置的样例，马上眼前一亮了。这个功能比我想要的还要好…果断上。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">MapMoveToLocationCity</span>(<span class="params"></span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    map.on(<span class="string">'moveend'</span>, getCity);</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getCity</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        map.getCity(<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (data[<span class="string">'province'</span>] &amp;&amp; <span class="keyword">typeof</span> data[<span class="string">'province'</span>] === <span class="string">'string'</span>) &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">var</span> cityinfo = (data[<span class="string">'city'</span>] || data[<span class="string">'province'</span>]);</span><br><span class="line">                cityName = cityinfo.substring(<span class="number">0</span>, cityinfo.length - <span class="number">1</span>);</span><br><span class="line">                ConvertCityCNNameToShortCut();<span class="comment">//城市名转58同城地区域名</span></span><br><span class="line"></span><br><span class="line">                <span class="built_in">document</span>.getElementById(<span class="string">'IPLocation'</span>).innerHTML = <span class="string">'地图中心所在城市：'</span> + cityName;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>整个代码的意思是，给map绑定一下移动时间，移动完了之后，调用getCity的方法获取当前地图中心所在城市信息。</p>
+<p>这个时候要注意，城市名可能在city对象里面，也可能在province里面。</p>
+<p>原因很简单：普通城市等级就是城市，我国还存在一个和省份一个等级的城市：直辖市。因此直辖市的城市名是在province里面的。</p>
+<h4 id="城市名匹配58同城地区域名"><a href="#城市名匹配58同城地区域名" class="headerlink" title="城市名匹配58同城地区域名"></a>城市名匹配58同城地区域名</h4><p>这个是上个版本(两三天前)的一个bug引出来的新功能。</p>
+<p>上个版本是让用户输入城市名，然后提取城市名的中文拼音首字母作为58同城地区域名。如上海 =sh，广州=gz，北京=bj，成都=cd。</p>
+<p>这个功能使用的是网上别人写的一个JS库，通过汉字匹配实现的。转换出来的数据没什么问题，不过我国汉字实在奥妙。</p>
+<p>广州=gz，赣州=gz；<br>遂宁=sn；绥宁=sn；<br>惠州=hz，杭州=hz。</p>
+<p>这样一来，上面这个做法就没法玩了。</p>
+<p>想了下怎么解决这个问题，灵机一动。反正是在爬58的数据，这个城市名和城市域名数据58同城肯定有啊，然后找到了这个。<br><a href="http://www.58.com/changecity.aspx?PGTID=0d100000-0007-a77b-4c4b-a28f725b8f5a&amp;ClickID=1" target="_blank" rel="external">58同城城市分类导航</a></p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/c01c293a-d5cc-4f58-80dc-13aa05d47b01" alt=""></p>
+<p>很明显，我要的所有城市名和城市域名都是里面了。</p>
+<p>晚上和衣衣说了下，衣衣一大早就把处理好的json数据给我了。</p>
+<p>于是来了下面一段代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//加载json文件</span></span><br><span class="line">$.getJSON(<span class="string">"DomainJS/city.json"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">data</span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">      allCityInfo = data;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ConvertCityCNNameToShortCut</span>(<span class="params"></span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> filterarray = $.grep(allCityInfo, <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> obj.cityName == cityName;</span><br><span class="line">    &#125;);<span class="comment">//找到当前城市名对应的json对象</span></span><br><span class="line">    <span class="comment">//获取json对象的地区域名</span></span><br><span class="line">    cityNameCNPY = filterarray <span class="keyword">instanceof</span> <span class="built_in">Array</span> ? </span><br><span class="line">    filterarray[<span class="number">0</span>].shortCut : filterarray != <span class="literal">null</span> ? filterarray.shortCut : <span class="string">""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="高德地图自动补全功能"><a href="#高德地图自动补全功能" class="headerlink" title="高德地图自动补全功能"></a>高德地图自动补全功能</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"control-input"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="title">input</span> <span class="attribute">id</span>=<span class="value">"work-location"</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">style</span>=<span class="value">"width:60%"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> auto = <span class="keyword">new</span> AMap.Autocomplete(&#123;</span><br><span class="line">       input: <span class="string">"work-location"</span></span><br><span class="line">   &#125;);</span><br><span class="line"></span><br><span class="line">   AMap.event.addListener(auto, <span class="string">"select"</span>, workLocationSelected);</span><br></pre></td></tr></table></figure>
+<p>看方法前面也知道，其实这就是把ID为work-location的input初始化为地图插件，然后给Amap增加了一个监听事件。<br>当其中选中某一个数据的时候，触发workLocationSelected函数。效果如下：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/fe425992-e7c4-4cae-800e-319eff3b17e8" alt=""></p>
+<p>在这里locationSelected是定位到所选位置，代码如下：<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">function workLocationSelected(e) &#123;</span><br><span class="line">    workAddress = e.poi.name;</span><br><span class="line">    loadWorkLocation();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function loadWorkLocation() &#123;</span><br><span class="line">    delWorkLocation();</span><br><span class="line">    <span class="keyword">var</span> geocoder = new <span class="type">AMap</span>.<span class="type">Geocoder</span>(&#123;</span><br><span class="line">        city: cityName,</span><br><span class="line">        radius: <span class="number">1000</span></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    geocoder.getLocation(workAddress, function (status, <span class="literal">result</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (status === <span class="string">"complete"</span> &amp;&amp; <span class="literal">result</span>.info === '<span class="type">OK</span>') &#123;</span><br><span class="line">            <span class="keyword">var</span> geocode = <span class="literal">result</span>.geocodes[<span class="number">0</span>];</span><br><span class="line">            x = geocode.location.getLng();</span><br><span class="line">            y = geocode.location.getLat();</span><br><span class="line">            loadWorkMarker(x, y);</span><br><span class="line">            loadWorkRange(x, y, <span class="number">60</span>, <span class="string">"#3f67a5"</span>, vehicle);</span><br><span class="line">            map.setZoomAndCenter(<span class="number">12</span>, [x, y]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>至于导航功能代码我没怎么动，没去研究就不献丑了…</p>
+<p>最后来个效果图。</p>
+<p>####北京<br><img src="http://7xread.com1.z0.glb.clouddn.com/e7900aba-5a56-417c-9dd9-63527583e84b" alt=""></p>
+<p>####成都<br><img src="http://7xread.com1.z0.glb.clouddn.com/c9947d97-1b76-42bf-82b3-aca817e84e13" alt=""></p>
+<p>####苏州<br><img src="http://7xread.com1.z0.glb.clouddn.com/941809ae-aa37-4a3b-89c7-10646cc7e3e7" alt=""></p>
+<p>###深圳<br><img src="http://7xread.com1.z0.glb.clouddn.com/86712397-27ec-4b37-bbf8-81191e530ef6" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://codelover.link/2016/08/13/58City-House-Crawler-JS/" data-id="cirstyaek0000pculehnx6vud" class="article-share-link">Share</a>
+      
+      
+	  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+	  
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/08/13/58City-House-Crawler/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">.NET_58同城品牌公寓爬虫</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-58City-House-Crawler-JS" data-title="58同城高德搜房项目JS相关知识" data-url="http://codelover.link/2016/08/13/58City-House-Crawler-JS/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'codelover'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
+ 
+
+ </section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/net/">.net</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/net-core/">.net core</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/CodeSmith/">CodeSmith</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GC/">GC</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/jexus/">jexus</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nothing/">nothing</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ubuntu/">ubuntu</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/08/13/58City-House-Crawler-JS/">58同城高德搜房项目JS相关知识</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/13/58City-House-Crawler/">.NET_58同城品牌公寓爬虫</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/13/GC-1/">C#.NET托管堆和垃圾回收</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/13/GC-2/">C#.NET托管堆和垃圾回收(续)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/13/something/">一些有用的网站</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul class="entry">
+		 <li class='link'><a href='http://www.1234.sh'>あまみや ゆうこ blog</a></li>
+		 <li class='link'><a href="http://www.linuxdot.net">Linux DotNET大本营</a></li>
+		 <li class='link'><a href="http://piratf.ml/">潘雄飞的博客 - 我是魔法师啦啦啦。</a></li>
+		  <li class='link'><a href="http://codesky.me/">CodeSky 代码之空</a></li>
+		 
+		 
+      </ul>
+    </div>
+</div>
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 李国宝<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
