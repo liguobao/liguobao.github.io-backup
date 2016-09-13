@@ -1,0 +1,715 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="mono,webreques exception," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="codelover's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前几天在做一个使用URL通过WebRequest请求HTML页面的功能的时候遇到了点坑，程序在开发环境没有任何的问题，部署到linux mono上之后就跪了。代码如下：
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061pu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mono webreques https exception">
+<meta property="og:url" content="http://codelover.link/2016/04/10/mono-webreques-https-exception/index.html">
+<meta property="og:site_name" content="codelover's blog">
+<meta property="og:description" content="前几天在做一个使用URL通过WebRequest请求HTML页面的功能的时候遇到了点坑，程序在开发环境没有任何的问题，部署到linux mono上之后就跪了。代码如下：
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061pu">
+<meta property="og:updated_time" content="2016-09-13T15:33:15.039Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mono webreques https exception">
+<meta name="twitter:description" content="前几天在做一个使用URL通过WebRequest请求HTML页面的功能的时候遇到了点坑，程序在开发环境没有任何的问题，部署到linux mono上之后就跪了。代码如下：
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061pu">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6254113771573216000,
+      author: 'codelover'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://codelover.link/2016/04/10/mono-webreques-https-exception/"/>
+
+  <title> mono webreques https exception | codelover's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">codelover's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                mono webreques https exception
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-10T12:39:04+08:00" content="2016-04-10">
+              2016-04-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/net/" itemprop="url" rel="index">
+                    <span itemprop="name">.net</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/10/mono-webreques-https-exception/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/10/mono-webreques-https-exception/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前几天在做一个使用URL通过WebRequest请求HTML页面的功能的时候遇到了点坑，程序在开发环境没有任何的问题，部署到linux mono上之后就跪了。代码如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">GetHTML</span>(<span class="params"><span class="keyword">string</span> url</span>)</span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">string</span> htmlCode;</span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">        HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);</span><br><span class="line">        webRequest.Timeout = <span class="number">30000</span>;</span><br><span class="line">        webRequest.Method = <span class="string">"GET"</span>;</span><br><span class="line">        webRequest.UserAgent = <span class="string">"Mozilla/4.0"</span>;</span><br><span class="line">        webRequest.Headers.Add(<span class="string">"Accept-Encoding"</span>, <span class="string">"gzip, deflate"</span>);</span><br><span class="line"></span><br><span class="line">        HttpWebResponse webResponse = (System.Net.HttpWebResponse)webRequest.GetResponse();</span><br><span class="line">        <span class="comment">//获取目标网站的编码格式</span></span><br><span class="line">        <span class="keyword">string</span> contentype = webResponse.Headers[<span class="string">"Content-Type"</span>];</span><br><span class="line">        Regex regex = <span class="keyword">new</span> Regex(<span class="string">"charset\\s*=\\s*[\\W]?\\s*([\\w-]+)"</span>, RegexOptions.IgnoreCase);</span><br><span class="line">        <span class="keyword">if</span> (webResponse.ContentEncoding.ToLower() == <span class="string">"gzip"</span>)<span class="comment">//如果使用了GZip则先解压</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">using</span> (System.IO.Stream streamReceive = webResponse.GetResponseStream())</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">using</span> (<span class="keyword">var</span> zipStream = <span class="keyword">new</span> System.IO.Compression.GZipStream(streamReceive, </span><br><span class="line">                System.IO.Compression.CompressionMode.Decompress))</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">//匹配编码格式</span></span><br><span class="line">                    <span class="keyword">if</span> (regex.IsMatch(contentype))</span><br><span class="line">                    &#123;</span><br><span class="line">                        Encoding ending = Encoding.GetEncoding(regex.Match(contentype).Groups[<span class="number">1</span>].Value.Trim());</span><br><span class="line">                        <span class="keyword">using</span> (StreamReader sr = <span class="keyword">new</span> System.IO.StreamReader(zipStream, ending))</span><br><span class="line">                        &#123;</span><br><span class="line">                            htmlCode = sr.ReadToEnd();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">using</span> (StreamReader sr = </span><br><span class="line">                        <span class="keyword">new</span> System.IO.StreamReader(zipStream, Encoding.UTF8))</span><br><span class="line">                        &#123;</span><br><span class="line">                            htmlCode = sr.ReadToEnd();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">using</span> (System.IO.Stream streamReceive = webResponse.GetResponseStream())</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">using</span> (System.IO.StreamReader sr = <span class="keyword">new</span> System.IO.StreamReader(streamReceive, Encoding.Default))</span><br><span class="line">                &#123;</span><br><span class="line">                    htmlCode = sr.ReadToEnd();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> htmlCode;</span><br><span class="line"></span><br><span class="line">    &#125;<span class="keyword">catch</span>(Exception ex)</span><br><span class="line">    &#123;</span><br><span class="line">        LogHelper.WriteException(<span class="string">"GetHTML"</span>, ex, <span class="keyword">new</span> &#123; Url = url &#125;);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>开发环境在Windows10 + VS2013,整个代码跑起来没什么问题。</p>
+<p>无论是HTTP还是HTTPS协议，网页HTML一样能获取得到。</p>
+<p>网站部署到linux Jexus之后HTTP协议的网站同样可以获取到HTML，遇到HTTPS协议的网站的时候就跪了。</p>
+<p>抓到的异常信息如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">System.Net.WebException: Error: TrustFailure (The authentication or decryption has failed.) </span><br><span class="line">---&gt; System.IO.IOException: The authentication or decryption has failed.</span><br><span class="line">---&gt; System.IO.IOException: The authentication or decryption has failed. </span><br><span class="line">---&gt; Mono.Security.Protocol.Tls.TlsException:</span><br><span class="line">Invalid certificate received <span class="keyword">from</span> server. Error code: <span class="number">0xffffffff800b0109</span></span><br><span class="line">at Mono.Security.Protocol.Tls.RecordProtocol.EndReceiveRecord </span><br><span class="line">(IAsyncResult asyncResult) &lt;<span class="number">0x41b58d80</span> + <span class="number">0x0013e</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </span><br><span class="line">at Mono.Security.Protocol.Tls.SslClientStream.SafeEndReceiveRecord</span><br><span class="line">(IAsyncResult ar, Boolean ignoreEmpty) &lt;<span class="number">0x41b58cb0</span> + <span class="number">0x00031</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </span><br><span class="line">at Mono.Security.Protocol.Tls.SslClientStream.NegotiateAsyncWorker</span><br><span class="line">(IAsyncResult result) &lt;<span class="number">0x41b72a40</span> + <span class="number">0x0023f</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </span><br><span class="line">--- End of inner exception stack trace ---</span><br><span class="line">at Mono.Security.Protocol.Tls.SslClientStream.EndNegotiateHandshake </span><br><span class="line">(IAsyncResult result) &lt;<span class="number">0x41ba07e0</span> + <span class="number">0x000f3</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </span><br><span class="line">at Mono.Security.Protocol.Tls.SslStreamBase.AsyncHandshakeCallback </span><br><span class="line">(IAsyncResult asyncResult) &lt;<span class="number">0x41ba0540</span> + <span class="number">0x00086</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </span><br><span class="line">--- End of inner exception stack trace ---</span><br><span class="line">at Mono.Security.Protocol.Tls.SslStreamBase.EndRead </span><br><span class="line">(IAsyncResult asyncResult) &lt;<span class="number">0x41b73fd0</span> + <span class="number">0x00199</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </span><br><span class="line">at Mono.Net.Security.Private.LegacySslStream.EndAuthenticateAsClient </span><br><span class="line">(IAsyncResult asyncResult) &lt;<span class="number">0x41b73f30</span> + <span class="number">0x00042</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </span><br><span class="line">at Mono.Net.Security.Private.LegacySslStream.AuthenticateAsClient (System.String targetHost, </span><br><span class="line">System.Security.Cryptography.X509Certificates.X509CertificateCollection</span><br><span class="line">clientCertificates, SslProtocols enabledSslProtocols,</span><br><span class="line">Boolean checkCertificateRevocation) &lt;<span class="number">0x41b6a660</span> + <span class="number">0x00055</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </span><br><span class="line">at Mono.Net.Security.MonoTlsStream.CreateStream (System.Byte[] buffer) </span><br><span class="line">&lt;<span class="number">0x41b69c30</span> + <span class="number">0x00159</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </span><br><span class="line">--- End of inner exception stack trace ---</span><br><span class="line">at System.Net.HttpWebRequest.EndGetResponse (IAsyncResult asyncResult) </span><br><span class="line">&lt;<span class="number">0x41b67660</span> + <span class="number">0x001f9</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </span><br><span class="line">at System.Net.HttpWebRequest.GetResponse () &lt;<span class="number">0x41b60920</span> + <span class="number">0x0005a</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </span><br><span class="line">at WebBookmarkUI.Commom.HTTPHelper.GetHTML (System.String url) &lt;<span class="number">0x41b59b70</span> + <span class="number">0x00235</span>&gt; </span><br><span class="line"><span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>有用的信息基本就是：</p>
+<ol>
+<li>Invalid certificate received from server</li>
+<li>The authentication or decryption has failed</li>
+</ol>
+<p>一开始百思不得其解，为嘛好好的程序在开发环境跑得都好的，到了mono上就挂了，多疑的我还以为是mono的bug。<br>今天静下心来去找了一下资料，发现Mono的文档有这个问题的描述，认真读了一遍，又去请教了一番宇内流云大大，终于弄懂了是什么回事。</p>
+<p>先贴一下相关资料：</p>
+<ol>
+<li><p><a href="http://stackoverflow.com/questions/4926676/mono-webrequest-fails-with-https" target="_blank" rel="external">stackoverflow mono-webrequest-fails-with-https</a></p>
+</li>
+<li><p><a href="http://www.mono-project.com/docs/faq/security/" target="_blank" rel="external">mono doc security</a></p>
+</li>
+</ol>
+<p>这个问题是出现的原因是Windows自带了HTPPS的根证书，linux默认则是没有带有根证书的。我们的mono在调用WebRequest去请求HTTPS协议的网站的时候，找不到任何有效的根证书，所以抛出上面的异常了。</p>
+<p>解决方案也很简单，为linux导入一下HTTPS根证书就好。</p>
+<p>在linux服务器上面执行下面这条命令。<br><figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">mozroots</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">import</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">ask</span><span class="literal">-</span><span class="comment">remove</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">machine</span></span><br></pre></td></tr></table></figure></p>
+<p>然后在网站的Application_Start()里面添加下面代码：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> System.Net.ServicePointManager.ServerCertificateValidationCallback +=</span><br><span class="line"> <span class="keyword">delegate</span>(<span class="keyword">object</span> sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate,</span><br><span class="line"> System.Security.Cryptography.X509Certificates.X509Chain chain,</span><br><span class="line"> System.Net.Security.SslPolicyErrors sslPolicyErrors)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>; <span class="comment">// **** Always accept</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>完事。</p>
+<p>这个故事告诉我们，linux干活都是要亲力亲为呀。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mono/" rel="tag">#mono</a>
+          
+            <a href="/tags/webreques-exception/" rel="tag">#webreques exception</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/07/ubuntu-jexus-mywebsql/" rel="next" title="ubuntu使用Jexus搭建MyWebSQL">
+                <i class="fa fa-chevron-left"></i> ubuntu使用Jexus搭建MyWebSQL
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/" rel="prev" title="CodeSmith 连接MySQL数据库报“can't find .net framework data provider”">
+                CodeSmith 连接MySQL数据库报“can't find .net framework data provider” <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/10/mono-webreques-https-exception/"
+           data-title="mono webreques https exception" data-url="http://codelover.link/2016/04/10/mono-webreques-https-exception/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="李国宝" />
+          <p class="site-author-name" itemprop="name">李国宝</p>
+          <p class="site-description motion-element" itemprop="description">一直走在吃软饭路上的软狗</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liguobao" target="_blank" title="GitHub">
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/codelover" target="_blank" title="知乎">
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.1234.sh" title="あまみや ゆうこ" target="_blank">あまみや ゆうこ</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://piratf.ml" title="潘雄飞的博客 - 我是魔法师啦啦啦。" target="_blank">潘雄飞的博客 - 我是魔法师啦啦啦。</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://codesky.me" title="CodeSky 代码之空" target="_blank">CodeSky 代码之空</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李国宝</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"codelover"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

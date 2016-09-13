@@ -1,0 +1,733 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="codelover's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="之前在阿里云上装了一个ubuntu，后来也没怎么用力，就挂这一个mysql数据库。最近在家里用MySQL Workbench 连接阿里云上面的MySQL的时候，连着过了一会就中断了。后来看了一圈回来才发现，目测是家里电信宽带的锅，不断给我动态分配IP地址….后来群里面的小伙伴说，搭个websql了事啦。听起来不错的想法，于是昨天就试了一下。
+之前在ubuntu上装过apache，后来为了跑asp.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntu使用Jexus搭建MyWebSQL">
+<meta property="og:url" content="http://codelover.link/2016/04/07/ubuntu-jexus-mywebsql/index.html">
+<meta property="og:site_name" content="codelover's blog">
+<meta property="og:description" content="之前在阿里云上装了一个ubuntu，后来也没怎么用力，就挂这一个mysql数据库。最近在家里用MySQL Workbench 连接阿里云上面的MySQL的时候，连着过了一会就中断了。后来看了一圈回来才发现，目测是家里电信宽带的锅，不断给我动态分配IP地址….后来群里面的小伙伴说，搭个websql了事啦。听起来不错的想法，于是昨天就试了一下。
+之前在ubuntu上装过apache，后来为了跑asp.">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/7d902b94-f132-4041-84fa-78f044f91358">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/df3951c0-9d3d-4085-b577-743df68c1d98">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/cf8d88d8-fb5d-42f0-81cc-e0fbb566ebe5">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/7bac43bc-01ea-4ce0-ba4b-37a06a51fe3a">
+<meta property="og:updated_time" content="2016-09-13T15:39:31.143Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ubuntu使用Jexus搭建MyWebSQL">
+<meta name="twitter:description" content="之前在阿里云上装了一个ubuntu，后来也没怎么用力，就挂这一个mysql数据库。最近在家里用MySQL Workbench 连接阿里云上面的MySQL的时候，连着过了一会就中断了。后来看了一圈回来才发现，目测是家里电信宽带的锅，不断给我动态分配IP地址….后来群里面的小伙伴说，搭个websql了事啦。听起来不错的想法，于是昨天就试了一下。
+之前在ubuntu上装过apache，后来为了跑asp.">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6254113771573216000,
+      author: 'codelover'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://codelover.link/2016/04/07/ubuntu-jexus-mywebsql/"/>
+
+  <title> ubuntu使用Jexus搭建MyWebSQL | codelover's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">codelover's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ubuntu使用Jexus搭建MyWebSQL
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-07T00:00:00+08:00" content="2016-04-07">
+              2016-04-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/ubuntu/" itemprop="url" rel="index">
+                    <span itemprop="name">ubuntu</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/07/ubuntu-jexus-mywebsql/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/07/ubuntu-jexus-mywebsql/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前在阿里云上装了一个ubuntu，后来也没怎么用力，就挂这一个mysql数据库。最近在家里用MySQL Workbench 连接阿里云上面的MySQL的时候，连着过了一会就中断了。后来看了一圈回来才发现，目测是家里电信宽带的锅，不断给我动态分配IP地址….后来群里面的小伙伴说，搭个websql了事啦。听起来不错的想法，于是昨天就试了一下。</p>
+<p>之前在ubuntu上装过apache，后来为了跑asp.net，把apache停了，换成了jexus。<br>Jexus是国内.NET 跨平台大牛们写的一个web服务器，使用方便，很稳定，也在不断加入新特性。相关资料直接访问<a href="http://www.jexus.org/" target="_blank" rel="external">www.jexus.org</a>。</p>
+<p>jexus是以mono为基础的，其实首先应该先配置mono的运行环境。</p>
+<p>###第一步 安装mono<br>相关资料链接：</p>
+<p><a href="http://www.linuxdot.net/bbsfile-3090" target="_blank" rel="external">在Ubuntu操作系统上安装mono的具体方法</a></p>
+<p><a href="http://www.isvee.com/archives/763" target="_blank" rel="external">Ubuntu 14.04 安装 Mono</a></p>
+<p>我的ubuntu老早之前就安装好了mono，这个就此瞥过咯。</p>
+<p>###第二步 安装jexus</p>
+<p><a href="http://www.linuxdot.net/bbsfile-3084" target="_blank" rel="external">Jexus web server V5.1 安装配置要点</a></p>
+<p><a href="http://www.jexus.org/" target="_blank" rel="external">jexus首页</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">A、安装：</span><br><span class="line">cd /tmp</span><br><span class="line">wget linuxdot.net/down/jexus-<span class="number">5.8</span><span class="number">.1</span>.tar.gz </span><br><span class="line">tar -zxvf jexus-<span class="number">5.8</span><span class="number">.1</span>.tar.gz </span><br><span class="line">cd jexus-<span class="number">5.8</span><span class="number">.1</span> </span><br><span class="line">sudo ./install </span><br><span class="line"></span><br><span class="line">B、更新</span><br><span class="line">cd /tmp</span><br><span class="line">sudo /usr/jexus/jws stop</span><br><span class="line">wget linuxdot.net/down/jexus-<span class="number">5.8</span><span class="number">.1</span>.tar.gz</span><br><span class="line">tar -zxvf jexus-<span class="number">5.8</span><span class="number">.1</span>.tar.gz</span><br><span class="line">cd jexus-<span class="number">5.8</span><span class="number">.1</span></span><br><span class="line">sudo ./upgrade</span><br></pre></td></tr></table></figure>
+<p>5.8.1差不多是现在最新版本了。</p>
+<p>###第三步 jexus 支持PHP</p>
+<p>先在ubuntu上安装一下PHP5-CGI.</p>
+<p><a href="http://www.linuxidc.com/Linux/2012-05/60172.htm" target="_blank" rel="external">用 Jexus ASP.NET WEB服务器搭建 PHP 网站的具体方法</a></p>
+<p>总结来说就是下面两句：<br><figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="built_in">get</span> <span class="keyword">update</span></span><br><span class="line"></span><br><span class="line">sudo apt-<span class="built_in">get</span> install php5-cgi</span><br></pre></td></tr></table></figure></p>
+<p>接着：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>)修改“/etc/php.ini”文件:</span><br><span class="line"></span><br><span class="line">找到cgi.force_redirect=<span class="number">1</span>一行，把前边的<span class="string">"#"</span>号去掉，把值从<span class="number">1</span>改为<span class="number">0</span>，如：</span><br><span class="line"></span><br><span class="line">cgi.force_redirect=<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">2</span>)修改jws.conf。打开jexus文件夹中的jws.conf，作如下配置：</span><br><span class="line"></span><br><span class="line">填写PHP-CGI程序路径和工作进程数。如：“php-fcgi.<span class="built_in">set</span>=/usr/bin/php-cgi,<span class="number">6</span>”。</span><br><span class="line"></span><br><span class="line"><span class="number">3</span>)修改网站配置。在需要使用PHP的网站的配置文件中添加:</span><br><span class="line"></span><br><span class="line">fastcgi.add=php|socket:/var/run/jexus/phpsvr</span><br></pre></td></tr></table></figure>
+<p><a href="http://www.cnblogs.com/shanyou/p/3369322.html" target="_blank" rel="external">Jexus 支持PHP的三种方式-张善友</a></p>
+<p>搞完上面这些，理论上你的jexus已经能跑PHP网站了。</p>
+<p>###第四步 安装mywebsql</p>
+<p><a href="http://mywebsql.net/" target="_blank" rel="external">mywebsql首页</a></p>
+<p>mywebsql跑起来应该是下图的：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/7d902b94-f132-4041-84fa-78f044f91358" alt="mywebsql效果图"></p>
+<p><a href="https://sourceforge.net/projects/mywebsql/files/stable/mywebsql-3.6.zip/download" target="_blank" rel="external">下载地址</a></p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> /tmp</span><br><span class="line"></span><br><span class="line">wget https:<span class="comment">//sourceforge.net/projects/mywebsql/files/stable/mywebsql-3.6.zip</span></span><br><span class="line"></span><br><span class="line">cp mywebsql-3.6.<span class="keyword">zip</span> /<span class="keyword">var</span>/www </span><br><span class="line"></span><br><span class="line"><span class="keyword">cd</span> /<span class="keyword">var</span>/www</span><br><span class="line"></span><br><span class="line">tar -zxvf mywebsql-3.6.<span class="keyword">zip</span></span><br></pre></td></tr></table></figure>
+<p>把mywebsql网站文件弄好之后，就可以去看jexus配置php网站了。</p>
+<p>jexus的网站配置文件夹一般路径就是/usr/jexus/siteconf/</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/jexus/siteconf/</span><br><span class="line"></span><br><span class="line">vi mywebSQL <span class="comment">#创建网站配置文件</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> .. </span><br><span class="line"></span><br><span class="line">./jexus restart</span><br></pre></td></tr></table></figure>
+<p>上面的mywebSQL里面就写网站配置了，主要是端口号/运行环境之类的配置。</p>
+<p>贴一下我的配置：</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#仅供参考</span></span><br><span class="line"><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">####</span><br><span class="line"># Web Site: Default</span><br><span class="line">###</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">#</span></span><br><span class="line"></span><br><span class="line">port=<span class="number">2016</span></span><br><span class="line">root=/ /var/www/mywebsql</span><br><span class="line">hosts=*    <span class="comment">#OR your.com,*.your.com</span></span><br><span class="line">usephp =<span class="literal">true</span></span><br><span class="line">fastcgi.add=php|<span class="attribute">socket</span>:/var/run/jexus/phpsvr</span><br><span class="line"></span><br><span class="line"><span class="comment"># addr=0.0.0.0</span></span><br><span class="line"><span class="comment"># CheckQuery=false</span></span><br><span class="line"><span class="comment"># NoLog=true</span></span><br><span class="line"><span class="comment"># NoFile=/index.aspx</span></span><br><span class="line"><span class="comment"># Keep_Alive=false</span></span><br><span class="line"><span class="comment"># UseGZIP=true</span></span><br><span class="line"><span class="comment"># UseHttps=true</span></span><br><span class="line"><span class="comment"># DenyFrom=192.168.0.233, 192.168.1.*, 192.168.2.0/24</span></span><br><span class="line"><span class="comment"># AllowFrom=192.168.*.*</span></span><br><span class="line"><span class="comment"># DenyDirs=~/cgi, ~/upfiles</span></span><br><span class="line"><span class="comment"># indexes=myindex.aspx</span></span><br><span class="line"><span class="comment"># rewrite=^/.+?\.(asp|php|cgi|pl|sh)$ /index.aspx</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># reproxy=/bbs/ http://192.168.1.112/bbs/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Jexus php fastcgi address is '/var/run/jexus/phpsvr'</span></span><br><span class="line"><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">#</span></span><br><span class="line"><span class="comment"># fastcgi.add=php|socket:/var/run/jexus/phpsvr</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># php-fpm listen address is '127.0.0.1:9000'</span></span><br><span class="line"><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">##</span></span><br><span class="line"><span class="comment"># fastcgi.add=php|tcp:127.0.0.1:9000</span></span><br></pre></td></tr></table></figure>
+<p>到这里，访问<a href="http://你的主机IP:上面配置的端口号" target="_blank" rel="external">http://你的主机IP:上面配置的端口号</a> 就能看到下面的页面了。</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/df3951c0-9d3d-4085-b577-743df68c1d98" alt="MywWebSQL登陆页"></p>
+<p>输入账号密码就能登陆。</p>
+<p>###然而….<br>我登陆的时候显示，系统提示：没有安装客户端库。</p>
+<p>###第五步 配置PHP MySQL库</p>
+<p>于是又跑去看了一下MyWebSQL的说明，文档上说可以在/install.php上面看配置。</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/cf8d88d8-fb5d-42f0-81cc-e0fbb566ebe5" alt="这是配置好的效果图"></p>
+<p>显示：</p>
+<p>MySQL Client Library    client library is not installed<br>MySQL improved functionality    client library is not installed</p>
+<p>好吧，PHP MySQL客户端库没有安装….</p>
+<p>那就安装咯。<br>于是找到了下面一个文章：<br><a href="http://www.cnblogs.com/CheeseZH/p/4694135.html" target="_blank" rel="external">ZH奶酪：Ubuntu 14.04安装LAMP(Linux，Apache，MySQL，PHP)</a></p>
+<p>安装一下基础库<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="keyword">get</span> install php5 libapache2-<span class="keyword">mod</span>-php5 php5-mcrypt php5-curl php5-imagick php5-cli</span><br></pre></td></tr></table></figure></p>
+<p>搜索一下还有什么库可以安装。</p>
+<p>apt-cache search php5-</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/7bac43bc-01ea-4ce0-ba4b-37a06a51fe3a" alt=""></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get <span class="operator"><span class="keyword">install</span> php5 php5-mysqlnd </span><br><span class="line"></span><br><span class="line">sudo apt-<span class="keyword">get</span> <span class="keyword">install</span> php5 php5-mysqlnd-ms</span></span><br></pre></td></tr></table></figure>
+<p>接着重启一下jexus的网站，万事大吉。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/28/CodeSmith to MySQL/" rel="next" title="CodeSmith for MySQL template">
+                <i class="fa fa-chevron-left"></i> CodeSmith for MySQL template
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/10/mono-webreques-https-exception/" rel="prev" title="mono webreques https exception">
+                mono webreques https exception <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/07/ubuntu-jexus-mywebsql/"
+           data-title="ubuntu使用Jexus搭建MyWebSQL" data-url="http://codelover.link/2016/04/07/ubuntu-jexus-mywebsql/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="李国宝" />
+          <p class="site-author-name" itemprop="name">李国宝</p>
+          <p class="site-description motion-element" itemprop="description">一直走在吃软饭路上的软狗</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liguobao" target="_blank" title="GitHub">
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/codelover" target="_blank" title="知乎">
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.1234.sh" title="あまみや ゆうこ" target="_blank">あまみや ゆうこ</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://piratf.ml" title="潘雄飞的博客 - 我是魔法师啦啦啦。" target="_blank">潘雄飞的博客 - 我是魔法师啦啦啦。</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://codesky.me" title="CodeSky 代码之空" target="_blank">CodeSky 代码之空</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李国宝</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"codelover"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

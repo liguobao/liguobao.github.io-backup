@@ -1,0 +1,914 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="codelover's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="先看一段代码
+#region test1 闭包
+
+public static void test1()
+{
+    int index = 0;
+    Func&amp;lt;IEnumerable&amp;lt;int&amp;gt;&amp;gt; sequence =()=&amp;gt;GetEnumrableInt(index);
+
+    index = 20;
+    foreach(int n in sequence(">
+<meta property="og:type" content="article">
+<meta property="og:title" content=".NET-lmabda避免修改绑定变量">
+<meta property="og:url" content="http://codelover.link/2016/02/15/can't-modify-linq-object/index.html">
+<meta property="og:site_name" content="codelover's blog">
+<meta property="og:description" content="先看一段代码
+#region test1 闭包
+
+public static void test1()
+{
+    int index = 0;
+    Func&amp;lt;IEnumerable&amp;lt;int&amp;gt;&amp;gt; sequence =()=&amp;gt;GetEnumrableInt(index);
+
+    index = 20;
+    foreach(int n in sequence(">
+<meta property="og:updated_time" content="2016-09-13T15:42:01.307Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content=".NET-lmabda避免修改绑定变量">
+<meta name="twitter:description" content="先看一段代码
+#region test1 闭包
+
+public static void test1()
+{
+    int index = 0;
+    Func&amp;lt;IEnumerable&amp;lt;int&amp;gt;&amp;gt; sequence =()=&amp;gt;GetEnumrableInt(index);
+
+    index = 20;
+    foreach(int n in sequence(">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6254113771573216000,
+      author: 'codelover'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://codelover.link/2016/02/15/can't-modify-linq-object/"/>
+
+  <title> .NET-lmabda避免修改绑定变量 | codelover's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">codelover's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                .NET-lmabda避免修改绑定变量
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-02-15T00:00:00+08:00" content="2016-02-15">
+              2016-02-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/net/" itemprop="url" rel="index">
+                    <span itemprop="name">.net</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/15/can't-modify-linq-object/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/15/can't-modify-linq-object/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>先看一段代码</p>
+<pre><code>#region test1 闭包
+
+public static void test1()
+{
+    int index = 0;
+    Func&lt;IEnumerable&lt;int&gt;&gt; sequence =()=&gt;GetEnumrableInt(index);
+
+    index = 20;
+    foreach(int n in sequence())
+        Console.WriteLine(n);
+
+    Console.WriteLine(&quot;Done&quot;);
+
+    index = 100;
+    foreach (int n in sequence())
+        Console.WriteLine(n);
+}
+
+
+public static IEnumerable&lt;int&gt; GetEnumrableInt(int index)
+{
+    List&lt;int&gt; l = new List&lt;int&gt;();
+    for(int i=index;i&lt;index+30;i++)
+    {
+        l.Add(i);
+    }
+    return l;
+}
+
+#endregion
+</code></pre><p>上面一坨代码演示了在闭包中使用了外部变量，随即又在外部修改了这些变量的情况，得到的结果是输出了20-50的数，然后又输出了100-130之间的数。这种行为有点诡异，但是确实有存在的意义…(书本这样说的，我到觉得很少会用到。)</p>
+<p>为了将查询表达式转换成可执行代码，C#编译器做了很多工作。一般而言，C#编译器将查询和lambda表达式转换成 “静态委托”、”实例委托” 或 “闭包”。编译器将根据lambda表达式中的代码选择一种实现方式。选择哪种方式依赖于lambda表达式的主体（body）。这看上去似乎是一些语言上的实现细节，但它却会显著地影响到我们的代码。编译器选择何种实现将可能导致diamante行为发生微妙的变化。</p>
+<p>并不是任何的lambda表达式都会生成同样结构的代码。</p>
+<p>对于编译器来说，最简单的一种行为是为以下形式的代码生成委托。  </p>
+<pre><code>//我们的lambda表达式
+public static void test2()
+{
+    int[] someNum = {0,1,2,3,4,5,6,7,8,9,10 };
+
+    IEnumerable&lt;int&gt; ans = from n in someNum
+                           select n * n;
+
+    foreach (int i in ans)
+        Console.WriteLine(i);
+
+}
+</code></pre><p>编译器将使用静态委托来实现n*n的lambda表达式，其为上面代码生成的代码如下：</p>
+<pre><code> //编译器为我们的lambda生成的代码
+#region 等价于 test2()
+private static int HiddenFunc(int n)
+{
+    return n * n;
+}
+
+//静态委托
+private static Func&lt;int, int&gt; HiddenDelegate;
+
+public void test2_1()
+{
+
+    int[] someNum = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+    if(HiddenDelegate==null)
+    {
+        HiddenDelegate = new Func&lt;int, int&gt;(HiddenFunc);
+    }
+    IEnumerable&lt;int&gt; ans = someNum.Select&lt;int, int&gt;(HiddenDelegate);
+
+  foreach(int i in ans)
+      Console.WriteLine(i);
+
+}
+#endregion
+</code></pre><p>这个lambda表达式主体部分并没有访问任何的实例变量或者局部变量。lambda表达式仅仅访问了它的参数。对于这种情况，C#编译器将创建一个静态方法，作为委托的目标。这也是编译器执行的最简单的一种处理方式。若表达式可以通过私有的静态方法实现，那么编译器将生成该私有的静态方法以及相对应的委托定义。对于上面的代码例子中的情况以及仅访问了静态变量的表达式，编译器都会采用这样的方案。</p>
+<p>接下来介绍另一种较为简单的情况：<br>lambda表达式需要访问类型的实例变量，但无需访问外层方法中的局部变量。</p>
+<pre><code>public class ModFilter
+{
+    private readonly int modules;
+
+    public ModFilter(int mod)
+    {
+        modules = mod;
+    }
+
+
+    public IEnumerable&lt;int&gt; FindValues(IEnumerable&lt;int&gt; sequence)
+    {
+
+        return from n in sequence
+               where n % modules == 0 //新添加的表达式
+               select n * n;  //和前面的例子是一样的
+    }
+}
+</code></pre><p>/* </p>
+<p>在这种情况下，编译器将为表达式创建一个实例方法来包装该委托。<br>其基本概念和前一种情况一致，只是这里使用了实例方法，以便读取并修改当前对象的状态。<br>与静态委托的例子一样，这里编译器将把lambda表达式转换成我们熟悉的代码。其中包含委托的定义以及方法调用。<br>如下：</p>
+<p>*/</p>
+<pre><code>public class ModFilter_Other
+{
+    private readonly int modules;
+
+
+    //实例方法
+    private bool WhereClause(int n)
+    {
+        return ((n%this.modules) ==0);
+    }
+
+
+    private static int SelectClause(int n)
+    {
+        return n * n;
+    }
+
+    private static Func&lt;int, int&gt; SelectDelegate;
+
+
+
+
+    public ModFilter_Other(int mod)
+    {
+        modules = mod;
+    }
+
+
+    public IEnumerable&lt;int&gt; FindValues(IEnumerable&lt;int&gt; sequence)
+    {
+        if(SelectDelegate==null)
+        {
+            SelectDelegate = new Func&lt;int, int&gt;(SelectClause);
+        }
+
+        return sequence.Where&lt;int&gt;(
+            new Func&lt;int, bool&gt;(this.WhereClause)).
+            Select&lt;int, int&gt;(SelectClause);
+    }
+}
+</code></pre><p>概括来说便是：lambda表达式中的代码访问了对象实例中的成员变量，那么编译器将生成实例方法来表示lambda表达式中的代码。其实这并没有什么奇特之处——编译器省去了我们的一些代码输入工作，代码也变得整洁很多，本质来说这还是普通的方法调用。</p>
+<p>不过若是lambda表达式中访问到了外部方法中的局部变量或者方法参数，那么编译器将帮你完成很多工作。</p>
+<p>这里会用到闭包。编译器将生成一个私有的嵌套类型，以便为局部变量实现闭包。</p>
+<p>局部变量必须传入到实现了lambda表达式主体部分的委托里。</p>
+<p>此外，所有由该lambda表达式执行的对这些局部变量所作的修改都必须能够在外部访问到。</p>
+<p>当然，代码中内层和外层中共享的可能不止有一个变量，也可能不止一个的查询表达式。</p>
+<p>我们来修改一下该实例方法，让其访问一个局部变量。</p>
+<pre><code>public class ModFilter
+{
+      private readonly int modules;
+
+      public ModFilter(int mod)
+      {
+          modules = mod;
+      }
+
+
+      public IEnumerable&lt;int&gt; FindValues(IEnumerable&lt;int&gt; sequence)
+      {
+          int numValues = 0;
+
+          return from n in sequence
+                 where n % modules == 0 //新添加的表达式
+                 select n * n / ++ numValues; //访问局部变量
+      }
+}
+</code></pre><p>注意，select字句需要访问numValues这个局部变量。编译器为了创建这个闭包，需要使用嵌套类型来实现你所需要的行为。下面展示的是编译器为你生成的代码。</p>
+<pre><code>  public class ModFilter
+ {
+    private sealed class Closure
+    {
+        public ModFilter outer;
+
+        public int numValues;
+
+        public int SelectClause(int n)
+        {
+            return ((n * n) / ++this.numValues);
+        }
+    }
+
+
+
+    private readonly int modules;
+
+
+    //实例方法
+    private bool WhereClause(int n)
+    {
+        return ((n % this.modules) == 0);
+    }
+
+    public ModFilter(int mod)
+    {
+        modules = mod;
+    }
+
+
+    public IEnumerable&lt;int&gt; FindValues(IEnumerable&lt;int&gt; sequence)
+    {
+        Closure c = new Closure();
+        c.outer = this;
+        c.numValues = 0;
+
+        return sequence.Where&lt;int&gt;(
+            new Func&lt;int, bool&gt;(this.WhereClause)).
+            Select&lt;int, int&gt;(c.SelectClause);
+    }
+}
+</code></pre><p>在上面这段代码中，编译器专门创建了一个嵌套类，用来容纳所有将在lambda表达式中访问或修改的变量。实际上，这些局部变量将完全被嵌套类的字段所代替。lambda表达式内部的代码以及表达式外部(但仍在当前方法内)的代码访问的均是同一个字段，lambda表达式中的逻辑也被编译成了内部类的一个方法。</p>
+<p>对于lambda表达式中将要用到的外部方法的参数，编译器也会以对待局部变量的方式实现：编译器将这些参数复制到表示该闭包的嵌套类中。</p>
+<p>回到最开始的那个示例，这是我们应该可以理解这种看似怪异的行为了。变量index在传入闭包后，但在查询开始执行前曾被外部代码修改。也就是说，你修改了闭包的内部状态，然后还期待其能够回到从前的状态开始执行，显然这是不可能实现的。</p>
+<p>考虑到延迟执行中的交互以及编译器实现闭包的方式，修改查询与外部代码之间绑定的变量将可能会引发错误的行为。<br>因此，我们应该尽量避免在方法中修改哪些将要传入到闭包中，并将在闭包中使用的变量。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/10/classfield-property/" rel="next" title=".NET 类字段与类属性">
+                <i class="fa fa-chevron-left"></i> .NET 类字段与类属性
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/03/Join/" rel="prev" title=".NET-join用法">
+                .NET-join用法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/02/15/can't-modify-linq-object/"
+           data-title=".NET-lmabda避免修改绑定变量" data-url="http://codelover.link/2016/02/15/can't-modify-linq-object/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="李国宝" />
+          <p class="site-author-name" itemprop="name">李国宝</p>
+          <p class="site-description motion-element" itemprop="description">一直走在吃软饭路上的软狗</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liguobao" target="_blank" title="GitHub">
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/codelover" target="_blank" title="知乎">
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.1234.sh" title="あまみや ゆうこ" target="_blank">あまみや ゆうこ</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://piratf.ml" title="潘雄飞的博客 - 我是魔法师啦啦啦。" target="_blank">潘雄飞的博客 - 我是魔法师啦啦啦。</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://codesky.me" title="CodeSky 代码之空" target="_blank">CodeSky 代码之空</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李国宝</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"codelover"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
