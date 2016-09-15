@@ -102,13 +102,14 @@
 <meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/d306d9c5-6391-421d-86fc-053b97d1b489">
 <meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/0800dc87-2500-42d2-a3c5-a75a2c819330">
 <meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/24842774-311e-4e55-a6b5-b88a89edc754">
-<meta property="og:updated_time" content="2016-09-13T15:40:16.494Z">
+<meta property="og:updated_time" content="2016-09-15T05:11:13.650Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jexus支持HTTPS协议">
 <meta name="twitter:description" content="众所周知，在HTTPS页面请求HTTP资料的时候，现代浏览器会拦截，提示用户是否继续，或者直接拦截，提示都不出来。
 最近给自己做了个快速书签工具，点击书签就直接把书签发送到服务器地址，然后保存到我的网站中。
 一开始一切都挺正常的，不过遇到了https的网站的时候，就跪掉了。
 开始的时候看到HTTPS证书是收费的，想想还是算了，反正凑合能用就是。前几天偶尔看到有一个免费申请HTTPS的开源软件，喵了">
+<meta name="twitter:image" content="http://7xread.com1.z0.glb.clouddn.com/60e4f29a-6da5-40e1-ae32-453a3bbf2455">
 
 
 
@@ -346,8 +347,8 @@
 <blockquote>
 <p>Let’s Encrypt 是一个将于2015年末推出的数字证书认证机构，将通过旨在消除当前手动创建和安装证书的复杂过程的自动化流程，为安全网站提供免费的SSL/TLS证书。  Let’s Encrypt 是由互联网安全研究小组（ISRG，一个公益组织）提供的服务。主要赞助商包括电子前哨基金会，Mozilla基金会，Akamai以及思科。2015年4月9日，ISRG与Linux基金会宣布合作。用以实现这一新的数字证书认证机构的协议被称为自动证书管理环境（ACME）。  GitHub上有这一规范的草案，且提案的一个版本已作为一个Internet草案发布。Let’s Encrypt 宣称这一过程将十分简单、自动化并且免费。  2015年8月7日，该服务更新其推出计划，预计将在2015年9月7日当周某时发布首个证书，随后向列入白名单的域名发行少量证书并逐渐扩大发行。若一切按计划进行，该服务预计将在2015年11月16日当周某时全面开始提供.</p>
 </blockquote>
-<p>整个项目在Github有代码，主要是通过客户端来为我们的网站生成https证书。<br>首先我们先下载客户端，如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/letsencrypt/letsencrypt.git</span><br></pre></td></tr></table></figure></p>
-<p>接着进入这个仓库内，执行下面代码：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./letsencrypt-auto certonly -a &#10;webroot\ --webroot-path &#32593;&#31449;&#25152;&#22312;&#36335;&#24452;(&#22914;&#65306;/var/www/web/) \ &#10;-d &#20320;&#30340;&#22495;&#21517;(&#22914;&#65306;test.online) -d www.&#20320;&#30340;&#22495;&#21517;(&#22914;ww.test.online)</span><br></pre></td></tr></table></figure></p>
+<p>整个项目在Github有代码，主要是通过客户端来为我们的网站生成https证书。<br>首先我们先下载客户端，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/letsencrypt/letsencrypt.git</div></pre></td></tr></table></figure></p>
+<p>接着进入这个仓库内，执行下面代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">./letsencrypt-auto certonly -a </div><div class="line">webroot\ --webroot-path 网站所在路径(如：/var/www/web/) \ </div><div class="line">-d 你的域名(如：test.online) -d www.你的域名(如ww.test.online)</div></pre></td></tr></table></figure></p>
 <p>这里需要注意的事，我这里为了排版，给上面的命令加了换行，运行这个命令的时候记得把换行符去掉。<br>换行符在webroot、-d 前面各有一个。</p>
 <p>一切顺利的话，我们在<code>/etc/letsencrypt/live/域名/</code>这个目录下能看到四个文件，分别是：</p>
 <ol>
@@ -363,7 +364,7 @@
 <ol>
 <li>修改jws.conf<br>进入Jexus文件夹中，打开 “jws.conf”，添加下面两句：</li>
 </ol>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CertificateFile    = /etc/letsencrypt/live/&#22495;&#21517;/fullchain.pem&#10;CertificateKeyFile = /etc/letsencrypt/live/&#22495;&#21517;/privkey.pem</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">CertificateFile    = /etc/letsencrypt/live/域名/fullchain.pem</div><div class="line">CertificateKeyFile = /etc/letsencrypt/live/域名/privkey.pem</div></pre></td></tr></table></figure>
 <p>修改之后效果图如下：<br><img src="http://7xread.com1.z0.glb.clouddn.com/d306d9c5-6391-421d-86fc-053b97d1b489" alt="图片描述"></p>
 <ol>
 <li>开启网站的HTTPS功能</li>
@@ -401,16 +402,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/" rel="next" title="CodeSmith 连接MySQL数据库报“can't find .net framework data provider”">
-                <i class="fa fa-chevron-left"></i> CodeSmith 连接MySQL数据库报“can't find .net framework data provider”
+              <a href="/2016/04/10/mono-webreques-https-exception/" rel="next" title="mono webreques https exception">
+                <i class="fa fa-chevron-left"></i> mono webreques https exception
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/06/20/don’t-throw-exception-in-foreach/" rel="prev" title="避免在函数或者操作中抛出异常">
-                避免在函数或者操作中抛出异常 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/" rel="prev" title="CodeSmith 连接MySQL数据库报“can't find .net framework data provider”">
+                CodeSmith 连接MySQL数据库报“can't find .net framework data provider” <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -475,7 +476,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
+               src="http://7xrayk.com1.z0.glb.clouddn.com/%E5%A4%A7%E7%86%8A%E5%B0%8F%E7%86%8A.jpg"
                alt="李国宝" />
           <p class="site-author-name" itemprop="name">李国宝</p>
           <p class="site-description motion-element" itemprop="description">一直走在吃软饭路上的软狗</p>
@@ -491,7 +492,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -500,7 +501,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -1,0 +1,737 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="codesmith," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="codelover's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。
+以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CodeSmith for MySQL template">
+<meta property="og:url" content="http://codelover.link/2016/03/28/CodeSmith-to-MySQL/index.html">
+<meta property="og:site_name" content="codelover's blog">
+<meta property="og:description" content="对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。
+以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/20160228-1.png">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/20160228-2.png">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/20160228-1.png">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/20160228-4.png">
+<meta property="og:updated_time" content="2016-09-15T07:46:52.858Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CodeSmith for MySQL template">
+<meta name="twitter:description" content="对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。
+以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑">
+<meta name="twitter:image" content="http://7xrayk.com1.z0.glb.clouddn.com/20160228-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6254113771573216000,
+      author: 'codelover'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://codelover.link/2016/03/28/CodeSmith-to-MySQL/"/>
+
+  <title> CodeSmith for MySQL template | codelover's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">codelover's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                CodeSmith for MySQL template
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-28T00:00:00+08:00" content="2016-03-28">
+              2016-03-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/CodeSmith/" itemprop="url" rel="index">
+                    <span itemprop="name">CodeSmith</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/28/CodeSmith-to-MySQL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/28/CodeSmith-to-MySQL/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。</p>
+<p><br><br>以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。<br><br><br>不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。<br><br><br>再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑合能用。起初也懒，codesmith语法不熟，就没想过去修改一下了。<br><br> 最近又要用到这套东西，于是决定还是去修改一番，更便于使用。</p>
+<p>这个文章就主要讲一下修改过程，顺便说一下codesmith的简单语法。</p>
+<p>先说一下操作步骤：</p>
+<p>把模板的文件夹扔到codesmith模板文件的路径下，接着打开Codesmith，找到刚扔过去的文件夹，选择Main.cst,右键-execute-选择对应的MySQL库-选中表。<br><br>（注：codesmith连接MySQL有问题的话，<br><br>移步这里解决 <a href="http://codelover.link/2016/02/25/CodeSmith%E8%BF%9E%E6%8E%A5MySQL%E6%8A%A5%E9%94%99%E2%80%9C%E6%89%BE%E4%B8%8D%E5%88%B0%E8%AF%B7%E6%B1%82%E7%9A%84%20.Net%20Framework%20Data%20Provider%E3%80%82%E5%8F%AF%E8%83%BD%E6%B2%A1%E6%9C%89%E5%AE%89%E8%A3%85%E3%80%82%E2%80%9D%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">CodeSmith 连接MySQL数据库报“can’t find .net framework data provider”</a></p>
+<p>如下图：<br><img src="http://7xrayk.com1.z0.glb.clouddn.com/20160228-1.png" alt="1"></p>
+<p>然后点击Generate就能顺利生成model/dal/bll了。</p>
+<p>生成代码结构如下：<br><img src="http://7xrayk.com1.z0.glb.clouddn.com/20160228-2.png" alt="2"></p>
+<p></p><p>这样操作没什么问题，顺利生成了我们要的model/dal/bll了，然后….我懒嘛。<br>每次都要把表一个个选一次，麻不麻烦啊。然后就想了，能不能改一下模板呢。于是便开始google相关资料了。找到了几个相关文章，参考这就开始改造了。<br>先看看原来的Main.cst里面写了撒。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">&lt;%@ CodeTemplate Language=<span class="string">"C#"</span> ResponseEncoding=<span class="string">"UTF-8"</span> </div><div class="line">TargetLanguage=<span class="string">"Text"</span> Src=<span class="string">""</span> Inherits=<span class="string">""</span> Debug=<span class="string">"False"</span> </div><div class="line">Description=<span class="string">"Template description here."</span> </div><div class="line"> Output=<span class="string">"None"</span>%&gt;</div><div class="line">&lt;%@ Register Name=<span class="string">"Models"</span> Template=<span class="string">"DBMad.Models.cst"</span> </div><div class="line">	MergeProperties=<span class="string">"False"</span> ExcludeProperties=<span class="string">""</span> %&gt;	</div><div class="line">&lt;%@ Register Name=<span class="string">"DAL"</span> Template=<span class="string">"DBMad.DAL.cst"</span> </div><div class="line">MergeProperties=<span class="string">"False"</span> ExcludeProperties=<span class="string">""</span> %&gt; </div><div class="line">&lt;%@ Register Name=<span class="string">"BLL"</span> Template=<span class="string">"DBMad.BLL.cst"</span> </div><div class="line">MergeProperties=<span class="string">"False"</span> ExcludeProperties=<span class="string">""</span> %&gt;</div><div class="line"></div><div class="line">&lt;%@ Property Name=<span class="string">"SourceTable"</span> </div><div class="line">Type=<span class="string">"SchemaExplorer.TableSchema"</span> Optional=<span class="string">"False"</span>%&gt;</div><div class="line">&lt;%@ Property Name=<span class="string">"RootNamespace"</span> Default=<span class="string">"Net.Itcast.CN"</span> </div><div class="line">Type=<span class="string">"System.String"</span> Optional=<span class="string">"False"</span>%&gt;</div><div class="line"></div><div class="line">&lt;%@ Assembly Name=<span class="string">"SchemaExplorer"</span> %&gt;</div><div class="line">&lt;%@ Assembly Name=<span class="string">"System.Data"</span> %&gt;</div><div class="line">&lt;%@ Import Namespace=<span class="string">"SchemaExplorer"</span> %&gt;</div><div class="line">&lt;%@ Import Namespace=<span class="string">"System.Data"</span> %&gt;</div><div class="line">&lt;script runat=<span class="string">"template"</span>&gt;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">string</span> _outputDirectory = String.Empty;</div><div class="line">	[Editor(<span class="keyword">typeof</span>(System.Windows.Forms.Design.FolderNameEditor), </div><div class="line">	<span class="keyword">typeof</span>(System.Drawing.Design.UITypeEditor))] </div><div class="line">	[Description(<span class="string">"The directory to output the results to."</span>)]</div><div class="line">	<span class="keyword">public</span> <span class="keyword">string</span> OutputDirectory </div><div class="line">	&#123;</div><div class="line">		<span class="keyword">get</span></div><div class="line">		&#123;		</div><div class="line">			<span class="keyword">return</span> _outputDirectory;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">set</span></div><div class="line">		&#123;</div><div class="line">			<span class="keyword">if</span> (<span class="keyword">value</span> != <span class="literal">null</span> &amp;&amp; !<span class="keyword">value</span>.EndsWith(<span class="string">"\\"</span>))</div><div class="line">			&#123;</div><div class="line">				<span class="keyword">value</span> += <span class="string">"\\"</span>;</div><div class="line">		    &#125;</div><div class="line">			_outputDirectory = <span class="keyword">value</span>;</div><div class="line">		&#125; </div><div class="line">	&#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>这一段基本就是在声明选项以及引用命名空间，表现出来的便是我们看到的下图：</p>
+<p><img src="http://7xrayk.com1.z0.glb.clouddn.com/20160228-1.png" alt="1"></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;%</div><div class="line">    Models model = <span class="keyword">this</span>.Create&lt;Models&gt;();</div><div class="line">	model.ModelsNamespace = <span class="keyword">this</span>.RootNamespace+<span class="string">".Model"</span>;</div><div class="line">	model.TargetTable = <span class="keyword">this</span>.SourceTable;</div><div class="line">	model.RenderToFile(<span class="keyword">this</span>.OutputDirectory+<span class="string">"Model/"</span>+model.GetFileName(),<span class="literal">true</span>);</div><div class="line">	</div><div class="line"></div><div class="line">   DAL dal = <span class="keyword">this</span>.Create&lt;DAL&gt;();</div><div class="line">   dal.TargetTable = <span class="keyword">this</span>.SourceTable;</div><div class="line">   dal.ModelsNamespace = model.ModelsNamespace;</div><div class="line">   dal.DALClassNameSurfix = <span class="string">"DAL"</span>;</div><div class="line">   dal.DALNamespace =<span class="keyword">this</span>.RootNamespace+<span class="string">".DAL"</span>;</div><div class="line">   dal.RenderToFile(<span class="keyword">this</span>.OutputDirectory+<span class="string">"DAL/"</span></div><div class="line">   +dal.GetFileName(),<span class="literal">true</span>);</div><div class="line"></div><div class="line">   BLL bll = <span class="keyword">this</span>.Create&lt;BLL&gt;();</div><div class="line">   bll.ModelsNamespace = model.ModelsNamespace;</div><div class="line">   bll.DALClassNameSurfix = dal.DALClassNameSurfix;</div><div class="line">   bll.DALNamespace = dal.DALNamespace;</div><div class="line">   bll.BLLClassNameSurfix = <span class="string">"BLL"</span>;</div><div class="line">   bll.BLLNamespace = <span class="keyword">this</span>.RootNamespace+<span class="string">".BLL"</span>;</div><div class="line">   bll.TargetTable = <span class="keyword">this</span>.SourceTable;</div><div class="line">   bll.RenderToFile(<span class="keyword">this</span>.OutputDirectory+<span class="string">"BLL/"</span></div><div class="line">   +bll.GetFileName(),<span class="literal">true</span>);</div><div class="line"></div><div class="line">   Response.Write(<span class="string">"ok,see "</span>+<span class="keyword">this</span>.OutputDirectory);</div><div class="line">%&gt;</div></pre></td></tr></table></figure>
+<p>这一段就是我们点击Generate之后执行的代码，基本功能就是调用<br>DBMad.Models.cst,DBMad.DAL.cst,DBMad.BLL.cst。<br>因为在上面声明数据源的时候，使用了SchemaExplorer.TableSchema，导致我们选择表的时候不能多选。代码如下：</p>
+<p>&lt;%@ Property Name=”SourceTable” Type=”SchemaExplorer.TableSchema” Optional=”False”%&gt;</p>
+<p>这样一想，这个Main.cst就是一个可以处理单表的生成模板了，我们只要自己写一个可以多选表的模板，然后循环调用这个模板去生成，不就完事了？</p>
+<p>找了一下资料，发现只需要把上面的选项Type改一下，便可以多选表了。</p>
+<p>如下：</p>
+<p>&lt;%@ Property Name=”SourceTables” Type=”SchemaExplorer.TableSchemaCollection” Default=”” Optional=”False” Category=””%&gt; </p>
+<p>整体代码如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">&lt;%@ CodeTemplate Language=<span class="string">"C#"</span> ResponseEncoding=<span class="string">"UTF-8"</span> </div><div class="line">TargetLanguage=<span class="string">"Text"</span> Src=<span class="string">""</span> Inherits=<span class="string">""</span> Debug=<span class="string">"False"</span> </div><div class="line">Description=<span class="string">"Template description here."</span> Output=<span class="string">"None"</span>%&gt;</div><div class="line">&lt;%@ Property Name=<span class="string">"SourceTables"</span> </div><div class="line">Type=<span class="string">"SchemaExplorer.TableSchemaCollection"</span> Default=<span class="string">""</span> </div><div class="line">Optional=<span class="string">"False"</span> Category=<span class="string">""</span>%&gt; </div><div class="line">&lt;%@ Register Name=<span class="string">"SE"</span> Template=<span class="string">"CreatSingleTable.cst"</span> </div><div class="line">MergeProperties=<span class="string">"False"</span> ExcludeProperties=<span class="string">""</span> %&gt; </div><div class="line">&lt;%@ Property Name=<span class="string">"RootNamespace"</span> Default=<span class="string">"Net.Itcast.CN"</span> </div><div class="line">Type=<span class="string">"System.String"</span> Optional=<span class="string">"False"</span>%&gt;</div><div class="line">&lt;%@ Assembly Name=<span class="string">"SchemaExplorer"</span> %&gt; </div><div class="line">&lt;%@ Assembly Name=<span class="string">"System.Data"</span> %&gt;</div><div class="line">&lt;%@ Import Namespace=<span class="string">"SchemaExplorer"</span> %&gt; </div><div class="line">&lt;%@ Import Namespace=<span class="string">"System.Data"</span> %&gt; </div><div class="line">&lt;%@ Import Namespace=<span class="string">"System.Collections"</span> %&gt; </div><div class="line">&lt;script runat=<span class="string">"template"</span>&gt;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">string</span> _outputDirectory = String.Empty;</div><div class="line">	[Editor(<span class="keyword">typeof</span>(System.Windows.Forms.Design.FolderNameEditor), </div><div class="line">	<span class="keyword">typeof</span>(System.Drawing.Design.UITypeEditor))] </div><div class="line">	[Description(<span class="string">"The directory to output the results to."</span>)]</div><div class="line">	<span class="keyword">public</span> <span class="keyword">string</span> OutputDirectory </div><div class="line">	&#123;</div><div class="line">		<span class="keyword">get</span></div><div class="line">		&#123;		</div><div class="line">			<span class="keyword">return</span> _outputDirectory;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">set</span></div><div class="line">		&#123;</div><div class="line">			<span class="keyword">if</span> (<span class="keyword">value</span> != <span class="literal">null</span> &amp;&amp; !<span class="keyword">value</span>.EndsWith(<span class="string">"\\"</span>))</div><div class="line">			&#123;</div><div class="line">				<span class="keyword">value</span> += <span class="string">"\\"</span>;</div><div class="line">		    &#125;</div><div class="line">			_outputDirectory = <span class="keyword">value</span>;</div><div class="line">		&#125; </div><div class="line">	&#125;</div><div class="line">&lt;/script&gt;</div><div class="line"></div><div class="line">&lt;% </div><div class="line"><span class="keyword">foreach</span>(TableSchema ts <span class="keyword">in</span> SourceTables) </div><div class="line">&#123; </div><div class="line">SE s = <span class="keyword">new</span> SE(); </div><div class="line">   s.SourceTable = ts; </div><div class="line">   s.RootNamespace = RootNamespace;</div><div class="line">   s.OutputDirectory = OutputDirectory;</div><div class="line">   s.Render(<span class="keyword">this</span>.Response); </div><div class="line">&#125; </div><div class="line">%&gt; </div><div class="line">&lt;script runat=<span class="string">"template"</span>&gt; </div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>前面一部分还是一样的声明，</p>
+<p>&lt;%@ Property Name=”SourceTables” Type=”SchemaExplorer.TableSchemaCollection” Default=”” Optional=”False” Category=””%&gt; </p>
+<p>这一句把选项类型修改成可多选的（既 集合）。<br>效果如下图：<br><img src="http://7xrayk.com1.z0.glb.clouddn.com/20160228-4.png" alt="3"></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;% </div><div class="line"><span class="keyword">foreach</span>(TableSchema ts <span class="keyword">in</span> SourceTables) </div><div class="line">&#123; </div><div class="line">SE s = <span class="keyword">new</span> SE(); </div><div class="line">   s.SourceTable = ts; </div><div class="line">   s.RootNamespace = RootNamespace;</div><div class="line">   s.OutputDirectory = OutputDirectory;</div><div class="line">   s.Render(<span class="keyword">this</span>.Response); </div><div class="line">&#125; </div><div class="line">%&gt; </div><div class="line">&lt;script runat=<span class="string">"template"</span>&gt; </div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>这一段代码便是获取刚得到的表集合，遍历集合然后依次调用之前的单表生成模板。</p>
+<p>到这里差不多已经完成了我要的效果，选择多表，实现一次生成所有的表对应的model/dal/bll。</p>
+<p>这个效果基本就是我要的了，但是后来又发现，model里面的字段居然没有注释，我在建表的时候写了字段注释的呀。</p>
+<p>打开model的cst文件之后发现，模板并没有做注释这个工作。<br>代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">&lt;%@ CodeTemplate Language="C#" TargetLanguage="C#" </div><div class="line">Src="ToolsCodeTemplate.cs" Inherits="ToolsCodeTemplate"%&gt;</div><div class="line">&lt;%@ Property Name="TargetTable" Type="SchemaExplorer.TableSchema" </div><div class="line">Category="Context" Description="TargetTable that the object is </div><div class="line">based on." %&gt;</div><div class="line">&lt;%@ Property Name="ModelsNamespace" Default="Model" </div><div class="line">Type="System.String" Category="Context" Description="TargetTable </div><div class="line">that the object is based on." %&gt;</div><div class="line">&lt;%@ Assembly Name="SchemaExplorer" %&gt;</div><div class="line">&lt;%@ Assembly Name="System.Data" %&gt;</div><div class="line">&lt;%@ Import Namespace="SchemaExplorer" %&gt;</div><div class="line">&lt;%@ Import Namespace="System.Data" %&gt;</div><div class="line">&lt;% PrintHeader(); %&gt;</div><div class="line">using System;</div><div class="line">using System.Collections.Generic;</div><div class="line">using System.Text;</div><div class="line"></div><div class="line">namespace &lt;%= ModelsNamespace %&gt;</div><div class="line">&#123;	</div><div class="line">	[Serializable()]</div><div class="line">	public class &lt;%= GetModelClassName() %&gt;</div><div class="line">	&#123;</div><div class="line">	    &lt;% </div><div class="line">		foreach (ColumnSchema column in TargetTable.Columns)</div><div class="line">	   &#123;</div><div class="line">		%&gt;</div><div class="line">			private &lt;%= GetPropertyType(column) %&gt;  _&lt;%= </div><div class="line">			GetPropertyName(column) %&gt;;			</div><div class="line">		&lt;%</div><div class="line">		&#125;</div><div class="line">		%&gt;</div><div class="line">	    </div><div class="line">		&lt;% </div><div class="line">		foreach (ColumnSchema column in TargetTable.Columns)</div><div class="line">		&#123;</div><div class="line">		%&gt;</div><div class="line">			public &lt;%= GetPropertyType(column) %&gt; &lt;%= </div><div class="line">			GetPropertyName(column) %&gt;</div><div class="line">			&#123;</div><div class="line">				 get &#123; return _&lt;%= GetPropertyName(column) %&gt;; &#125;</div><div class="line">	             set &#123; _&lt;%= GetPropertyName(column) %&gt; = value; &#125;</div><div class="line">			&#125;</div><div class="line">		&lt;%</div><div class="line">		&#125;</div><div class="line">		%&gt;	</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">&lt;script runat="template"&gt;</div><div class="line">public string GetModelClassName()</div><div class="line">&#123;</div><div class="line">	return GetModelClassName(TargetTable);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public override string GetFileName()</div><div class="line">&#123;</div><div class="line">	return this.GetModelClassName(this.TargetTable) + ".cs";</div><div class="line">&#125;</div><div class="line"></div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>获取表中字段名使用的是GetPropertyName(column)，咦，在哪实现了这个东西呢？回去翻一下文件，哦，还有一个ToolsCodeTemplate.cs文一直没管呢。</p>
+<p>果然，GetPropertyName(column)在这里。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">GetPropertyName</span>(<span class="params">ColumnSchema column</span>)</span></div><div class="line">&#123;</div><div class="line">   <span class="keyword">return</span> GetNameFromDBFieldName(column);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">GetNameFromDBFieldName</span>(<span class="params">ColumnSchema column</span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">return</span> column.Name;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>读取列名就是这么简单，那么我们对应写一个函数读取一下列注释，然后再model里面调用一下不好了。</p>
+<p>又查了一下资料，</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">GetColumnComment</span>(<span class="params">ColumnSchema column</span>)</span></div><div class="line">&#123;</div><div class="line">     <span class="keyword">return</span> column.Description;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>嗯，理论上这样是可以的…<br>然而，我想多了。倒腾了好久，这个属性值都是空的…<br>google了一圈之后发现，原来是SchemaExplorer.MySQLSchemaProvider.dll 里面压根没实现读取列注释的实现….</p>
+<p>不过也有对应的解决方法：</p>
+<p><a href="http://www.cnblogs.com/LonelyShadow/p/4147743.html" target="_blank" rel="external">完美解决CodeSmith无法获取MySQL表及列Description说明注释的方案</a></p>
+<p>把DLL替换一下就好了。</p>
+<p>最后附上模板连接:<a href="https://github.com/liguobao/CodeSmith-for-MySQL-Template" target="_blank" rel="external">CodeSmith-for-MySQL-Template</a></p>
+<p>注：</p>
+<ol>
+<li>模板会把MySQL的表名前三个字符截取掉，建议把表明设置为tbl开头，或者自行修改模板文件。</li>
+<li>想让字段注释生效记得替换SchemaExplorer.MySQLSchemaProvider.dll(替换前记得备份！)</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/codesmith/" rel="tag">#codesmith</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/25/GC-1/" rel="next" title="C#.NET托管堆和垃圾回收">
+                <i class="fa fa-chevron-left"></i> C#.NET托管堆和垃圾回收
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/07/ubuntu-jexus-mywebsql/" rel="prev" title="ubuntu使用Jexus搭建MyWebSQL">
+                ubuntu使用Jexus搭建MyWebSQL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/28/CodeSmith-to-MySQL/"
+           data-title="CodeSmith for MySQL template" data-url="http://codelover.link/2016/03/28/CodeSmith-to-MySQL/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xrayk.com1.z0.glb.clouddn.com/%E5%A4%A7%E7%86%8A%E5%B0%8F%E7%86%8A.jpg"
+               alt="李国宝" />
+          <p class="site-author-name" itemprop="name">李国宝</p>
+          <p class="site-description motion-element" itemprop="description">一直走在吃软饭路上的软狗</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liguobao" target="_blank" title="GitHub">
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/codelover" target="_blank" title="知乎">
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.1234.sh" title="あまみや ゆうこ" target="_blank">あまみや ゆうこ</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://piratf.ml" title="潘雄飞的博客 - 我是魔法师啦啦啦。" target="_blank">潘雄飞的博客 - 我是魔法师啦啦啦。</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://codesky.me" title="CodeSky 代码之空" target="_blank">CodeSky 代码之空</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李国宝</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"codelover"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
