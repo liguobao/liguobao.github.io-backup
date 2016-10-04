@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://codelover.link/"/>
-  <updated>2016-09-15T06:33:52.348Z</updated>
+  <updated>2016-10-04T16:52:21.372Z</updated>
   <id>http://codelover.link/</id>
   
   <author>
@@ -14,6 +14,122 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>58HouseSearch项目迁移到asp.net core</title>
+    <link href="http://codelover.link/2016/10/04/58CityHouseSearch_move_to_aspnetcore/"/>
+    <id>http://codelover.link/2016/10/04/58CityHouseSearch_move_to_aspnetcore/</id>
+    <published>2016-10-03T16:00:00.000Z</published>
+    <updated>2016-10-04T16:52:21.372Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><a href="https://github.com/liguobao/58HouseSearch" target="_blank" rel="external">58HouseSearch</a>这个项目原本是基于ASP.NET MVC 4写的，开发环境是Windows+VS2015，发布平台是linux+mono+jexus，这样看来整个项目基本已经满足跨平台的需求。</p>
+<p>这样一来，本来我是没什么动力去做迁移的，好好的东西闲着没事干才迁移呢。</p>
+<p>不过，这不国庆了么？穷人不是在家穷游天下么？所以…真的有点闲着没事干了。</p>
+<h3 id="迁移可行性探讨"><a href="#迁移可行性探讨" class="headerlink" title="迁移可行性探讨"></a>迁移可行性探讨</h3><p>项目迁移前，我们还是先来讨论一下迁移可行性。为嘛要进行可行性探讨呢？原因是.NET CORE是一个跨平台的框架，和上一代的.NET存在不兼容。</p>
+<p>个人总结一下，迁移的主要的问题在于：代码不兼容、类库不兼容、严重依赖Windows API或者COM组件等。</p>
+<h4 id="代码不兼容"><a href="#代码不兼容" class="headerlink" title="代码不兼容"></a>代码不兼容</h4><p>代码不兼容其实不算麻烦。毕竟代码是活的，你我也是活的，不就是一个改字罢了。花点时间慢慢改，总是能搞掂的。</p>
+<h4 id="类库不兼容"><a href="#类库不兼容" class="headerlink" title="类库不兼容"></a>类库不兼容</h4><p>要不就弃用，要不就找替代品。</p>
+<h4 id="严重依赖Windows-API或者COM组件"><a href="#严重依赖Windows-API或者COM组件" class="headerlink" title="严重依赖Windows API或者COM组件"></a>严重依赖Windows API或者COM组件</h4><p>额？找替代品，找不到可用替代品的话。放弃吧，这个项目别考虑迁移了。</p>
+<p>这个故事告诉我们，做跨平台项目的时候，少点用系统API或者组建。</p>
+<p>回到58HouseSearch项目上面。</p>
+<p>这个项目的代码基本都是我写的，所以重写代码没什么问题。<br>依赖的类库有下面几个:</p>
+<ul>
+<li><p><a href="https://github.com/FlorianRappl/AngleSharp" target="_blank" rel="external">AngleSharp</a></p>
+</li>
+<li><p><a href="http://www.newtonsoft.com/json" target="_blank" rel="external">Newtonsoft.Json</a></p>
+</li>
+<li><p><a href="http://logging.apache.org/log4net/" target="_blank" rel="external">log4net</a></p>
+</li>
+</ul>
+<p>AngleSharp是用来解析HTML的类库，用linq的方式来操作HTML，用起来实在爽快。</p>
+<p>如果这货在.net core上不能跑，我应该立马放弃了。<br>不过，这个实在给力…</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/1a950803-3d38-4b16-9761-6c9cd806b0b9" alt="AngleSharp支持平台"></p>
+<p>Newtonsoft.Json</p>
+<p>在这个项目里面主要是用来记录PV数据的，非核心功能，可有可无。不过看了下nuget上的介绍，也是支持.net core的。</p>
+<p>剩下log4net…嗯，并不支持log4net。不过这个就更加是非核心内容了，直接丢了。<br>PS:考虑后期加入Nlog替代log4net。</p>
+<p>至于依赖Windows API之类的，在这个项目里面基本没有，所以略过…</p>
+<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><ul>
+<li><a href="https://www.visualstudio.com/downloads/" target="_blank" rel="external">Visual Studio Community 2015 with Update 3 – Free</a></li>
+<li><a href="https://www.microsoft.com/net/download" target="_blank" rel="external">.NET Core SDK</a></li>
+<li><a href="https://www.microsoft.com/net/download" target="_blank" rel="external">.NET Core</a></li>
+<li><a href="https://go.microsoft.com/fwlink/?LinkId=827546" target="_blank" rel="external">.NET Core 1.0.1 - VS 2015 Tooling Preview 2</a></li>
+</ul>
+<p>友情提示：</p>
+<ol>
+<li>Visual Studio Community 2015 with Update 3 下载镜像来安装。</li>
+</ol>
+<p>错误操作如下：<br><img src="http://7xread.com1.z0.glb.clouddn.com/1e723e08-b3d5-4dab-b4a6-1de70799c4c8" alt="错误操作"></p>
+<p>正确打开方式：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/706771d8-d3f2-4122-a61d-5e961887121a" alt="正确的打开方式-1"></p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/455ec5cc-b429-4563-a4fb-3a0c18608969" alt="正确的打开方式-2"></p>
+<ol>
+<li><p>安装.NET Core SDK和.NET Core之后再安装.NET Core 1.0.1 - VS 2015 Tooling Preview 2</p>
+</li>
+<li><p>安装.NET Core 1.0.1 - VS 2015 Tooling Preview 2 这货的可能会报错0x80072f8a未指定的错误</p>
+</li>
+</ol>
+<p>解决方案见下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/47c517d1-4b48-4088-be4a-a0768413e768" alt="图片描述"></p>
+<p>详细见链接：<a href="http://www.cnblogs.com/JiaoWoWeiZai/p/5892255.html" target="_blank" rel="external">安装DotNetCore.1.0.1-VS2015Tools.Preview2.0.2出现0x80072f8a未指定的错误</a></p>
+<p>上面都弄好之后，理论上在VS2O15-新建项目里面可以看到ASP.NET CORE的模板了。如下图：<br><img src="http://7xread.com1.z0.glb.clouddn.com/3364e7c9-a41e-47f2-8d08-60345e4efa35" alt="ASP.NET CORE的模板"></p>
+<h3 id="项目迁移"><a href="#项目迁移" class="headerlink" title="项目迁移"></a>项目迁移</h3><h4 id="新建空白ASP-NET-CORE项目"><a href="#新建空白ASP-NET-CORE项目" class="headerlink" title="新建空白ASP.NET CORE项目"></a>新建空白ASP.NET CORE项目</h4><p>新建好了之后如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/e047d81d-56f1-4e51-9d72-7989e1fc6225" alt="空白ASP.NET CORE项目"></p>
+<h4 id="Nuget获取引用"><a href="#Nuget获取引用" class="headerlink" title="Nuget获取引用"></a>Nuget获取引用</h4><p><a href="https://www.nuget.org/packages/AngleSharp/" target="_blank" rel="external">https://www.nuget.org/packages/AngleSharp/</a></p>
+<p><a href="https://www.nuget.org/packages/Newtonsoft.Json" target="_blank" rel="external">https://www.nuget.org/packages/Newtonsoft.Json</a></p>
+<h4 id="添加Controllers文件夹"><a href="#添加Controllers文件夹" class="headerlink" title="添加Controllers文件夹"></a>添加Controllers文件夹</h4><p>然后把之前项目的Controllers拷贝过来，改掉命名空间，去掉无用代码，添加相应引用。</p>
+<h4 id="添加Views文件夹"><a href="#添加Views文件夹" class="headerlink" title="添加Views文件夹"></a>添加Views文件夹</h4><p>本项目直接把之前项目的Views拷贝过来是完全没有问题的。</p>
+<h4 id="静态文件处理"><a href="#静态文件处理" class="headerlink" title="静态文件处理"></a>静态文件处理</h4><p>asp.net core MVC中的文件结构和asp.net mvc的文件结构略有不同。</p>
+<p>asp.net core MVC在view中“IMG/Little/PaleGreen.png”对应的文件对应于“项目路径/webroot/IMG/Little/PaleGreen.png”；</p>
+<p>而asp.net mvc中，对应路径为“项目/IMG/Little/PaleGreen.png”。</p>
+<p>因而，我们的所有静态文件都应该放到：webroot文件夹下。</p>
+<p>上面的都做完了之后，项目结构如下：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/2fee156b-2505-4953-bfe9-1d2521f13565" alt="项目结构"></p>
+<p>接下来就是改代码了。</p>
+<h3 id="代码迁移"><a href="#代码迁移" class="headerlink" title="代码迁移"></a>代码迁移</h3><h4 id="Startup-cs添加MVC"><a href="#Startup-cs添加MVC" class="headerlink" title="Startup.cs添加MVC"></a>Startup.cs添加MVC</h4><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">public</span> <span class="selector-tag">class</span> <span class="selector-tag">Startup</span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// This method gets called by the runtime. Use this method to add services to the container.</span></div><div class="line">    <span class="comment">// For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940</span></div><div class="line">    <span class="selector-tag">public</span> <span class="selector-tag">void</span> <span class="selector-tag">ConfigureServices</span>(IServiceCollection services)</div><div class="line">    &#123;</div><div class="line">        <span class="comment">//添加MVC框架</span></div><div class="line">        services<span class="selector-class">.AddMvc</span>();</div><div class="line">        </div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.</span></div><div class="line">    <span class="selector-tag">public</span> <span class="selector-tag">void</span> <span class="selector-tag">Configure</span>(IApplicationBuilder app, IHostingEnvironment env,</div><div class="line">    ILoggerFactory loggerFactory)</div><div class="line">    &#123;</div><div class="line">        loggerFactory<span class="selector-class">.AddConsole</span>();</div><div class="line"></div><div class="line">        <span class="selector-tag">if</span> (env.IsDevelopment())</div><div class="line">        &#123;</div><div class="line">            app<span class="selector-class">.UseDeveloperExceptionPage</span>();</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//启用静态文件中间件</span></div><div class="line">        app<span class="selector-class">.UseStaticFiles</span>();</div><div class="line">        <span class="comment">//启动MVC路由</span></div><div class="line">        app<span class="selector-class">.UseMvcWithDefaultRoute</span>();</div><div class="line">        <span class="comment">//设置默认页面</span></div><div class="line">        <span class="selector-tag">app</span><span class="selector-class">.UseMvc</span>(routes =&gt;</div><div class="line">        &#123;</div><div class="line">            <span class="selector-tag">routes</span><span class="selector-class">.MapRoute</span>(</div><div class="line">                <span class="attribute">name</span>: <span class="string">"default"</span>,</div><div class="line">                <span class="attribute">template</span>: <span class="string">"&#123;controller=House&#125;/&#123;action=Index&#125;/&#123;id?&#125;"</span>); </div><div class="line">        &#125;);</div><div class="line"></div><div class="line">      </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="改写GetHTMLByURL方法"><a href="#改写GetHTMLByURL方法" class="headerlink" title="改写GetHTMLByURL方法"></a>改写GetHTMLByURL方法</h4><p>之前的方法：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/d005a100-e3e6-423b-b34c-3eae11b2ab63" alt="old GetHTMLByURL"></p>
+<p>.net core重写了HttpWebRequest，变成了WebRequest,所以上面的代码废了。</p>
+<p>重写如下：</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public static <span class="keyword">string</span> GetHTMLByURL(<span class="keyword">string</span> Url, <span class="keyword">string</span> <span class="built_in">type</span> = <span class="string">"UTF-8"</span>)</div><div class="line">&#123;</div><div class="line">    try</div><div class="line">    &#123;</div><div class="line">        Url = Url.ToLower();</div><div class="line"></div><div class="line">        <span class="keyword">System</span>.Net.WebRequest wReq = <span class="keyword">System</span>.Net.WebRequest.<span class="keyword">Create</span>(Url);</div><div class="line">        <span class="comment">// Get the response instance.</span></div><div class="line">        <span class="keyword">System</span>.Net.WebResponse wResp = wReq.GetResponseAsync().Result;</div><div class="line">        <span class="keyword">System</span>.IO.Stream respStream = wResp.GetResponseStream();</div><div class="line">        using (<span class="keyword">System</span>.IO.StreamReader reader = <span class="keyword">new</span> <span class="keyword">System</span>.IO.</div><div class="line">        StreamReader(respStream, Encoding.GetEncoding(<span class="built_in">type</span>)))</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">return</span> reader.ReadToEnd();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    catch (<span class="keyword">System</span>.Exception ex)</div><div class="line">    &#123;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">string</span>.Empty;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="改写Controller代码"><a href="#改写Controller代码" class="headerlink" title="改写Controller代码"></a>改写Controller代码</h4><p>嗯，换了命名空间，别的一句都没改直接拉过来了…略过。</p>
+<h3 id="发布到ubuntu"><a href="#发布到ubuntu" class="headerlink" title="发布到ubuntu"></a>发布到ubuntu</h3><p><a href="https://www.microsoft.com/net/core#ubuntu" target="_blank" rel="external">Install for Ubuntu 14.04, 16.04 &amp; Linux Mint 17</a></p>
+<p>第一步<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//Ubuntu 14.04 / Linux Mint 17</span></div><div class="line">sudo <span class="keyword">sh</span> -c 'echo <span class="string">"deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main"</span> &gt; /etc/apt/sources.<span class="keyword">list</span>.<span class="keyword">d</span>/dotnetdev.<span class="keyword">list</span>'</div><div class="line">sudo apt-key adv --keyserver apt-mo.trafficmanager.<span class="keyword">net</span> --recv-keys 417A0893</div><div class="line">sudo apt-get <span class="keyword">update</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//Ubuntu 16.04</span></div><div class="line">sudo <span class="keyword">sh</span> -c 'echo <span class="string">"deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main"</span> &gt; /etc/apt/sources.<span class="keyword">list</span>.<span class="keyword">d</span>/dotnetdev.<span class="keyword">list</span>'</div><div class="line">sudo apt-key adv --keyserver apt-mo.trafficmanager.<span class="keyword">net</span> --recv-keys 417A0893</div><div class="line">sudo apt-get <span class="keyword">update</span></div></pre></td></tr></table></figure></p>
+<p>第二步<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install dotnet-dev<span class="number">-1.0</span><span class="number">.0</span>-preview2<span class="number">-003131</span></div></pre></td></tr></table></figure></p>
+<p>安装好了之后，输入 dotnet -v 应该能看到版本信息，如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/6ebca12e-2be9-487e-b230-d22562a5aabe" alt="dotnet -v "></p>
+<p>这样的下，一句完成了ubuntu 运行asp.net core的环境搭建了。</p>
+<h3 id="project-json里面隐藏的坑"><a href="#project-json里面隐藏的坑" class="headerlink" title="project.json里面隐藏的坑"></a>project.json里面隐藏的坑</h3><h4 id="dependencies"><a href="#dependencies" class="headerlink" title="dependencies"></a>dependencies</h4><p>NET Core 1.0.1 - VS 2015 Tooling Preview 2模板的asp.net core 版本和ubuntu 的asp.net core 版本不一致。</p>
+<p>根据微软爸给的教程，我们在ubuntu上安装的.NET Core 1.0.0，见上图。</p>
+<p>然而我们创建项目的模板是.NET Core 1.0.1，见下图:</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/a3192bdf-f548-4fad-868a-4865632acd29" alt=".NET Core 1.0.1"></p>
+<p>怎么办？要不升级ubuntu的asp.net core，要不降级。</p>
+<p>由于没找到.NET Core 1.0.1 ubuntu的安装包，所以我选择了降级到.NET Core 1.0.0.</p>
+<p>其中需要把Microsoft.NETCore.App version 、Microsoft.AspNetCore.Server.Kestrel、Microsoft.AspNetCore.Mvc 这三个节点都改成“1.0.0”。如下：</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="string">"dependencies"</span>: &#123;</div><div class="line">  <span class="string">"Microsoft.NETCore.App"</span>: &#123;</div><div class="line">    <span class="string">"version"</span>: <span class="string">"1.0.1"</span>,</div><div class="line">    <span class="string">"type"</span>: <span class="string">"platform"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="string">"Microsoft.AspNetCore.Diagnostics"</span>: <span class="string">"1.0.0"</span>,</div><div class="line">  <span class="string">"Microsoft.AspNetCore.Server.IISIntegration"</span>: <span class="string">"1.0.0"</span>,</div><div class="line">  <span class="string">"Microsoft.AspNetCore.Server.Kestrel"</span>: <span class="string">"1.0.1"</span>,</div><div class="line">  <span class="string">"Microsoft.Extensions.Logging.Console"</span>: <span class="string">"1.0.0"</span>,</div><div class="line">  <span class="string">"Microsoft.AspNetCore.Mvc"</span>: <span class="string">"1.0.1"</span>,</div><div class="line">  <span class="string">"Microsoft.AspNetCore.StaticFiles"</span>: <span class="string">"1.0.0"</span>,</div><div class="line">  <span class="string">"Newtonsoft.Json"</span>: <span class="string">"9.0.1"</span>,</div><div class="line">  <span class="string">"AngleSharp"</span>: <span class="string">"0.9.8.1"</span></div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<h4 id="publishOptions"><a href="#publishOptions" class="headerlink" title="publishOptions"></a>publishOptions</h4><p>发布输出包括Views文件夹<br><figure class="highlight prolog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="string">"publishOptions"</span>: &#123;</div><div class="line">  <span class="string">"include"</span>: [</div><div class="line">    <span class="string">"wwwroot"</span>,</div><div class="line">    <span class="string">"web.config"</span>,</div><div class="line">    <span class="string">"Views"</span></div><div class="line">  ]</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<h4 id="runtimes"><a href="#runtimes" class="headerlink" title="runtimes"></a>runtimes</h4><p>runtimes 配置为模板运行平台。<br>详细见链接：<a href="https://docs.nuget.org/ndocs/schema/project.json" target="_blank" rel="external">https://docs.nuget.org/ndocs/schema/project.json</a></p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">"runtimes"</span>: &#123; <span class="string">"ubuntu.14.04-x64"</span>: &#123;&#125; &#125;</div></pre></td></tr></table></figure>
+<p>上面都弄好之后，跑一下看,如下图：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dotnet <span class="keyword">restore</span></div><div class="line"></div><div class="line"><span class="keyword">dotnet</span> run</div></pre></td></tr></table></figure>
+<p>来个请求看看：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/b1191226-c33b-45c7-98cc-f62bb3ea73b4" alt="请求log"></p>
+<h3 id="jexus转发-反向代理"><a href="#jexus转发-反向代理" class="headerlink" title="jexus转发/反向代理"></a>jexus转发/反向代理</h3><p><a href="http://www.cnblogs.com/gaobing/p/5663012.html" target="_blank" rel="external">ASP.NET Core “完整发布,自带运行时” 到jexus</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/liguobao/58HouseSearch&quot; target=&quot;_blank&quot; re
+    
+    </summary>
+    
+      <category term="asp.net core" scheme="http://codelover.link/categories/asp-net-core/"/>
+    
+    
+      <category term="58City" scheme="http://codelover.link/tags/58City/"/>
+    
+      <category term="asp.net core" scheme="http://codelover.link/tags/asp-net-core/"/>
+    
+  </entry>
   
   <entry>
     <title>58同城高德搜房项目JS相关知识</title>
@@ -204,7 +320,7 @@
     <link href="http://codelover.link/2016/07/28/asp.net-core-startup/"/>
     <id>http://codelover.link/2016/07/28/asp.net-core-startup/</id>
     <published>2016-07-27T16:00:00.000Z</published>
-    <updated>2016-09-15T07:41:16.198Z</updated>
+    <updated>2016-09-15T07:42:39.408Z</updated>
     
     <content type="html"><![CDATA[<p>之前版本的ASP.NET程序必须依赖IIS来启动，而IIS上会为挂载在其中的ASP.NET 注册一个ISAPI filter。每当http请求过来时，IIS则会启动w3wp的worker process来开始整个ASP.NET runtime程序。相信大家都这样的流程都有相应的了解。在.net core之前，ASP.NET的主要场景都是运行在Windows平台的，IIS也就是web server的首选了。虽然也有类似于jexus的linux webserver可用，但是基于mono的.NET 总体还是不够Microsoft 原生的强。</p>
 <p>不过到了现在，一切都不同了。</p>
@@ -298,6 +414,38 @@
     <summary type="html">
     
       &lt;h2 id=&quot;1、引言&quot;&gt;&lt;a href=&quot;#1、引言&quot; class=&quot;headerlink&quot; title=&quot;1、引言&quot;&gt;&lt;/a&gt;1、引言&lt;/h2&gt;&lt;p&gt;如某个场景下，你的函数或操作需要操作一个序列的对象，且在处理的过程中抛出了异常。这时如果没有一些状态记录之类的数据，我们不了
+    
+    </summary>
+    
+      <category term=".net" scheme="http://codelover.link/categories/net/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>ASP.NET core 初体验</title>
+    <link href="http://codelover.link/2016/05/30/the_first_aspnetcore/"/>
+    <id>http://codelover.link/2016/05/30/the_first_aspnetcore/</id>
+    <published>2016-05-29T16:00:00.000Z</published>
+    <updated>2016-10-04T16:42:39.153Z</updated>
+    
+    <content type="html"><![CDATA[<p>在大神的带领下体验了一下asp.net core，感觉很不错，简单写个手把手教程。</p>
+<p>环境要求：VS2015 update2，版本不限。</p>
+<p>首先到这里：<a href="https://www.microsoft.com/net/download" target="_blank" rel="external">https://www.microsoft.com/net/download</a></p>
+<p>下载.NET Core Install 和SDK Install。</p>
+<p>如下图：<br><img src="http://7xread.com1.z0.glb.clouddn.com/5f4576e6-6fa0-4fbb-83c9-009428480e83" alt="图一"></p>
+<p>接着无脑安装。<br><img src="http://7xread.com1.z0.glb.clouddn.com/a996d00e-5aa5-4034-96ae-548e35c2ba95" alt="图二"></p>
+<p>两个都装完之后环境已经搭好了。不过在VS中还没对应的.NET Core模板。<br>我们还需要去下载一个<br><a href="https://go.microsoft.com/fwlink/?LinkId=798481" target="_blank" rel="external">.NET Core Tooling Preview 1 for Visual Studio 2015</a></p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/07ec4ff1-64ea-486b-8cb8-99dc400c279a" alt="图三"></p>
+<p>这个安装略慢，稍等。</p>
+<p>上面的都安装好了之后，打开VS，新建项目，选中web，即可看到asp.net core.<br>如下图：<br><img src="http://7xread.com1.z0.glb.clouddn.com/aa3a9677-701e-45f0-90ea-b47b57dcb85e" alt="图五"><br>完事….<br>下次再来聊asp.net core项目…</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在大神的带领下体验了一下asp.net core，感觉很不错，简单写个手把手教程。&lt;/p&gt;
+&lt;p&gt;环境要求：VS2015 update2，版本不限。&lt;/p&gt;
+&lt;p&gt;首先到这里：&lt;a href=&quot;https://www.microsoft.com/net/download&quot; 
     
     </summary>
     
@@ -1166,10 +1314,10 @@ public sealed class SomeType
   
   <entry>
     <title>bytes to string</title>
-    <link href="http://codelover.link/2016/01/20/Bytes%20-To-String/"/>
-    <id>http://codelover.link/2016/01/20/Bytes -To-String/</id>
+    <link href="http://codelover.link/2016/01/20/Bytes-To-String/"/>
+    <id>http://codelover.link/2016/01/20/Bytes-To-String/</id>
     <published>2016-01-19T16:00:00.000Z</published>
-    <updated>2016-09-15T07:45:34.620Z</updated>
+    <updated>2016-10-04T16:42:09.341Z</updated>
     
     <content type="html"><![CDATA[<p>有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。</p>
 <p>在C#里面，Byte数组转String字符串我们一般用Convert.ToBase64()完成。</p>
@@ -1195,7 +1343,7 @@ public sealed class SomeType
     
     </summary>
     
-      <category term=".neta" scheme="http://codelover.link/categories/neta/"/>
+      <category term=".net" scheme="http://codelover.link/categories/net/"/>
     
     
       <category term="加密编码" scheme="http://codelover.link/tags/%E5%8A%A0%E5%AF%86%E7%BC%96%E7%A0%81/"/>

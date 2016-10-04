@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="加密编码," />
 
 
 
@@ -86,25 +86,22 @@
 
 
 
-<meta name="description" content="#.NET 类字段与类属性@(.NET)[基础|字段|属性]
-##字段字段表示只读或可读/可写的数据值。字段可以是静态的，这种字段被认为是类型状态的一部分。字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。强烈建议把字段声明为私有，防止类型或对象的状态被类型外部代码破坏。
-##属性属性允许用简单的、字段风格的语法设置或查询类型或对象的逻辑状态，同时保证状态不被破坏。作用于类型称为静态属">
+<meta name="description" content="有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。
+在C#里面，Byte数组转String字符串我们一般用Convert.ToBase64()完成。
+代码如下：123456789public string BytesToString(by">
 <meta property="og:type" content="article">
-<meta property="og:title" content=".NET 类字段与类属性">
-<meta property="og:url" content="http://codelover.link/2016/02/10/classfield-property/index.html">
+<meta property="og:title" content="bytes to string">
+<meta property="og:url" content="http://codelover.link/2016/01/20/Bytes-To-String/index.html">
 <meta property="og:site_name" content="codelover's blog">
-<meta property="og:description" content="#.NET 类字段与类属性@(.NET)[基础|字段|属性]
-##字段字段表示只读或可读/可写的数据值。字段可以是静态的，这种字段被认为是类型状态的一部分。字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。强烈建议把字段声明为私有，防止类型或对象的状态被类型外部代码破坏。
-##属性属性允许用简单的、字段风格的语法设置或查询类型或对象的逻辑状态，同时保证状态不被破坏。作用于类型称为静态属">
-<meta property="og:image" content="https://kekaeq-ch3301.files.1drv.com/y3meEWWaK-o9SNfr_fT71Xr3YrPqO1LIswWqMvlHyUxWeH8P0PtXsQlfRkDnGshlMJIy2gPsxNet14efOPOuX-dHmZhCTg8PXyELJR9tnayye4LeEQ6F997b8pSI84wBR6nmmOF8IAr92oKWk36-f8alkEj9TrDQbiMoKGQwO5MTFY/20150105.jpg?psid=1">
-<meta property="og:image" content="https://kekaeq-ch3301.files.1drv.com/y3mN8FseIEbAaQfT8ynEIc4nYsOUK0p0IN7Hp39imVSZXNQXlSfAYmvaC-9bDM3Hq6rPCV1XgrgvoST8wXejwARXaDmXptZpb_nyWwUzWK1rzaJ6fSsYfnP0icRKUclaVxnlltOJSQiuTFO7_fCfabmv0AsrgL5sLo6GdVJmpd-L10/QQ%E5%9B%BE%E7%89%8720151003165909.jpg?psid=1">
-<meta property="og:updated_time" content="2016-09-15T05:11:13.653Z">
+<meta property="og:description" content="有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。
+在C#里面，Byte数组转String字符串我们一般用Convert.ToBase64()完成。
+代码如下：123456789public string BytesToString(by">
+<meta property="og:updated_time" content="2016-10-04T16:42:09.341Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content=".NET 类字段与类属性">
-<meta name="twitter:description" content="#.NET 类字段与类属性@(.NET)[基础|字段|属性]
-##字段字段表示只读或可读/可写的数据值。字段可以是静态的，这种字段被认为是类型状态的一部分。字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。强烈建议把字段声明为私有，防止类型或对象的状态被类型外部代码破坏。
-##属性属性允许用简单的、字段风格的语法设置或查询类型或对象的逻辑状态，同时保证状态不被破坏。作用于类型称为静态属">
-<meta name="twitter:image" content="https://kekaeq-ch3301.files.1drv.com/y3meEWWaK-o9SNfr_fT71Xr3YrPqO1LIswWqMvlHyUxWeH8P0PtXsQlfRkDnGshlMJIy2gPsxNet14efOPOuX-dHmZhCTg8PXyELJR9tnayye4LeEQ6F997b8pSI84wBR6nmmOF8IAr92oKWk36-f8alkEj9TrDQbiMoKGQwO5MTFY/20150105.jpg?psid=1">
+<meta name="twitter:title" content="bytes to string">
+<meta name="twitter:description" content="有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。
+在C#里面，Byte数组转String字符串我们一般用Convert.ToBase64()完成。
+代码如下：123456789public string BytesToString(by">
 
 
 
@@ -125,9 +122,9 @@
 
 
 
-  <link rel="canonical" href="http://codelover.link/2016/02/10/classfield-property/"/>
+  <link rel="canonical" href="http://codelover.link/2016/01/20/Bytes-To-String/"/>
 
-  <title> .NET 类字段与类属性 | codelover's blog </title>
+  <title> bytes to string | codelover's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -267,7 +264,7 @@
             
             
               
-                .NET 类字段与类属性
+                bytes to string
               
             
           </h1>
@@ -279,8 +276,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-02-10T00:00:00+08:00" content="2016-02-10">
-              2016-02-10
+            <time itemprop="dateCreated" datetime="2016-01-20T00:00:00+08:00" content="2016-01-20">
+              2016-01-20
             </time>
           </span>
 
@@ -309,8 +306,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/02/10/classfield-property/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/10/classfield-property/" itemprop="commentsCount"></span>
+                <a href="/2016/01/20/Bytes-To-String/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/20/Bytes-To-String/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -333,55 +330,21 @@
       
 
       
-        <p>#.NET 类字段与类属性<br>@(.NET)[基础|字段|属性]</p>
-<p>##字段<br>字段表示只读或可读/可写的数据值。<br>字段可以是静态的，这种字段被认为是类型状态的一部分。<br>字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。<br>强烈建议把字段声明为私有，防止类型或对象的状态被类型外部代码破坏。</p>
-<p>##属性<br>属性允许用简单的、字段风格的语法设置或查询类型或对象的逻辑状态，同时保证状态不被破坏。<br>作用于类型称为静态属性，作用于对象称为实例属性。<br>属性可以无参，也可以有多个参数（相当少见，但集合类用的多）。 </p>
-<pre><code>using System;
-
-public sealed class SomeType
-{                            //  1  
-// Nested class  
-   private class SomeNestedType { }                //  2  
-
-   // Constant, read­only, and static read/write field   
-   private const Int32 c_SomeConstant = 1;            //  3     
-
-   private readonly String m_SomeReadOnlyField = &quot;2&quot;;     //  4    
-
-   private static Int32 s_SomeReadWriteField = 3;      //  5  
-
-   // Type constructor  
-   static SomeType() { }                                  //  6  
-
-   // Instance constructors  
-   public SomeType(Int32 x) { }                           //  7  
-
-   public SomeType() { }                                  //  8 
-
-   // Instance and static methods  
-   private String InstanceMethod() { return null; }       // 9   
-
-   public static void Main() { }                        // 10 
-
-   // Instance property  
-   public Int32 SomeProp
-   {                                // 11      
-       get { return 0; }                                // 12      
-       set { }                                          // 13  
-   }
-
-   // Instance parameterful property (indexer) 
-   public Int32 this[String s]
-   {                          // 14       
-       get { return 0; }                                // 15        
-       set { }                                          // 16  
-   }
-
-   // Instance event  
-   public event EventHandler SomeEvent;                  // 17  
-}
-</code></pre><p><img src="https://kekaeq-ch3301.files.1drv.com/y3meEWWaK-o9SNfr_fT71Xr3YrPqO1LIswWqMvlHyUxWeH8P0PtXsQlfRkDnGshlMJIy2gPsxNet14efOPOuX-dHmZhCTg8PXyELJR9tnayye4LeEQ6F997b8pSI84wBR6nmmOF8IAr92oKWk36-f8alkEj9TrDQbiMoKGQwO5MTFY/20150105.jpg?psid=1" alt="enter image description here"></p>
-<p><img src="https://kekaeq-ch3301.files.1drv.com/y3mN8FseIEbAaQfT8ynEIc4nYsOUK0p0IN7Hp39imVSZXNQXlSfAYmvaC-9bDM3Hq6rPCV1XgrgvoST8wXejwARXaDmXptZpb_nyWwUzWK1rzaJ6fSsYfnP0icRKUclaVxnlltOJSQiuTFO7_fCfabmv0AsrgL5sLo6GdVJmpd-L10/QQ%E5%9B%BE%E7%89%8720151003165909.jpg?psid=1" alt="enter image description here"></p>
+        <p>有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。</p>
+<p>在C#里面，Byte数组转String字符串我们一般用Convert.ToBase64()完成。</p>
+<p>代码如下：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">BytesToString</span>(<span class="params"><span class="keyword">byte</span>[] buff</span>)</span></div><div class="line">&#123;</div><div class="line">   <span class="keyword">return</span> Convert.ToBase64String(buff);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">byte</span>[] <span class="title">StringToBytes</span>(<span class="params"><span class="keyword">string</span> input</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> Encoding.UTF8.GetBytes(input);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p> 一般来说这样也没撒问题了，不过，如果这个数据是通过URL的方式给出去的，这时候就要考虑一下特殊字符编码问题了。+、空格、%之类的特殊字符可能会导致切断URL传参的数据，导致得到的数据不一致。这样的话，解密也做不下去了。</p>
+<p> 相关资料：<br> <br>1、<a href="http://www.ruanyifeng.com/blog/2010/02/url_encoding.html" target="_blank" rel="external">关于URL编码</a><br> <br>2、<a href="http://blog.csdn.net/luo_deng/article/details/12186535" target="_blank" rel="external">URL编码—-url参数中有+、空格、=、%、&amp;、#等特殊符号的问题解决</a></p>
+<p> 不过也好在，C#提供了一个HttpUtility.UrlEncode(input)和HttpUtility.UrlEncode(input)这两个函数，让我们直接把上面的特殊字符转换成URL可识别的转义字符。<br> 数据出去之后先Encode一下，回来之后Decode一下，好像问题都解决了吧。</p>
+<p>然而我们都忘了一件事情，URL到了浏览器之后，自然会对URL里面的东西Decode一次。<br>我实现的时候，在后台验证的时候又Decode一次,这就出问题了。</p>
+<p>问题在哪呢？一个encode的字符被decode两次，内容已经被改掉了…<br>这就导致解密的时候直接挂了….</p>
+<p>这样看来，<br>Convert.ToBase64String()这个不够靠谱，出来的数据可能会有特殊字符的问题。<br>怎么解决呢？那天晚上和老大/CTO都在看这个bug。一下子都没撒好办法….</p>
+<p>后来CTO想了一下，说byte不就是最大不久255么？直接转16进制字符就是嘛。<br>于是有了下面的代码：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> byte数组转string</span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name="bytes"&gt;</span><span class="doctag">&lt;/param&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">BytesToString</span>(<span class="params"><span class="keyword">byte</span>[] bytes</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (bytes == <span class="literal">null</span>)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">string</span>.Empty;</div><div class="line">   <span class="keyword">return</span> <span class="keyword">string</span>.Join(<span class="keyword">string</span>.Empty, </div><div class="line">   bytes.Select(b =&gt; <span class="keyword">string</span>.Format(<span class="string">"&#123;0:x2&#125;"</span>, b)).ToArray());</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> string转byte数组</span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name="str"&gt;</span><span class="doctag">&lt;/param&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] <span class="title">StringToBytes</span>(<span class="params"><span class="keyword">string</span> str</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">string</span>.IsNullOrEmpty(str))</div><div class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[str.Length / <span class="number">2</span>];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.Length; i += <span class="number">2</span>)</div><div class="line">    &#123;</div><div class="line">        bytes[i / <span class="number">2</span>] = Convert.ToByte(<span class="string">"0x"</span> + str[i] + str[i + <span class="number">1</span>], <span class="number">16</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> bytes;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>问题解决。</p>
+<p>关于base64的实现，下面这个链接是相关资料，有兴趣自己看啦。</p>
+<p><a href="http://www.hejingzong.cn/blog/ViewBlog_36.aspx" target="_blank" rel="external">C#/ASP.NET Base64编码原理及实现</a></p>
+<p><a href="http://www.cnblogs.com/tuyile006/archive/2008/01/17/1043178.html" target="_blank" rel="external">C＃实现Base64编码与解码</a></p>
 
       
     </div>
@@ -402,21 +365,23 @@ public sealed class SomeType
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/加密编码/" rel="tag">#加密编码</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/20/Bytes-To-String/" rel="next" title="bytes to string">
-                <i class="fa fa-chevron-left"></i> bytes to string
-              </a>
-            
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/02/15/can't-modify-linq-object/" rel="prev" title=".NET-lmabda避免修改绑定变量">
-                .NET-lmabda避免修改绑定变量 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/02/10/classfield-property/" rel="prev" title=".NET 类字段与类属性">
+                .NET 类字段与类属性 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -443,8 +408,8 @@ public sealed class SomeType
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/10/classfield-property/"
-           data-title=".NET 类字段与类属性" data-url="http://codelover.link/2016/02/10/classfield-property/">
+      <div class="ds-thread" data-thread-key="2016/01/20/Bytes-To-String/"
+           data-title="bytes to string" data-url="http://codelover.link/2016/01/20/Bytes-To-String/">
       </div>
     
   </div>
