@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://codelover.link/"/>
-  <updated>2016-10-04T16:52:21.372Z</updated>
+  <updated>2016-10-14T16:50:15.102Z</updated>
   <id>http://codelover.link/</id>
   
   <author>
@@ -16,11 +16,112 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Microsoft .NET Core 1.0.0 VS 2015 Tooling Preview 2 0x80070003</title>
+    <link href="http://codelover.link/2016/10/15/install_Preview2_on_fresh_VS2015_Update3_Installation/"/>
+    <id>http://codelover.link/2016/10/15/install_Preview2_on_fresh_VS2015_Update3_Installation/</id>
+    <published>2016-10-15T05:53:38.246Z</published>
+    <updated>2016-10-14T16:50:15.102Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近安装Microsoft .NET Core 1.0.0 VS 2015 Tooling Preview 2实在有点曲折，忍不住写个文章来讲这货的坑爹之旅了。</p>
+<p>一般我们在<a href="https://www.microsoft.com/net/download" target="_blank" rel="external">.NET Downloads</a> 下载回来的Microsoft .NET Core 1.0.0 VS 2015 Tooling Preview 2是一个简易安装包。</p>
+<p>它在安装过程中会不断去网络请求需要的msi文件，美名曰：在线安装。</p>
+<p>然而在我国的国情以及我国网络运营商的衬托下，在线安装这种东西实在不可恭维。</p>
+<p>本来网络稳定，在线安装 这种鬼也还算能用，不过最近微软爸爸不知道为嘛了，.net core相关安装包的下载地址全线失效。<br>如<a href="https://download.microsoft.com/download/0/A/3/0A372822-205D-4A86-BFA7-084D2CBE9EDF/DotNetCore.1.0.1-SDK.1.0.0.Preview2-003133-x64.exe" target="_blank" rel="external">DotNetCore.1.0.1-SDK.1.0.0.Preview2-003133-x64.exe</a>，直接出502 Bad Gateway。</p>
+<p>这个还能用迅雷或者命令行下载回来，但是DotNetCore.1.0.1-SDK.1.0.0.Preview2这货安装过程中需要的一下msi安装包，就死活下不回来了。</p>
+<p>安装过程报错：0x80070003 系统找不到需要的文件。此处已确认是微软爸爸的不过。<a href="https://github.com/aspnet/Tooling/issues/655" target="_blank" rel="external">issue在这里</a>看安装错误log的话。</p>
+<p>我们去看安装失败的log，能看到类似下面的log：</p>
+<p>Error 0x80072efd: Failed attempt to download URL: ‘<a href="https://download.microsoft.com/download/A/3/8/A38489F3-9777-41DD-83F8-2CBDFAB2520C/packages/ancm_iis_express_x64_en_rc2_39.msi" target="_blank" rel="external">https://download.microsoft.com/download/A/3/8/A38489F3-9777-41DD-83F8-2CBDFAB2520C/packages/ancm_iis_express_x64_en_rc2_39.msi</a>‘ to: ‘C:\Users\cneuss\AppData\Local\Temp{C307771D-8D9A-45B5-B514-B6CA69C0C6E2}\ANCM_IISExpress_x64’</p>
+<p>很明显这个操作从<a href="https://download.microsoft.com/download/A/3/8/A38489F3-9777-41DD-83F8-2CBDFAB2520C/packages/ancm_iis_express_x64_en_rc2_39.msi" target="_blank" rel="external">https://download.microsoft.com/download/A/3/8/A38489F3-9777-41DD-83F8-2CBDFAB2520C/packages/ancm_iis_express_x64_en_rc2_39.msi</a>上面下载ancm_iis_express_x64_en_rc2_39.msi文件。<br>然而我们点击进去，看到这个同样的问题：502 Bad Gateway。</p>
+<p>安装到这里，已经GG了。</p>
+<p>不过既然知道是因为下载文件的问题了，那么解决办法也应运而生了。</p>
+<p>我们完全手动下载文件（用迅雷或者别的下载工具），发布在本地，改hosts地址让下载请求直接从本地下载文件。</p>
+<p>这个方案听起来是没有任何的问题的，我也成功使用迅雷把无法下载的文件下载到本地了。然而在改host地址这里卡住了。</p>
+<p>不知道为嘛，无论我把<a href="download.microsoft.com">download.microsoft.com</a>指向怎么改，也无法把请求重定向到本地。</p>
+<p>后来认真看了下安装log，发现所以的下载操作都是把文件下载到 C:\Users\cneuss\AppData\Local\Temp 目录（具体目录看log文件内容）下的临时路径，报错是系统找不到需要的文件。</p>
+<p>那么，我们手动把需要的文件放到对应的位置，问题也就解决了。</p>
+<p>所以，为了清晰找到临时路径，安装之前先把“C:\Users\cneuss\AppData\Local\Temp”的文件清空，然后点击安装包。</p>
+<p>很快可以在temp路径下看到冒出来的{xxxxxxxxxxxxx}文件夹，然后迅速把我们通过迅雷下载回来的文件仍到这个目录底下。</p>
+<p>迅速操作的原因是，在线安装包正在下载所需要的文件，如：ancm_iis_express_x64_en_rc2_39.msi，我们要在下载超时之前把文件应该在的位置，这样的话即使下载没拿到文件，安装程序还是可以拿我们的文件去执行安装。</p>
+<p>别的就是不断尝试，看缺少那个msi手动下哪个msi的事情了。</p>
+<h4 id="最终方案"><a href="#最终方案" class="headerlink" title="最终方案"></a>最终方案</h4><p>最后，根据log文件，还发现了一个更简单的方法：</p>
+<p>在DotNetCore.1.0.1-SDK.1.0.0.Preview2-003133-x64.exe的同级目录下新建packages文件夹，把上面无法在线下载到的msi仍进去，然后就一路绿灯了。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近安装Microsoft .NET Core 1.0.0 VS 2015 Tooling Preview 2实在有点曲折，忍不住写个文章来讲这货的坑爹之旅了。&lt;/p&gt;
+&lt;p&gt;一般我们在&lt;a href=&quot;https://www.microsoft.com/net/downl
+    
+    </summary>
+    
+      <category term=".net core" scheme="http://codelover.link/categories/net-core/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>VS快捷键</title>
+    <link href="http://codelover.link/2016/10/14/visualstudio_shortcut_key/"/>
+    <id>http://codelover.link/2016/10/14/visualstudio_shortcut_key/</id>
+    <published>2016-10-13T16:00:00.000Z</published>
+    <updated>2016-10-15T06:16:08.368Z</updated>
+    
+    <content type="html"><![CDATA[<p>ctrl+s         保存（这个确实很简单，要说常用，这玩意绝对排名第一）</p>
+<p>ctrl+Shift+S   保存所有VS中打开的所有文件</p>
+<p>ctrl+O         打开新文件</p>
+<p>ctrl+Shift+O   打开项目</p>
+<p>ctrl+Shift+A   当前项目中添加新建项</p>
+<p>ctrl+F4        关闭当前打开页</p>
+<p>ctrl+F6        跳到下一个窗口</p>
+<p>ctrl+Shift+F6  跳到前一个打开的窗口</p>
+<p>F12            转到函数定义实现处，或者转到变量定义处（一堆代码中使用这个键确实逻辑会更清晰一点）</p>
+<p>ctrl+-         这个相对来说跟F12是配套使用的，F12到函数定义，然后返回原代码中继续查看</p>
+<p>shift+ctrl+-   相对于上一个步骤，这个可以再次转到函数定义的地方</p>
+<p>ctrl+tab       页面切换，打开页面过多的话，切换用的还是比较多的</p>
+<p>ctrl+F         搜索，查找，功能简单粗暴有的时候比很高效</p>
+<p>ctrl+F3        在选中区域搜索</p>
+<p>ctrl+K，ctrl+D 整个文档格式化</p>
+<p>ctrl+K,ctrl+F  格式化选中部分代码</p>
+<p>ctrl+K，ctrl+C  代码注释</p>
+<p>ctrl+K，ctrl+U  取消代码注释</p>
+<p>ctrl+L          删除，删除当前行或者删除选中行</p>
+<p>Shift+Alt+Enter 当前代码区域全屏，再按一次取消全屏</p>
+<p>ctrl+M，ctrl+M  写代码都喜欢折叠，折叠之后还是还要打开的，可以试试这个快捷键</p>
+<p>ctrl+space      代码补全</p>
+<p>ctrl+Enter      假如现在当前行上面添加代码光标跳到当前行的上一行</p>
+<p>ctrl+Shift+Enter假如现在当前行下面添加代码光标跳到当前行的下一行</p>
+<p>Shift+F12       查找函数或者变量的所有引用</p>
+<p>ctrl+g          查找行，跳转到你想要跳转的行数</p>
+<p>ctrl+Shift+↑    向上查找引用</p>
+<p>ctrl+Shift+↓    向下查找引用</p>
+<p>Shift+Alt+↑    向上画一条直线，通常如果拷贝代码的时候有行号可以这样去除</p>
+<p>Shift+Alt+↓    向下画一条直线，同上</p>
+<p>Shift+↑         向上选中代码区域</p>
+<p>Shift+↓         向下选中代码区域</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;ctrl+s         保存（这个确实很简单，要说常用，这玩意绝对排名第一）&lt;/p&gt;
+&lt;p&gt;ctrl+Shift+S   保存所有VS中打开的所有文件&lt;/p&gt;
+&lt;p&gt;ctrl+O         打开新文件&lt;/p&gt;
+&lt;p&gt;ctrl+Shift+O   打开项目&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="memorandum" scheme="http://codelover.link/categories/memorandum/"/>
+    
+    
+      <category term="Visual Studio" scheme="http://codelover.link/tags/Visual-Studio/"/>
+    
+  </entry>
+  
+  <entry>
     <title>58HouseSearch项目迁移到asp.net core</title>
     <link href="http://codelover.link/2016/10/04/58CityHouseSearch_move_to_aspnetcore/"/>
     <id>http://codelover.link/2016/10/04/58CityHouseSearch_move_to_aspnetcore/</id>
     <published>2016-10-03T16:00:00.000Z</published>
-    <updated>2016-10-04T16:52:21.372Z</updated>
+    <updated>2016-10-15T05:20:24.513Z</updated>
     
     <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><a href="https://github.com/liguobao/58HouseSearch" target="_blank" rel="external">58HouseSearch</a>这个项目原本是基于ASP.NET MVC 4写的，开发环境是Windows+VS2015，发布平台是linux+mono+jexus，这样看来整个项目基本已经满足跨平台的需求。</p>
 <p>这样一来，本来我是没什么动力去做迁移的，好好的东西闲着没事干才迁移呢。</p>
@@ -136,7 +237,7 @@
     <link href="http://codelover.link/2016/08/13/58City-House-Crawler-JS/"/>
     <id>http://codelover.link/2016/08/13/58City-House-Crawler-JS/</id>
     <published>2016-08-12T16:00:00.000Z</published>
-    <updated>2016-09-15T06:33:52.348Z</updated>
+    <updated>2016-10-15T05:20:24.470Z</updated>
     
     <content type="html"><![CDATA[<p>在线地址：<a href="http://codelover.link:8080/">58同城品牌公寓高德搜房</a></p>
 <p>Github地址：<a href="https://github.com/liguobao/58HouseSearch" target="_blank" rel="external">https://github.com/liguobao/58HouseSearch</a></p>
@@ -197,7 +298,7 @@
     <link href="http://codelover.link/2016/08/08/58City-House-Crawler/"/>
     <id>http://codelover.link/2016/08/08/58City-House-Crawler/</id>
     <published>2016-08-07T16:00:00.000Z</published>
-    <updated>2016-09-15T07:38:16.124Z</updated>
+    <updated>2016-10-15T05:20:24.496Z</updated>
     
     <content type="html"><![CDATA[<p>源码地址：<a href="https://github.com/liguobao/58HouseSearch" target="_blank" rel="external">https://github.com/liguobao/58HouseSearch</a></p>
 <p>在线地址：<a href="http://codelover.link:8080/">58公寓高德搜房(全国版)：http://codelover.link:8080/</a></p>
@@ -260,7 +361,7 @@
     <link href="http://codelover.link/2016/08/01/ASP.NET-Core-Middleware/"/>
     <id>http://codelover.link/2016/08/01/ASP.NET-Core-Middleware/</id>
     <published>2016-07-31T16:00:00.000Z</published>
-    <updated>2016-09-15T07:43:18.606Z</updated>
+    <updated>2016-10-15T05:20:24.550Z</updated>
     
     <content type="html"><![CDATA[<p>在ASP.NET 时代，一般来说我们很少会用到HttpModule/HttpHandler，然而有些场景我们使用HttpModule/HttpHandler倒方便快捷完成我们的需求。有兴趣了解HttpModule/HttpHandler以及使用场景的话，可以看下面这个链接的内容。</p>
 <p><a href="http://www.cnblogs.com/fish-li/archive/2013/01/04/2844908.html" target="_blank" rel="external">选择HttpHandler还是HttpModule？</a></p>
@@ -320,7 +421,7 @@
     <link href="http://codelover.link/2016/07/28/asp.net-core-startup/"/>
     <id>http://codelover.link/2016/07/28/asp.net-core-startup/</id>
     <published>2016-07-27T16:00:00.000Z</published>
-    <updated>2016-09-15T07:42:39.408Z</updated>
+    <updated>2016-10-15T05:20:24.829Z</updated>
     
     <content type="html"><![CDATA[<p>之前版本的ASP.NET程序必须依赖IIS来启动，而IIS上会为挂载在其中的ASP.NET 注册一个ISAPI filter。每当http请求过来时，IIS则会启动w3wp的worker process来开始整个ASP.NET runtime程序。相信大家都这样的流程都有相应的了解。在.net core之前，ASP.NET的主要场景都是运行在Windows平台的，IIS也就是web server的首选了。虽然也有类似于jexus的linux webserver可用，但是基于mono的.NET 总体还是不够Microsoft 原生的强。</p>
 <p>不过到了现在，一切都不同了。</p>
@@ -393,7 +494,7 @@
     <link href="http://codelover.link/2016/06/20/don%E2%80%99t-throw-exception-in-foreach/"/>
     <id>http://codelover.link/2016/06/20/don’t-throw-exception-in-foreach/</id>
     <published>2016-06-19T16:00:00.000Z</published>
-    <updated>2016-09-15T05:11:13.653Z</updated>
+    <updated>2016-10-15T05:20:24.907Z</updated>
     
     <content type="html"><![CDATA[<h2 id="1、引言"><a href="#1、引言" class="headerlink" title="1、引言"></a>1、引言</h2><p>如某个场景下，你的函数或操作需要操作一个序列的对象，且在处理的过程中抛出了异常。这时如果没有一些状态记录之类的数据，我们不了解已经处理了多少的数据，也不知道应该采用怎么样的策略回滚，因此根本无法返回到之前的状态。<br>我们看一下下面的一个代码：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> allEmp = FindAllEmployees();</div><div class="line">allEmp.ForEach(e =&gt; e.MonthlySalary *=<span class="number">1.05</span>M);</div></pre></td></tr></table></figure></p>
 <p>这样的代码看起来没什么问题。可是某一天，这个程序运行时抛出了异常。抛出异常的位置可能未知，导致部分员工得到了加薪，另外的一些员工却没有。结果是除了人工检查数据，我们已经没有办法重新找回丢失的状态。</p>
@@ -427,7 +528,7 @@
     <link href="http://codelover.link/2016/05/30/the_first_aspnetcore/"/>
     <id>http://codelover.link/2016/05/30/the_first_aspnetcore/</id>
     <published>2016-05-29T16:00:00.000Z</published>
-    <updated>2016-10-04T16:42:39.153Z</updated>
+    <updated>2016-10-15T07:14:38.318Z</updated>
     
     <content type="html"><![CDATA[<p>在大神的带领下体验了一下asp.net core，感觉很不错，简单写个手把手教程。</p>
 <p>环境要求：VS2015 update2，版本不限。</p>
@@ -449,37 +550,7 @@
     
     </summary>
     
-      <category term=".net" scheme="http://codelover.link/categories/net/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”</title>
-    <link href="http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw%E2%80%9Ccan%E2%80%98t%20find%20.Net%20Framework%20Data%20Provider%E2%80%9D%7F/"/>
-    <id>http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/</id>
-    <published>2016-04-19T16:00:00.000Z</published>
-    <updated>2016-09-15T05:11:13.649Z</updated>
-    
-    <content type="html"><![CDATA[<p>1、下载 mysql-connector-net 安装</p>
-<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
-<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
-<p>一般DLL所在目录是：</p>
-<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
-<p>3、重启CodeSmith生效</p>
-<p><br><br><br></p>
-<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
-<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;1、下载 mysql-connector-net 安装&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/downloads/connector/net/6.9.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;mysql-
-    
-    </summary>
-    
-      <category term="CodeSmith" scheme="http://codelover.link/categories/CodeSmith/"/>
+      <category term=".net core" scheme="http://codelover.link/categories/net-core/"/>
     
     
   </entry>
@@ -489,7 +560,7 @@
     <link href="http://codelover.link/2016/04/20/Jexus-support-HTTPS/"/>
     <id>http://codelover.link/2016/04/20/Jexus-support-HTTPS/</id>
     <published>2016-04-19T16:00:00.000Z</published>
-    <updated>2016-09-15T05:11:13.650Z</updated>
+    <updated>2016-10-15T05:20:24.707Z</updated>
     
     <content type="html"><![CDATA[<p>众所周知，在HTTPS页面请求HTTP资料的时候，现代浏览器会拦截，提示用户是否继续，或者直接拦截，提示都不出来。</p>
 <p>最近给自己做了个快速书签工具，点击书签就直接把书签发送到服务器地址，然后保存到我的网站中。</p>
@@ -546,11 +617,41 @@
   </entry>
   
   <entry>
+    <title>CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”</title>
+    <link href="http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw%E2%80%9Ccan%E2%80%98t%20find%20.Net%20Framework%20Data%20Provider%E2%80%9D%7F/"/>
+    <id>http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/</id>
+    <published>2016-04-19T16:00:00.000Z</published>
+    <updated>2016-10-15T05:20:24.627Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、下载 mysql-connector-net 安装</p>
+<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
+<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
+<p>一般DLL所在目录是：</p>
+<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
+<p>3、重启CodeSmith生效</p>
+<p><br><br><br></p>
+<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
+<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1、下载 mysql-connector-net 安装&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/downloads/connector/net/6.9.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;mysql-
+    
+    </summary>
+    
+      <category term="CodeSmith" scheme="http://codelover.link/categories/CodeSmith/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>mono webreques https exception</title>
     <link href="http://codelover.link/2016/04/10/mono-webreques-https-exception/"/>
     <id>http://codelover.link/2016/04/10/mono-webreques-https-exception/</id>
     <published>2016-04-10T04:39:04.000Z</published>
-    <updated>2016-09-15T05:11:13.654Z</updated>
+    <updated>2016-10-15T05:20:24.932Z</updated>
     
     <content type="html"><![CDATA[<p>前几天在做一个使用URL通过WebRequest请求HTML页面的功能的时候遇到了点坑，程序在开发环境没有任何的问题，部署到linux mono上之后就跪了。代码如下：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">GetHTML</span>(<span class="params"><span class="keyword">string</span> url</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">string</span> htmlCode;</div><div class="line">    <span class="keyword">try</span></div><div class="line">    &#123;</div><div class="line">        HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);</div><div class="line">        webRequest.Timeout = <span class="number">30000</span>;</div><div class="line">        webRequest.Method = <span class="string">"GET"</span>;</div><div class="line">        webRequest.UserAgent = <span class="string">"Mozilla/4.0"</span>;</div><div class="line">        webRequest.Headers.Add(<span class="string">"Accept-Encoding"</span>, <span class="string">"gzip, deflate"</span>);</div><div class="line"></div><div class="line">        HttpWebResponse webResponse = (System.Net.HttpWebResponse)webRequest.GetResponse();</div><div class="line">        <span class="comment">//获取目标网站的编码格式</span></div><div class="line">        <span class="keyword">string</span> contentype = webResponse.Headers[<span class="string">"Content-Type"</span>];</div><div class="line">        Regex regex = <span class="keyword">new</span> Regex(<span class="string">"charset\\s*=\\s*[\\W]?\\s*([\\w-]+)"</span>, RegexOptions.IgnoreCase);</div><div class="line">        <span class="keyword">if</span> (webResponse.ContentEncoding.ToLower() == <span class="string">"gzip"</span>)<span class="comment">//如果使用了GZip则先解压</span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">using</span> (System.IO.Stream streamReceive = webResponse.GetResponseStream())</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">using</span> (<span class="keyword">var</span> zipStream = <span class="keyword">new</span> System.IO.Compression.GZipStream(streamReceive, </div><div class="line">                System.IO.Compression.CompressionMode.Decompress))</div><div class="line">                &#123;</div><div class="line">                    <span class="comment">//匹配编码格式</span></div><div class="line">                    <span class="keyword">if</span> (regex.IsMatch(contentype))</div><div class="line">                    &#123;</div><div class="line">                        Encoding ending = Encoding.GetEncoding(regex.Match(contentype).Groups[<span class="number">1</span>].Value.Trim());</div><div class="line">                        <span class="keyword">using</span> (StreamReader sr = <span class="keyword">new</span> System.IO.StreamReader(zipStream, ending))</div><div class="line">                        &#123;</div><div class="line">                            htmlCode = sr.ReadToEnd();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">else</span></div><div class="line">                    &#123;</div><div class="line">                        <span class="keyword">using</span> (StreamReader sr = </div><div class="line">                        <span class="keyword">new</span> System.IO.StreamReader(zipStream, Encoding.UTF8))</div><div class="line">                        &#123;</div><div class="line">                            htmlCode = sr.ReadToEnd();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">using</span> (System.IO.Stream streamReceive = webResponse.GetResponseStream())</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">using</span> (System.IO.StreamReader sr = <span class="keyword">new</span> System.IO.StreamReader(streamReceive, Encoding.Default))</div><div class="line">                &#123;</div><div class="line">                    htmlCode = sr.ReadToEnd();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> htmlCode;</div><div class="line"></div><div class="line">    &#125;<span class="keyword">catch</span>(Exception ex)</div><div class="line">    &#123;</div><div class="line">        LogHelper.WriteException(<span class="string">"GetHTML"</span>, ex, <span class="keyword">new</span> &#123; Url = url &#125;);</div><div class="line">        <span class="keyword">return</span> <span class="string">""</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -602,7 +703,7 @@
     <link href="http://codelover.link/2016/04/07/ubuntu-jexus-mywebsql/"/>
     <id>http://codelover.link/2016/04/07/ubuntu-jexus-mywebsql/</id>
     <published>2016-04-06T16:00:00.000Z</published>
-    <updated>2016-09-15T05:11:13.654Z</updated>
+    <updated>2016-10-15T05:20:25.009Z</updated>
     
     <content type="html"><![CDATA[<p>之前在阿里云上装了一个ubuntu，后来也没怎么用力，就挂这一个mysql数据库。最近在家里用MySQL Workbench 连接阿里云上面的MySQL的时候，连着过了一会就中断了。后来看了一圈回来才发现，目测是家里电信宽带的锅，不断给我动态分配IP地址….后来群里面的小伙伴说，搭个websql了事啦。听起来不错的想法，于是昨天就试了一下。</p>
 <p>之前在ubuntu上装过apache，后来为了跑asp.net，把apache停了，换成了jexus。<br>Jexus是国内.NET 跨平台大牛们写的一个web服务器，使用方便，很稳定，也在不断加入新特性。相关资料直接访问<a href="http://www.jexus.org/" target="_blank" rel="external">www.jexus.org</a>。</p>
@@ -671,7 +772,7 @@
     <link href="http://codelover.link/2016/03/28/CodeSmith-to-MySQL/"/>
     <id>http://codelover.link/2016/03/28/CodeSmith-to-MySQL/</id>
     <published>2016-03-27T16:00:00.000Z</published>
-    <updated>2016-09-15T07:46:52.858Z</updated>
+    <updated>2016-10-15T05:20:24.644Z</updated>
     
     <content type="html"><![CDATA[<p>对于.NET平台上的代码生成器来说，codesmith是一个非常好的选择。</p>
 <p><br><br>以前在学院实验室用的都是SQL server数据库，老师给的一套codesmith模板用来生成model/DAL/BLL很是方便。<br><br><br>不过后来放弃SQL server 投入MySQL之后，刚开始都是手写SQL，还是很痛苦的。<br><br><br>再后来又去找MySQL codesmith模板,这个对应的资料就不多了。不过最后还是找到了一套不错的，凑合能用。起初也懒，codesmith语法不熟，就没想过去修改一下了。<br><br> 最近又要用到这套东西，于是决定还是去修改一番，更便于使用。</p>
@@ -740,7 +841,7 @@
     <link href="http://codelover.link/2016/03/25/GC-1/"/>
     <id>http://codelover.link/2016/03/25/GC-1/</id>
     <published>2016-03-24T16:00:00.000Z</published>
-    <updated>2016-09-15T05:11:13.650Z</updated>
+    <updated>2016-10-15T05:20:24.657Z</updated>
     
     <content type="html"><![CDATA[<p>###托管堆基础<br> 简述：每个程序都要使用这样或那样的资源，包括文件、内存缓冲区、屏幕空间、网络连接…..事实上，在面向对象的环境中，每个类型都代表可供程序使用的一种资源。要使用这些资源，必须为代表资源的类型分配内存。</p>
 <p> 以下是访问一个资源所需步骤：</p>
@@ -821,7 +922,7 @@
     <link href="http://codelover.link/2016/03/20/GC-2/"/>
     <id>http://codelover.link/2016/03/20/GC-2/</id>
     <published>2016-03-19T16:00:00.000Z</published>
-    <updated>2016-09-15T05:11:13.650Z</updated>
+    <updated>2016-10-15T05:20:24.678Z</updated>
     
     <content type="html"><![CDATA[<p>##大对象<br> CLR将对象分成大对象和小对象。目前认为85000字节或者更大的对象是大对象。CLR以不同方式对待大小对象。</p>
 <ol>
@@ -861,7 +962,7 @@
     <link href="http://codelover.link/2016/03/15/LINQ-advantage/"/>
     <id>http://codelover.link/2016/03/15/LINQ-advantage/</id>
     <published>2016-03-14T16:00:00.000Z</published>
-    <updated>2016-09-15T05:11:13.651Z</updated>
+    <updated>2016-10-15T05:20:24.794Z</updated>
     
     <content type="html"><![CDATA[<p>原文链接：<a href="http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html" target="_blank" rel="external">http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html</a></p>
 <p>这几天在读一本LINQ方面的书《Essential LINQ》,在这里和大家分享下。</p>
@@ -920,37 +1021,11 @@
   </entry>
   
   <entry>
-    <title>一些有用的网站</title>
-    <link href="http://codelover.link/2016/03/10/something/"/>
-    <id>http://codelover.link/2016/03/10/something/</id>
-    <published>2016-03-09T16:00:00.000Z</published>
-    <updated>2016-09-15T05:11:13.654Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">Markdown 语法说明 (简体中文版)</a></p>
-<p><a href="http://wowubuntu.com/markdown/basic.html" target="_blank" rel="external">Markdown: Basics （快速入门）</a></p>
-<p><a href="http://wsgzao.github.io/post/hexo-guide/" target="_blank" rel="external">使用GitHub和Hexo搭建免费静态Blog(本博客案例)</a></p>
-<p><a href="https://www.mxgw.info/t/filename-too-long-in-git.html" target="_blank" rel="external">win下面的git客户端提示FIlename too long解决方法</a></p>
-<p><a href="http://theme-next.iissnan.com/" target="_blank" rel="external">Hexo Next 模板</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;a href=&quot;http://wowubuntu.com/markdown/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Markdown 语法说明 (简体中文版)&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://wowubuntu.com/ma
-    
-    </summary>
-    
-      <category term="nothing" scheme="http://codelover.link/categories/nothing/"/>
-    
-    
-  </entry>
-  
-  <entry>
     <title>.NET-join用法</title>
     <link href="http://codelover.link/2016/03/03/Join/"/>
     <id>http://codelover.link/2016/03/03/Join/</id>
     <published>2016-03-02T16:00:00.000Z</published>
-    <updated>2016-09-15T05:11:13.651Z</updated>
+    <updated>2016-10-15T05:20:24.763Z</updated>
     
     <content type="html"><![CDATA[<p>#.NET   Join<br> 连接：内连接、外连接、左连接、右连接。<br>SQL的Join这里就不多说了，<br>今天主要是看一下LINQ的Join用法，以及Enumerable.Join()的用法。</p>
 <p>Join用于连接数据，首先就是数据之间有联系咯。</p>
@@ -1011,7 +1086,7 @@
     <link href="http://codelover.link/2016/02/15/can&#39;t-modify-linq-object/"/>
     <id>http://codelover.link/2016/02/15/can&#39;t-modify-linq-object/</id>
     <published>2016-02-14T16:00:00.000Z</published>
-    <updated>2016-09-15T05:11:13.652Z</updated>
+    <updated>2016-10-15T05:20:24.851Z</updated>
     
     <content type="html"><![CDATA[<p>先看一段代码</p>
 <pre><code>#region test1 闭包
@@ -1247,7 +1322,7 @@ public static void test1()
     <link href="http://codelover.link/2016/02/10/classfield-property/"/>
     <id>http://codelover.link/2016/02/10/classfield-property/</id>
     <published>2016-02-09T16:00:00.000Z</published>
-    <updated>2016-09-15T05:11:13.653Z</updated>
+    <updated>2016-10-15T05:20:24.876Z</updated>
     
     <content type="html"><![CDATA[<p>#.NET 类字段与类属性<br>@(.NET)[基础|字段|属性]</p>
 <p>##字段<br>字段表示只读或可读/可写的数据值。<br>字段可以是静态的，这种字段被认为是类型状态的一部分。<br>字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。<br>强烈建议把字段声明为私有，防止类型或对象的状态被类型外部代码破坏。</p>
@@ -1309,44 +1384,6 @@ public sealed class SomeType
     
       <category term=".net" scheme="http://codelover.link/categories/net/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>bytes to string</title>
-    <link href="http://codelover.link/2016/01/20/Bytes-To-String/"/>
-    <id>http://codelover.link/2016/01/20/Bytes-To-String/</id>
-    <published>2016-01-19T16:00:00.000Z</published>
-    <updated>2016-10-04T16:42:09.341Z</updated>
-    
-    <content type="html"><![CDATA[<p>有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。</p>
-<p>在C#里面，Byte数组转String字符串我们一般用Convert.ToBase64()完成。</p>
-<p>代码如下：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">BytesToString</span>(<span class="params"><span class="keyword">byte</span>[] buff</span>)</span></div><div class="line">&#123;</div><div class="line">   <span class="keyword">return</span> Convert.ToBase64String(buff);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">byte</span>[] <span class="title">StringToBytes</span>(<span class="params"><span class="keyword">string</span> input</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> Encoding.UTF8.GetBytes(input);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p> 一般来说这样也没撒问题了，不过，如果这个数据是通过URL的方式给出去的，这时候就要考虑一下特殊字符编码问题了。+、空格、%之类的特殊字符可能会导致切断URL传参的数据，导致得到的数据不一致。这样的话，解密也做不下去了。</p>
-<p> 相关资料：<br> <br>1、<a href="http://www.ruanyifeng.com/blog/2010/02/url_encoding.html" target="_blank" rel="external">关于URL编码</a><br> <br>2、<a href="http://blog.csdn.net/luo_deng/article/details/12186535" target="_blank" rel="external">URL编码—-url参数中有+、空格、=、%、&amp;、#等特殊符号的问题解决</a></p>
-<p> 不过也好在，C#提供了一个HttpUtility.UrlEncode(input)和HttpUtility.UrlEncode(input)这两个函数，让我们直接把上面的特殊字符转换成URL可识别的转义字符。<br> 数据出去之后先Encode一下，回来之后Decode一下，好像问题都解决了吧。</p>
-<p>然而我们都忘了一件事情，URL到了浏览器之后，自然会对URL里面的东西Decode一次。<br>我实现的时候，在后台验证的时候又Decode一次,这就出问题了。</p>
-<p>问题在哪呢？一个encode的字符被decode两次，内容已经被改掉了…<br>这就导致解密的时候直接挂了….</p>
-<p>这样看来，<br>Convert.ToBase64String()这个不够靠谱，出来的数据可能会有特殊字符的问题。<br>怎么解决呢？那天晚上和老大/CTO都在看这个bug。一下子都没撒好办法….</p>
-<p>后来CTO想了一下，说byte不就是最大不久255么？直接转16进制字符就是嘛。<br>于是有了下面的代码：</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> byte数组转string</span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name="bytes"&gt;</span><span class="doctag">&lt;/param&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">BytesToString</span>(<span class="params"><span class="keyword">byte</span>[] bytes</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (bytes == <span class="literal">null</span>)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">string</span>.Empty;</div><div class="line">   <span class="keyword">return</span> <span class="keyword">string</span>.Join(<span class="keyword">string</span>.Empty, </div><div class="line">   bytes.Select(b =&gt; <span class="keyword">string</span>.Format(<span class="string">"&#123;0:x2&#125;"</span>, b)).ToArray());</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> string转byte数组</span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name="str"&gt;</span><span class="doctag">&lt;/param&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] <span class="title">StringToBytes</span>(<span class="params"><span class="keyword">string</span> str</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">string</span>.IsNullOrEmpty(str))</div><div class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[str.Length / <span class="number">2</span>];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.Length; i += <span class="number">2</span>)</div><div class="line">    &#123;</div><div class="line">        bytes[i / <span class="number">2</span>] = Convert.ToByte(<span class="string">"0x"</span> + str[i] + str[i + <span class="number">1</span>], <span class="number">16</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> bytes;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>问题解决。</p>
-<p>关于base64的实现，下面这个链接是相关资料，有兴趣自己看啦。</p>
-<p><a href="http://www.hejingzong.cn/blog/ViewBlog_36.aspx" target="_blank" rel="external">C#/ASP.NET Base64编码原理及实现</a></p>
-<p><a href="http://www.cnblogs.com/tuyile006/archive/2008/01/17/1043178.html" target="_blank" rel="external">C＃实现Base64编码与解码</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。&lt;/p&gt;
-&lt;p&gt;在C#里面，Byte数组转String字符串我
-    
-    </summary>
-    
-      <category term=".net" scheme="http://codelover.link/categories/net/"/>
-    
-    
-      <category term="加密编码" scheme="http://codelover.link/tags/%E5%8A%A0%E5%AF%86%E7%BC%96%E7%A0%81/"/>
     
   </entry>
   

@@ -2,163 +2,177 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://codelover.link/2016/10/04/58CityHouseSearch_move_to_aspnetcore/</loc>
-    
-    <lastmod>2016-10-04T16:52:21.372Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://codelover.link/2016/05/30/the_first_aspnetcore/</loc>
     
-    <lastmod>2016-10-04T16:42:39.153Z</lastmod>
+    <lastmod>2016-10-15T07:14:38.318Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://codelover.link/2016/01/20/Bytes-To-String/</loc>
+    <loc>http://codelover.link/2016/01/01/hexo_memorandum/</loc>
     
-    <lastmod>2016-10-04T16:42:09.341Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://codelover.link/about/index.html</loc>
-    
-    <lastmod>2016-09-15T08:12:55.704Z</lastmod>
+    <lastmod>2016-10-15T06:20:40.030Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://codelover.link/2016/03/28/CodeSmith-to-MySQL/</loc>
+    <loc>http://codelover.link/2016/10/14/visualstudio_shortcut_key/</loc>
     
-    <lastmod>2016-09-15T07:46:52.858Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://codelover.link/2016/08/01/ASP.NET-Core-Middleware/</loc>
-    
-    <lastmod>2016-09-15T07:43:18.606Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://codelover.link/2016/07/28/asp.net-core-startup/</loc>
-    
-    <lastmod>2016-09-15T07:42:39.408Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://codelover.link/2016/08/08/58City-House-Crawler/</loc>
-    
-    <lastmod>2016-09-15T07:38:16.124Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://codelover.link/2016/08/13/58City-House-Crawler-JS/</loc>
-    
-    <lastmod>2016-09-15T06:33:52.348Z</lastmod>
+    <lastmod>2016-10-15T06:16:08.368Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://codelover.link/tags/index.html</loc>
     
-    <lastmod>2016-09-15T05:11:13.656Z</lastmod>
+    <lastmod>2016-10-15T05:20:25.039Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://codelover.link/categories/index.html</loc>
     
-    <lastmod>2016-09-15T05:11:13.655Z</lastmod>
+    <lastmod>2016-10-15T05:20:25.031Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://codelover.link/2016/03/10/something/</loc>
+    <loc>http://codelover.link/about/index.html</loc>
     
-    <lastmod>2016-09-15T05:11:13.654Z</lastmod>
+    <lastmod>2016-10-15T05:20:25.023Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://codelover.link/2016/04/07/ubuntu-jexus-mywebsql/</loc>
     
-    <lastmod>2016-09-15T05:11:13.654Z</lastmod>
+    <lastmod>2016-10-15T05:20:25.009Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://codelover.link/2016/04/10/mono-webreques-https-exception/</loc>
     
-    <lastmod>2016-09-15T05:11:13.654Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://codelover.link/2016/02/10/classfield-property/</loc>
-    
-    <lastmod>2016-09-15T05:11:13.653Z</lastmod>
+    <lastmod>2016-10-15T05:20:24.932Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://codelover.link/2016/06/20/don%E2%80%99t-throw-exception-in-foreach/</loc>
     
-    <lastmod>2016-09-15T05:11:13.653Z</lastmod>
+    <lastmod>2016-10-15T05:20:24.907Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/02/10/classfield-property/</loc>
+    
+    <lastmod>2016-10-15T05:20:24.876Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://codelover.link/2016/02/15/can't-modify-linq-object/</loc>
     
-    <lastmod>2016-09-15T05:11:13.652Z</lastmod>
+    <lastmod>2016-10-15T05:20:24.851Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/07/28/asp.net-core-startup/</loc>
+    
+    <lastmod>2016-10-15T05:20:24.829Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://codelover.link/2016/03/15/LINQ-advantage/</loc>
     
-    <lastmod>2016-09-15T05:11:13.651Z</lastmod>
+    <lastmod>2016-10-15T05:20:24.794Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://codelover.link/2016/03/03/Join/</loc>
     
-    <lastmod>2016-09-15T05:11:13.651Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://codelover.link/2016/03/20/GC-2/</loc>
-    
-    <lastmod>2016-09-15T05:11:13.650Z</lastmod>
+    <lastmod>2016-10-15T05:20:24.763Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://codelover.link/2016/04/20/Jexus-support-HTTPS/</loc>
     
-    <lastmod>2016-09-15T05:11:13.650Z</lastmod>
+    <lastmod>2016-10-15T05:20:24.707Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/03/20/GC-2/</loc>
+    
+    <lastmod>2016-10-15T05:20:24.678Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://codelover.link/2016/03/25/GC-1/</loc>
     
-    <lastmod>2016-09-15T05:11:13.650Z</lastmod>
+    <lastmod>2016-10-15T05:20:24.657Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/03/28/CodeSmith-to-MySQL/</loc>
+    
+    <lastmod>2016-10-15T05:20:24.644Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw%E2%80%9Ccan%E2%80%98t%20find%20.Net%20Framework%20Data%20Provider%E2%80%9D%7F/</loc>
     
-    <lastmod>2016-09-15T05:11:13.649Z</lastmod>
+    <lastmod>2016-10-15T05:20:24.627Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/01/20/Bytes-To-String/</loc>
+    
+    <lastmod>2016-10-15T05:20:24.596Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/08/01/ASP.NET-Core-Middleware/</loc>
+    
+    <lastmod>2016-10-15T05:20:24.550Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/10/04/58CityHouseSearch_move_to_aspnetcore/</loc>
+    
+    <lastmod>2016-10-15T05:20:24.513Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/08/08/58City-House-Crawler/</loc>
+    
+    <lastmod>2016-10-15T05:20:24.496Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/08/13/58City-House-Crawler-JS/</loc>
+    
+    <lastmod>2016-10-15T05:20:24.470Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/10/15/install_Preview2_on_fresh_VS2015_Update3_Installation/</loc>
+    
+    <lastmod>2016-10-14T16:50:15.102Z</lastmod>
     
   </url>
   

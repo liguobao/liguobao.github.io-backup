@@ -260,6 +260,280 @@
             
               
                 
+                <a class="post-title-link" href="/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/" itemprop="url">
+                  CodeSmith 连接MySQL数据库报“can't find .net framework data provider”
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-20T00:00:00+08:00" content="2016-04-20">
+              2016-04-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/CodeSmith/" itemprop="url" rel="index">
+                    <span itemprop="name">CodeSmith</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>1、下载 mysql-connector-net 安装</p>
+<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
+<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
+<p>一般DLL所在目录是：</p>
+<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
+<p>3、重启CodeSmith生效</p>
+<p><br><br><br></p>
+<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
+<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/10/mono-webreques-https-exception/" itemprop="url">
+                  mono webreques https exception
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-10T12:39:04+08:00" content="2016-04-10">
+              2016-04-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/net/" itemprop="url" rel="index">
+                    <span itemprop="name">.net</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/10/mono-webreques-https-exception/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/10/mono-webreques-https-exception/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>前几天在做一个使用URL通过WebRequest请求HTML页面的功能的时候遇到了点坑，程序在开发环境没有任何的问题，部署到linux mono上之后就跪了。代码如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">GetHTML</span>(<span class="params"><span class="keyword">string</span> url</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">string</span> htmlCode;</div><div class="line">    <span class="keyword">try</span></div><div class="line">    &#123;</div><div class="line">        HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);</div><div class="line">        webRequest.Timeout = <span class="number">30000</span>;</div><div class="line">        webRequest.Method = <span class="string">"GET"</span>;</div><div class="line">        webRequest.UserAgent = <span class="string">"Mozilla/4.0"</span>;</div><div class="line">        webRequest.Headers.Add(<span class="string">"Accept-Encoding"</span>, <span class="string">"gzip, deflate"</span>);</div><div class="line"></div><div class="line">        HttpWebResponse webResponse = (System.Net.HttpWebResponse)webRequest.GetResponse();</div><div class="line">        <span class="comment">//获取目标网站的编码格式</span></div><div class="line">        <span class="keyword">string</span> contentype = webResponse.Headers[<span class="string">"Content-Type"</span>];</div><div class="line">        Regex regex = <span class="keyword">new</span> Regex(<span class="string">"charset\\s*=\\s*[\\W]?\\s*([\\w-]+)"</span>, RegexOptions.IgnoreCase);</div><div class="line">        <span class="keyword">if</span> (webResponse.ContentEncoding.ToLower() == <span class="string">"gzip"</span>)<span class="comment">//如果使用了GZip则先解压</span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">using</span> (System.IO.Stream streamReceive = webResponse.GetResponseStream())</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">using</span> (<span class="keyword">var</span> zipStream = <span class="keyword">new</span> System.IO.Compression.GZipStream(streamReceive, </div><div class="line">                System.IO.Compression.CompressionMode.Decompress))</div><div class="line">                &#123;</div><div class="line">                    <span class="comment">//匹配编码格式</span></div><div class="line">                    <span class="keyword">if</span> (regex.IsMatch(contentype))</div><div class="line">                    &#123;</div><div class="line">                        Encoding ending = Encoding.GetEncoding(regex.Match(contentype).Groups[<span class="number">1</span>].Value.Trim());</div><div class="line">                        <span class="keyword">using</span> (StreamReader sr = <span class="keyword">new</span> System.IO.StreamReader(zipStream, ending))</div><div class="line">                        &#123;</div><div class="line">                            htmlCode = sr.ReadToEnd();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">else</span></div><div class="line">                    &#123;</div><div class="line">                        <span class="keyword">using</span> (StreamReader sr = </div><div class="line">                        <span class="keyword">new</span> System.IO.StreamReader(zipStream, Encoding.UTF8))</div><div class="line">                        &#123;</div><div class="line">                            htmlCode = sr.ReadToEnd();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">using</span> (System.IO.Stream streamReceive = webResponse.GetResponseStream())</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">using</span> (System.IO.StreamReader sr = <span class="keyword">new</span> System.IO.StreamReader(streamReceive, Encoding.Default))</div><div class="line">                &#123;</div><div class="line">                    htmlCode = sr.ReadToEnd();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> htmlCode;</div><div class="line"></div><div class="line">    &#125;<span class="keyword">catch</span>(Exception ex)</div><div class="line">    &#123;</div><div class="line">        LogHelper.WriteException(<span class="string">"GetHTML"</span>, ex, <span class="keyword">new</span> &#123; Url = url &#125;);</div><div class="line">        <span class="keyword">return</span> <span class="string">""</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>开发环境在Windows10 + VS2013,整个代码跑起来没什么问题。</p>
+<p>无论是HTTP还是HTTPS协议，网页HTML一样能获取得到。</p>
+<p>网站部署到linux Jexus之后HTTP协议的网站同样可以获取到HTML，遇到HTTPS协议的网站的时候就跪了。</p>
+<p>抓到的异常信息如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">System.Net.WebException: Error: TrustFailure (The authentication or decryption has failed.) </div><div class="line">---&gt; System.IO.IOException: The authentication or decryption has failed.</div><div class="line">---&gt; System.IO.IOException: The authentication or decryption has failed. </div><div class="line">---&gt; Mono.Security.Protocol.Tls.TlsException:</div><div class="line">Invalid certificate received <span class="keyword">from</span> server. Error code: <span class="number">0xffffffff800b0109</span></div><div class="line">at Mono.Security.Protocol.Tls.RecordProtocol.EndReceiveRecord </div><div class="line">(IAsyncResult asyncResult) &lt;<span class="number">0x41b58d80</span> + <span class="number">0x0013e</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </div><div class="line">at Mono.Security.Protocol.Tls.SslClientStream.SafeEndReceiveRecord</div><div class="line">(IAsyncResult ar, Boolean ignoreEmpty) &lt;<span class="number">0x41b58cb0</span> + <span class="number">0x00031</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </div><div class="line">at Mono.Security.Protocol.Tls.SslClientStream.NegotiateAsyncWorker</div><div class="line">(IAsyncResult result) &lt;<span class="number">0x41b72a40</span> + <span class="number">0x0023f</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </div><div class="line">--- End of inner exception stack trace ---</div><div class="line">at Mono.Security.Protocol.Tls.SslClientStream.EndNegotiateHandshake </div><div class="line">(IAsyncResult result) &lt;<span class="number">0x41ba07e0</span> + <span class="number">0x000f3</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </div><div class="line">at Mono.Security.Protocol.Tls.SslStreamBase.AsyncHandshakeCallback </div><div class="line">(IAsyncResult asyncResult) &lt;<span class="number">0x41ba0540</span> + <span class="number">0x00086</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </div><div class="line">--- End of inner exception stack trace ---</div><div class="line">at Mono.Security.Protocol.Tls.SslStreamBase.EndRead </div><div class="line">(IAsyncResult asyncResult) &lt;<span class="number">0x41b73fd0</span> + <span class="number">0x00199</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </div><div class="line">at Mono.Net.Security.Private.LegacySslStream.EndAuthenticateAsClient </div><div class="line">(IAsyncResult asyncResult) &lt;<span class="number">0x41b73f30</span> + <span class="number">0x00042</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </div><div class="line">at Mono.Net.Security.Private.LegacySslStream.AuthenticateAsClient (System.String targetHost, </div><div class="line">System.Security.Cryptography.X509Certificates.X509CertificateCollection</div><div class="line">clientCertificates, SslProtocols enabledSslProtocols,</div><div class="line">Boolean checkCertificateRevocation) &lt;<span class="number">0x41b6a660</span> + <span class="number">0x00055</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </div><div class="line">at Mono.Net.Security.MonoTlsStream.CreateStream (System.Byte[] buffer) </div><div class="line">&lt;<span class="number">0x41b69c30</span> + <span class="number">0x00159</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </div><div class="line">--- End of inner exception stack trace ---</div><div class="line">at System.Net.HttpWebRequest.EndGetResponse (IAsyncResult asyncResult) </div><div class="line">&lt;<span class="number">0x41b67660</span> + <span class="number">0x001f9</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </div><div class="line">at System.Net.HttpWebRequest.GetResponse () &lt;<span class="number">0x41b60920</span> + <span class="number">0x0005a</span>&gt; <span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span> </div><div class="line">at WebBookmarkUI.Commom.HTTPHelper.GetHTML (System.String url) &lt;<span class="number">0x41b59b70</span> + <span class="number">0x00235</span>&gt; </div><div class="line"><span class="keyword">in</span> &lt;filename unknown&gt;:<span class="number">0</span></div></pre></td></tr></table></figure>
+<p>有用的信息基本就是：</p>
+<ol>
+<li>Invalid certificate received from server</li>
+<li>The authentication or decryption has failed</li>
+</ol>
+<p>一开始百思不得其解，为嘛好好的程序在开发环境跑得都好的，到了mono上就挂了，多疑的我还以为是mono的bug。<br>今天静下心来去找了一下资料，发现Mono的文档有这个问题的描述，认真读了一遍，又去请教了一番宇内流云大大，终于弄懂了是什么回事。</p>
+<p>先贴一下相关资料：</p>
+<ol>
+<li><p><a href="http://stackoverflow.com/questions/4926676/mono-webrequest-fails-with-https" target="_blank" rel="external">stackoverflow mono-webrequest-fails-with-https</a></p>
+</li>
+<li><p><a href="http://www.mono-project.com/docs/faq/security/" target="_blank" rel="external">mono doc security</a></p>
+</li>
+</ol>
+<p>这个问题是出现的原因是Windows自带了HTPPS的根证书，linux默认则是没有带有根证书的。我们的mono在调用WebRequest去请求HTTPS协议的网站的时候，找不到任何有效的根证书，所以抛出上面的异常了。</p>
+<p>解决方案也很简单，为linux导入一下HTTPS根证书就好。</p>
+<p>在linux服务器上面执行下面这条命令。<br><figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">mozroots</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">import</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">ask</span><span class="literal">-</span><span class="comment">remove</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">machine</span></div></pre></td></tr></table></figure></p>
+<p>然后在网站的Application_Start()里面添加下面代码：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> System.Net.ServicePointManager.ServerCertificateValidationCallback +=</div><div class="line"> <span class="keyword">delegate</span>(<span class="keyword">object</span> sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate,</div><div class="line"> System.Security.Cryptography.X509Certificates.X509Chain chain,</div><div class="line"> System.Net.Security.SslPolicyErrors sslPolicyErrors)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">// **** Always accept</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>完事。</p>
+<p>这个故事告诉我们，linux干活都是要亲力亲为呀。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/04/07/ubuntu-jexus-mywebsql/" itemprop="url">
                   ubuntu使用Jexus搭建MyWebSQL
                 </a>
@@ -1069,130 +1343,6 @@
             
               
                 
-                <a class="post-title-link" href="/2016/03/10/something/" itemprop="url">
-                  一些有用的网站
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-10T00:00:00+08:00" content="2016-03-10">
-              2016-03-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/nothing/" itemprop="url" rel="index">
-                    <span itemprop="name">nothing</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/10/something/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/10/something/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">Markdown 语法说明 (简体中文版)</a></p>
-<p><a href="http://wowubuntu.com/markdown/basic.html" target="_blank" rel="external">Markdown: Basics （快速入门）</a></p>
-<p><a href="http://wsgzao.github.io/post/hexo-guide/" target="_blank" rel="external">使用GitHub和Hexo搭建免费静态Blog(本博客案例)</a></p>
-<p><a href="https://www.mxgw.info/t/filename-too-long-in-git.html" target="_blank" rel="external">win下面的git客户端提示FIlename too long解决方法</a></p>
-<p><a href="http://theme-next.iissnan.com/" target="_blank" rel="external">Hexo Next 模板</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/03/03/Join/" itemprop="url">
                   .NET-join用法
                 </a>
@@ -1828,145 +1978,11 @@ public sealed class SomeType
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/01/20/Bytes-To-String/" itemprop="url">
-                  bytes to string
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-01-20T00:00:00+08:00" content="2016-01-20">
-              2016-01-20
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/net/" itemprop="url" rel="index">
-                    <span itemprop="name">.net</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/20/Bytes-To-String/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/20/Bytes-To-String/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>有时候我们会遇到需要把数据加密之后再网络上传输的需求，这样的话一般使用AES256之类的算法，经过运算之后得到一个byte数组，接着转换成string，就扔出去了。对方拿到之后，用密钥解密之后便得到了对应的数据。</p>
-<p>在C#里面，Byte数组转String字符串我们一般用Convert.ToBase64()完成。</p>
-<p>代码如下：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">BytesToString</span>(<span class="params"><span class="keyword">byte</span>[] buff</span>)</span></div><div class="line">&#123;</div><div class="line">   <span class="keyword">return</span> Convert.ToBase64String(buff);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">byte</span>[] <span class="title">StringToBytes</span>(<span class="params"><span class="keyword">string</span> input</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> Encoding.UTF8.GetBytes(input);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p> 一般来说这样也没撒问题了，不过，如果这个数据是通过URL的方式给出去的，这时候就要考虑一下特殊字符编码问题了。+、空格、%之类的特殊字符可能会导致切断URL传参的数据，导致得到的数据不一致。这样的话，解密也做不下去了。</p>
-<p> 相关资料：<br> <br>1、<a href="http://www.ruanyifeng.com/blog/2010/02/url_encoding.html" target="_blank" rel="external">关于URL编码</a><br> <br>2、<a href="http://blog.csdn.net/luo_deng/article/details/12186535" target="_blank" rel="external">URL编码—-url参数中有+、空格、=、%、&amp;、#等特殊符号的问题解决</a></p>
-<p> 不过也好在，C#提供了一个HttpUtility.UrlEncode(input)和HttpUtility.UrlEncode(input)这两个函数，让我们直接把上面的特殊字符转换成URL可识别的转义字符。<br> 数据出去之后先Encode一下，回来之后Decode一下，好像问题都解决了吧。</p>
-<p>然而我们都忘了一件事情，URL到了浏览器之后，自然会对URL里面的东西Decode一次。<br>我实现的时候，在后台验证的时候又Decode一次,这就出问题了。</p>
-<p>问题在哪呢？一个encode的字符被decode两次，内容已经被改掉了…<br>这就导致解密的时候直接挂了….</p>
-<p>这样看来，<br>Convert.ToBase64String()这个不够靠谱，出来的数据可能会有特殊字符的问题。<br>怎么解决呢？那天晚上和老大/CTO都在看这个bug。一下子都没撒好办法….</p>
-<p>后来CTO想了一下，说byte不就是最大不久255么？直接转16进制字符就是嘛。<br>于是有了下面的代码：</p>
-<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> byte数组转string</span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name="bytes"&gt;</span><span class="doctag">&lt;/param&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">BytesToString</span>(<span class="params"><span class="keyword">byte</span>[] bytes</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (bytes == <span class="literal">null</span>)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">string</span>.Empty;</div><div class="line">   <span class="keyword">return</span> <span class="keyword">string</span>.Join(<span class="keyword">string</span>.Empty, </div><div class="line">   bytes.Select(b =&gt; <span class="keyword">string</span>.Format(<span class="string">"&#123;0:x2&#125;"</span>, b)).ToArray());</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> string转byte数组</span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name="str"&gt;</span><span class="doctag">&lt;/param&gt;</span></span></div><div class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] <span class="title">StringToBytes</span>(<span class="params"><span class="keyword">string</span> str</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">string</span>.IsNullOrEmpty(str))</div><div class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[str.Length / <span class="number">2</span>];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.Length; i += <span class="number">2</span>)</div><div class="line">    &#123;</div><div class="line">        bytes[i / <span class="number">2</span>] = Convert.ToByte(<span class="string">"0x"</span> + str[i] + str[i + <span class="number">1</span>], <span class="number">16</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> bytes;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>问题解决。</p>
-<p>关于base64的实现，下面这个链接是相关资料，有兴趣自己看啦。</p>
-<p><a href="http://www.hejingzong.cn/blog/ViewBlog_36.aspx" target="_blank" rel="external">C#/ASP.NET Base64编码原理及实现</a></p>
-<p><a href="http://www.cnblogs.com/tuyile006/archive/2008/01/17/1043178.html" target="_blank" rel="external">C＃实现Base64编码与解码</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2007,7 +2023,7 @@ public sealed class SomeType
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -2015,7 +2031,7 @@ public sealed class SomeType
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -2024,7 +2040,7 @@ public sealed class SomeType
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
