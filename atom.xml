@@ -60,13 +60,14 @@
   </entry>
   
   <entry>
-    <title>VS快捷键</title>
+    <title>VS快捷键（转载）</title>
     <link href="http://codelover.link/2016/10/14/visualstudio_shortcut_key/"/>
     <id>http://codelover.link/2016/10/14/visualstudio_shortcut_key/</id>
     <published>2016-10-13T16:00:00.000Z</published>
-    <updated>2016-10-15T06:16:08.368Z</updated>
+    <updated>2016-10-15T07:23:43.214Z</updated>
     
-    <content type="html"><![CDATA[<p>ctrl+s         保存（这个确实很简单，要说常用，这玩意绝对排名第一）</p>
+    <content type="html"><![CDATA[<p>原文：<a href="http://www.cnblogs.com/xiaofeixiang/p/3785167.html" target="_blank" rel="external">http://www.cnblogs.com/xiaofeixiang/p/3785167.html</a></p>
+<p>ctrl+s         保存（这个确实很简单，要说常用，这玩意绝对排名第一）</p>
 <p>ctrl+Shift+S   保存所有VS中打开的所有文件</p>
 <p>ctrl+O         打开新文件</p>
 <p>ctrl+Shift+O   打开项目</p>
@@ -102,10 +103,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;ctrl+s         保存（这个确实很简单，要说常用，这玩意绝对排名第一）&lt;/p&gt;
-&lt;p&gt;ctrl+Shift+S   保存所有VS中打开的所有文件&lt;/p&gt;
-&lt;p&gt;ctrl+O         打开新文件&lt;/p&gt;
-&lt;p&gt;ctrl+Shift+O   打开项目&lt;/p&gt;
+      &lt;p&gt;原文：&lt;a href=&quot;http://www.cnblogs.com/xiaofeixiang/p/3785167.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.cnblogs.com/xiaofeixiang/p/3785
     
     </summary>
     
