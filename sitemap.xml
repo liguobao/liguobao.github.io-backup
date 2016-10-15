@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://codelover.link/2016/10/15/install_Preview2_on_fresh_VS2015_Update3_Installation/</loc>
+    
+    <lastmod>2016-10-15T07:31:54.363Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://codelover.link/2016/01/01/hexo_memorandum/</loc>
+    
+    <lastmod>2016-10-15T07:30:48.962Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://codelover.link/2016/10/14/visualstudio_shortcut_key/</loc>
     
     <lastmod>2016-10-15T07:23:43.214Z</lastmod>
@@ -12,13 +26,6 @@
     <loc>http://codelover.link/2016/05/30/the_first_aspnetcore/</loc>
     
     <lastmod>2016-10-15T07:14:38.318Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://codelover.link/2016/01/01/hexo_memorandum/</loc>
-    
-    <lastmod>2016-10-15T06:20:40.030Z</lastmod>
     
   </url>
   
@@ -166,13 +173,6 @@
     <loc>http://codelover.link/2016/08/13/58City-House-Crawler-JS/</loc>
     
     <lastmod>2016-10-15T05:20:24.470Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://codelover.link/2016/10/15/install_Preview2_on_fresh_VS2015_Update3_Installation/</loc>
-    
-    <lastmod>2016-10-14T16:50:15.102Z</lastmod>
     
   </url>
   
