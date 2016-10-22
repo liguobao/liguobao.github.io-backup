@@ -1,0 +1,747 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript,requirejs," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="codelover's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="写在前面最早接触javascript的时候，javascript代码直接扔在script标签里面就完事了。
+反正代码不多，交互简单，逻辑不难，和HTML混在一起也未尝不可。
+后来交互越来越复杂，代码越多越多了，我们就开始把JS代码独立到了单独的JS文件中。
+公共的库引用在前，自己的逻辑代码引用在后，全局变量定义在HTML内部，在独立JS文件中直接使用变量就好。
+我们会经常看到下面这种代码：
+123">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用requirejs编写模块化代码">
+<meta property="og:url" content="http://codelover.link/2016/10/22/javascript_requirejs_rf_code/index.html">
+<meta property="og:site_name" content="codelover's blog">
+<meta property="og:description" content="写在前面最早接触javascript的时候，javascript代码直接扔在script标签里面就完事了。
+反正代码不多，交互简单，逻辑不难，和HTML混在一起也未尝不可。
+后来交互越来越复杂，代码越多越多了，我们就开始把JS代码独立到了单独的JS文件中。
+公共的库引用在前，自己的逻辑代码引用在后，全局变量定义在HTML内部，在独立JS文件中直接使用变量就好。
+我们会经常看到下面这种代码：
+123">
+<meta property="og:updated_time" content="2016-10-22T14:27:09.575Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用requirejs编写模块化代码">
+<meta name="twitter:description" content="写在前面最早接触javascript的时候，javascript代码直接扔在script标签里面就完事了。
+反正代码不多，交互简单，逻辑不难，和HTML混在一起也未尝不可。
+后来交互越来越复杂，代码越多越多了，我们就开始把JS代码独立到了单独的JS文件中。
+公共的库引用在前，自己的逻辑代码引用在后，全局变量定义在HTML内部，在独立JS文件中直接使用变量就好。
+我们会经常看到下面这种代码：
+123">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6254113771573216000,
+      author: 'codelover'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://codelover.link/2016/10/22/javascript_requirejs_rf_code/"/>
+
+  <title> 使用requirejs编写模块化代码 | codelover's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">codelover's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用requirejs编写模块化代码
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-22T00:00:00+08:00" content="2016-10-22">
+              2016-10-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/22/javascript_requirejs_rf_code/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/22/javascript_requirejs_rf_code/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>最早接触javascript的时候，javascript代码直接扔在script标签里面就完事了。</p>
+<p>反正代码不多，交互简单，逻辑不难，和HTML混在一起也未尝不可。</p>
+<p>后来交互越来越复杂，代码越多越多了，我们就开始把JS代码独立到了单独的JS文件中。</p>
+<p>公共的库引用在前，自己的逻辑代码引用在后，全局变量定义在HTML内部，在独立JS文件中直接使用变量就好。</p>
+<p>我们会经常看到下面这种代码：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"1.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"2.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"3.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"4.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"5.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"6.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>通过script标签顺序去js管理依赖关系。</p>
+<p>阮一峰老师在<a href="http://www.ruanyifeng.com/blog/2012/11/require_js.html" target="_blank" rel="external">Javascript模块化编程（三）：require.js的用法</a><br>一文中总结了这样写法的缺点：</p>
+<p>首先，加载的时候，浏览器会停止网页渲染，加载文件越多，网页失去响应的时间就会越长；</p>
+<p>其次，由于js文件之间存在依赖关系，因此必须严格保证加载顺序（比如上例的1.js要在2.js的前面），依赖性最大的模块一定要放到最后加载.</p>
+<p>当依赖关系很复杂的时候，代码的编写和维护都会变得困难。</p>
+<p>而requirejs的诞生便是为了解决这个问题。</p>
+<h3 id="requirejs"><a href="#requirejs" class="headerlink" title="requirejs"></a><a href="http://requirejs.org/docs/download.html" target="_blank" rel="external">requirejs</a></h3><p>在<a href="http://requirejs.org/docs/download.html" target="_blank" rel="external">官网</a>把requirejs 下载回来之后。使用一般的方法引入：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"js/require.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>但是这样的方法，还是可能在加载require.js的时候导致网页失去响应。解决方案一般有两种：</p>
+<ol>
+<li><p>把上面的代码放到网页底部</p>
+</li>
+<li><p>使用异步的方法加载，如下：</p>
+</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"js/require.js"</span> <span class="attr">defer</span> <span class="attr">async</span>=<span class="string">"true"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><a href="http://www.w3school.com.cn/html5/att_script_async.asp" target="_blank" rel="external">async属性</a> 表明这个文件需要异步加载，避免网页失去响应。</p>
+<p>不过IE下不支持这个属性，只支持defer，所以可以把defer也写上。</p>
+<h3 id="加载主模块"><a href="#加载主模块" class="headerlink" title="加载主模块"></a>加载主模块</h3><p>在上一步，我们已经引入了require了，那么require怎么知道我们究竟要加载什么东西呢？答案是使用data-main属性。<br>假设我们的主模块为js/home.js,引入代码应该如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"js/require.js"</span> <span class="attr">data-main</span>=<span class="string">"js/home"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">//require.js默认文件后缀为js，所以home.js可以写成home。</div></pre></td></tr></table></figure></p>
+<p>接下来我使用<a href="https://github.com/liguobao/58HouseSearch" target="_blank" rel="external">58HouseSearch</a> 的代码来讲解一下require的使用。</p>
+<p>在此项目里面，重构前大概就是JS变量漫天飞，js文件里面各种函数到处乱放。一开始用起来还没什么，后来加入了更多功能的时候，JS代码维护起来就疼不欲生了。因此托了个小伙伴帮忙使用模块化思想重构了一下JS代码。</p>
+<p>上面说了，我们首先需要创建我们的模块，在这个项目里面，主模块叫home.js。</p>
+<p>home.js中我们需要配置一下require.config.<br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">require.config(&#123;</div><div class="line">    baseUrl: <span class="string">'/DomainJS/'</span>,</div><div class="line">    paths: &#123;</div><div class="line">        jquery: <span class="string">"lib/jquery-1.11.3.min"</span>,</div><div class="line">        <span class="string">"AMUI"</span>: <span class="string">"lib/amazeui.2.7.1.min"</span>,</div><div class="line">        <span class="string">"jquery.range"</span>: <span class="string">"lib/jquery.range"</span>,</div><div class="line">        <span class="string">"es5"</span>: <span class="string">"lib/es5"</span>,</div><div class="line">        <span class="string">"mapController"</span>: <span class="string">"mapController"</span>,</div><div class="line">        <span class="string">"addToolbar"</span>: <span class="string">"addToolbar"</span>,</div><div class="line">    &#125;,</div><div class="line">    shim: &#123;</div><div class="line">        <span class="string">"addToolbar"</span>: &#123;</div><div class="line">            deps: [<span class="string">"jquery"</span>]</div><div class="line">        &#125;,</div><div class="line">        <span class="string">"jquery.range"</span>: &#123;</div><div class="line">            deps: [<span class="string">"jquery"</span>]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>在这里我主要配置了一下baseURL(所有模块的查找根路径)，paths(名称映射)，shim(<br>为那些没有使用define()来声明依赖关系、设置模块的”浏览器全局变量注入”型脚本做依赖和导出配置。)</p>
+<p>关于require.config的详细内容可以看下下面这些文章：</p>
+<ol>
+<li><a href="https://segmentfault.com/a/1190000002401665" target="_blank" rel="external">RequireJS进阶:配置文件的学习</a> </li>
+<li><a href="https://segmentfault.com/a/1190000002403806" target="_blank" rel="external">RequireJS进阶:模块的优化及配置的详解</a></li>
+</ol>
+<p>配置做完了，我们也可以开始真正写我们的逻辑代码了,我们使用require来加载我们需要的库。<br>代码如下：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">require(['domready!', 'jquery', 'AMUI', 'mapController', 'city', 'commuteGo'], </div><div class="line"></div><div class="line">function (<span class="name">doc</span>, $, AMUI, mapController, city, commuteGo) &#123;</div><div class="line">    city.initAllCityInfo()<span class="comment">;</span></div><div class="line">    mapController.init()<span class="comment">;</span></div><div class="line"></div><div class="line">    $(<span class="string">"input[name='locationType']"</span>).bind('click', </div><div class="line">    mapController.locationMethodOnChange)</div><div class="line"></div><div class="line">    $(<span class="string">"input[name='vehicle']"</span>).bind('click', commuteGo.go)</div><div class="line"></div><div class="line">    $('#Get58Data').bind('click', function(<span class="name">e</span>) &#123;</div><div class="line">        e.preventDefault()<span class="comment">;</span></div><div class="line">     </div><div class="line">        mapController.Get58DataClick()<span class="comment">;</span></div><div class="line">        e.stopPropagation()<span class="comment">;</span></div><div class="line">    &#125;)<span class="comment">;</span></div><div class="line"></div><div class="line"> </div><div class="line">    $.ajax(&#123;</div><div class="line">        type: <span class="string">"post"</span>,</div><div class="line">        url: <span class="string">"../Commom/GetPVCount"</span>,</div><div class="line">        data: &#123; &#125;,</div><div class="line">        success: function (<span class="name">result</span>)</div><div class="line">        &#123;</div><div class="line">            if (<span class="name">result</span>.IsSuccess)&#123;</div><div class="line">                $(<span class="string">"#lblPVCount"</span>).text(<span class="name">result</span>.PVCount)<span class="comment">;</span></div><div class="line">            &#125;else &#123;</div><div class="line">                $(<span class="string">"#lblPVCount"</span>).text(<span class="number">0</span>)<span class="comment">;</span></div><div class="line">                console.log(<span class="name">result</span>.Error)<span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)<span class="comment">;</span></div><div class="line"></div><div class="line">    $('#search-offcanvas').offCanvas(&#123; effect: 'overlay' &#125;)<span class="comment">;</span></div><div class="line"></div><div class="line">    $(<span class="string">".amap-sug-result"</span>).css(<span class="string">"z-index"</span>, <span class="number">9999</span>)<span class="comment">;</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>忽略function里面的具体逻辑，加载如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">require</span>([<span class="string">'domready!'</span>, <span class="string">'jquery'</span>, <span class="string">'AMUI'</span>, <span class="string">'mapController'</span>, <span class="string">'city'</span>, <span class="string">'commuteGo'</span>], </div><div class="line"><span class="function"><span class="keyword">function</span> (<span class="params">doc, $, AMUI, mapController, city, commuteGo</span>)</span>&#123;</div><div class="line"></div><div class="line"><span class="comment">//todo</span></div><div class="line"></div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>第一个参数为一个数组，表示所依赖的模块，此处为[‘domready!’, ‘jquery’, ‘AMUI’, ‘mapController’, ‘city’, ‘commuteGo’]；</p>
+<p>第二个参数为回调函数，当前面指定的模块都全部加载成功之后，便调用此函数。加载的模块会以参数形式传入此函数，从而在回调函数内部就可以使用这些模块啦。</p>
+<p>require()异步加载所需模块的时候，此时浏览器并不会失去响应；当前面的模块加载成功之后，执行回调函数才会运行我们的逻辑代码，因此解决了依赖性问题。</p>
+<p>讲完了模块加载，我们下面讲一下模块编写。</p>
+<h3 id="AMD模块编写"><a href="#AMD模块编写" class="headerlink" title="AMD模块编写"></a>AMD模块编写</h3><p>require.js加载的模块的采用的AMD规范。所以我们的模块必须按照AMD的规定来写。</p>
+<p>关于AMD规范详情可以看这个文章：<a href="http://www.ruanyifeng.com/blog/2012/10/asynchronous_module_definition.html" target="_blank" rel="external">Javascript模块化编程（二）：AMD规范</a></p>
+<p>模块有两个情况，不依赖其他模块和依赖其他模块。</p>
+<h4 id="不依赖其他模块"><a href="#不依赖其他模块" class="headerlink" title="不依赖其他模块"></a>不依赖其他模块</h4><p>直接define定义，使用function回调。</p>
+<p><a href="https://github.com/liguobao/58HouseSearch/blob/master/58HouseSearch/DomainJS/helper.js" target="_blank" rel="external">58HouseSearch/DomainJS/helper.js</a><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">define(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">//获取URL中的参数</span></div><div class="line">    <span class="keyword">var</span> getQueryString=  <span class="function"><span class="keyword">function</span> (<span class="params">name</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> reg = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">"(^|&amp;)"</span> + name + <span class="string">"=([^&amp;]*)(&amp;|$)"</span>);</div><div class="line">        <span class="keyword">var</span> r = <span class="built_in">window</span>.location.search.substr(<span class="number">1</span>).match(reg);</div><div class="line">        <span class="keyword">if</span> (r != <span class="literal">null</span>) <span class="keyword">return</span> <span class="built_in">unescape</span>(r[<span class="number">2</span>]); <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        getQueryString: getQueryString,</div><div class="line">    &#125;;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<h4 id="依赖其他模块"><a href="#依赖其他模块" class="headerlink" title="依赖其他模块"></a>依赖其他模块</h4><p>define中如同require一样，用数组表明需要加载的模块，function回调。</p>
+<p><a href="https://github.com/liguobao/58HouseSearch/blob/master/58HouseSearch/DomainJS/marker.js" target="_blank" rel="external">58HouseSearch/DomainJS/marker.js</a><br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">define(['mapSignleton', 'city', 'transfer'], </div><div class="line">function(<span class="name">mapSignleton</span>, city, transfer) &#123;</div><div class="line">    var _map = mapSignleton.map<span class="comment">;</span></div><div class="line">    var _workMarker = null<span class="comment">;</span></div><div class="line">    var _markerArray = []<span class="comment">;</span></div><div class="line">    var load = function(<span class="name">x</span>, y, locationName) &#123;</div><div class="line">        _workMarker = new AMap.Marker(&#123;</div><div class="line">            map: _map,</div><div class="line">            title: locationName,</div><div class="line">            icon: 'http<span class="symbol">://webapi</span>.amap.com/theme/v1.<span class="number">3</span>/markers/n/mark_r.png',</div><div class="line">            position: [x, y]</div><div class="line">        &#125;)<span class="comment">;</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var add = function(<span class="name">address</span>, rent, href, markBG) &#123;</div><div class="line">        new AMap.Geocoder(&#123;</div><div class="line">            city: city.name,</div><div class="line">            radius: <span class="number">1000</span></div><div class="line">        &#125;).getLocation(<span class="name">address</span>, function(<span class="name">status</span>, result) &#123;</div><div class="line"></div><div class="line">            if (<span class="name">status</span> === <span class="string">"complete"</span> <span class="symbol">&amp;&amp;</span> result.info === 'OK') &#123;</div><div class="line">                var geocode = result.geocodes[<span class="number">0</span>]<span class="comment">;</span></div><div class="line">                var rentMarker = new AMap.Marker(&#123;</div><div class="line">                    map: _map,</div><div class="line">                    title: address,</div><div class="line">                    icon: markBG ? 'IMG/Little/' +</div><div class="line">                    markBG : 'http<span class="symbol">://webapi</span>.amap.com/theme/v1.<span class="number">3</span>/markers/n/mark_b.png',</div><div class="line">                    position: [geocode.location.getLng(), geocode.location.getLat()]</div><div class="line">                &#125;)<span class="comment">;</span></div><div class="line">                _markerArray.push(<span class="name">rentMarker</span>)<span class="comment">;</span></div><div class="line"></div><div class="line">                rentMarker.content = <span class="string">"&lt;div&gt;&lt;a target = '_blank' href='"</span> </div><div class="line">                + href + <span class="string">"'&gt;房源："</span> + address + <span class="string">"  租金："</span> + rent + <span class="string">"&lt;/a&gt;&lt;div&gt;"</span></div><div class="line">                rentMarker.on('click', function(<span class="name">e</span>) &#123;</div><div class="line">                    transfer.add(<span class="name">e</span>, address)<span class="comment">;</span></div><div class="line">                &#125;)<span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line">    &#125;<span class="comment">;</span></div><div class="line"></div><div class="line">    var clearArray = function() &#123;</div><div class="line">        if (<span class="name">_markerArray</span> <span class="symbol">&amp;&amp;</span> _markerArray.length &gt; <span class="number">0</span>) </div><div class="line">        _map.remove(<span class="name">_markerArray</span>)<span class="comment">;</span></div><div class="line">        _markerArray = []<span class="comment">;</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var clear = function() &#123;</div><div class="line">        if (<span class="name">_workMarker</span>) &#123;</div><div class="line">            _map.remove(<span class="name">_workMarker</span>)<span class="comment">;</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return &#123;</div><div class="line">        load: load,</div><div class="line">        add: add,</div><div class="line">        clearArray: clearArray,</div><div class="line">        clear: clear</div><div class="line">    &#125;<span class="comment">;</span></div><div class="line">&#125;)<span class="comment">;</span></div></pre></td></tr></table></figure></p>
+<p>这样的话，一个供require调用的模块也就写好了。</p>
+<p>最后感谢小伙伴<a href="https://www.zhihu.com/people/piratf" target="_blank" rel="external">Larry Sean</a> 帮忙重构代码。</p>
+<p>全文完。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag">#javascript</a>
+          
+            <a href="/tags/requirejs/" rel="tag">#requirejs</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/15/install_Preview2_on_fresh_VS2015_Update3_Installation/" rel="next" title="Microsoft .NET Core 1.0.0 VS 2015 Tooling Preview 2 0x80070003">
+                <i class="fa fa-chevron-left"></i> Microsoft .NET Core 1.0.0 VS 2015 Tooling Preview 2 0x80070003
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/22/javascript_requirejs_rf_code/"
+           data-title="使用requirejs编写模块化代码" data-url="http://codelover.link/2016/10/22/javascript_requirejs_rf_code/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xrayk.com1.z0.glb.clouddn.com/%E5%A4%A7%E7%86%8A%E5%B0%8F%E7%86%8A.jpg"
+               alt="李国宝" />
+          <p class="site-author-name" itemprop="name">李国宝</p>
+          <p class="site-description motion-element" itemprop="description">一直走在吃软饭路上的软狗</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liguobao" target="_blank" title="GitHub">
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/codelover" target="_blank" title="知乎">
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.1234.sh" title="あまみや ゆうこ" target="_blank">あまみや ゆうこ</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://piratf.ml" title="潘雄飞的博客 - 我是魔法师啦啦啦。" target="_blank">潘雄飞的博客 - 我是魔法师啦啦啦。</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://codesky.me" title="CodeSky 代码之空" target="_blank">CodeSky 代码之空</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#requirejs"><span class="nav-number">2.</span> <span class="nav-text">requirejs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载主模块"><span class="nav-number">3.</span> <span class="nav-text">加载主模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AMD模块编写"><span class="nav-number">4.</span> <span class="nav-text">AMD模块编写</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#不依赖其他模块"><span class="nav-number">4.1.</span> <span class="nav-text">不依赖其他模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#依赖其他模块"><span class="nav-number">4.2.</span> <span class="nav-text">依赖其他模块</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李国宝</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"codelover"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

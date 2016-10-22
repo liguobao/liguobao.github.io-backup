@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://codelover.link/"/>
-  <updated>2016-10-15T07:31:54.363Z</updated>
+  <updated>2016-10-22T14:27:09.575Z</updated>
   <id>http://codelover.link/</id>
   
   <author>
@@ -14,6 +14,82 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用requirejs编写模块化代码</title>
+    <link href="http://codelover.link/2016/10/22/javascript_requirejs_rf_code/"/>
+    <id>http://codelover.link/2016/10/22/javascript_requirejs_rf_code/</id>
+    <published>2016-10-21T16:00:00.000Z</published>
+    <updated>2016-10-22T14:27:09.575Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>最早接触javascript的时候，javascript代码直接扔在script标签里面就完事了。</p>
+<p>反正代码不多，交互简单，逻辑不难，和HTML混在一起也未尝不可。</p>
+<p>后来交互越来越复杂，代码越多越多了，我们就开始把JS代码独立到了单独的JS文件中。</p>
+<p>公共的库引用在前，自己的逻辑代码引用在后，全局变量定义在HTML内部，在独立JS文件中直接使用变量就好。</p>
+<p>我们会经常看到下面这种代码：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"1.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"2.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"3.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"4.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"5.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">　　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"6.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>通过script标签顺序去js管理依赖关系。</p>
+<p>阮一峰老师在<a href="http://www.ruanyifeng.com/blog/2012/11/require_js.html" target="_blank" rel="external">Javascript模块化编程（三）：require.js的用法</a><br>一文中总结了这样写法的缺点：</p>
+<p>首先，加载的时候，浏览器会停止网页渲染，加载文件越多，网页失去响应的时间就会越长；</p>
+<p>其次，由于js文件之间存在依赖关系，因此必须严格保证加载顺序（比如上例的1.js要在2.js的前面），依赖性最大的模块一定要放到最后加载.</p>
+<p>当依赖关系很复杂的时候，代码的编写和维护都会变得困难。</p>
+<p>而requirejs的诞生便是为了解决这个问题。</p>
+<h3 id="requirejs"><a href="#requirejs" class="headerlink" title="requirejs"></a><a href="http://requirejs.org/docs/download.html" target="_blank" rel="external">requirejs</a></h3><p>在<a href="http://requirejs.org/docs/download.html" target="_blank" rel="external">官网</a>把requirejs 下载回来之后。使用一般的方法引入：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"js/require.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>但是这样的方法，还是可能在加载require.js的时候导致网页失去响应。解决方案一般有两种：</p>
+<ol>
+<li><p>把上面的代码放到网页底部</p>
+</li>
+<li><p>使用异步的方法加载，如下：</p>
+</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"js/require.js"</span> <span class="attr">defer</span> <span class="attr">async</span>=<span class="string">"true"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><a href="http://www.w3school.com.cn/html5/att_script_async.asp" target="_blank" rel="external">async属性</a> 表明这个文件需要异步加载，避免网页失去响应。</p>
+<p>不过IE下不支持这个属性，只支持defer，所以可以把defer也写上。</p>
+<h3 id="加载主模块"><a href="#加载主模块" class="headerlink" title="加载主模块"></a>加载主模块</h3><p>在上一步，我们已经引入了require了，那么require怎么知道我们究竟要加载什么东西呢？答案是使用data-main属性。<br>假设我们的主模块为js/home.js,引入代码应该如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">　<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"js/require.js"</span> <span class="attr">data-main</span>=<span class="string">"js/home"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">//require.js默认文件后缀为js，所以home.js可以写成home。</div></pre></td></tr></table></figure></p>
+<p>接下来我使用<a href="https://github.com/liguobao/58HouseSearch" target="_blank" rel="external">58HouseSearch</a> 的代码来讲解一下require的使用。</p>
+<p>在此项目里面，重构前大概就是JS变量漫天飞，js文件里面各种函数到处乱放。一开始用起来还没什么，后来加入了更多功能的时候，JS代码维护起来就疼不欲生了。因此托了个小伙伴帮忙使用模块化思想重构了一下JS代码。</p>
+<p>上面说了，我们首先需要创建我们的模块，在这个项目里面，主模块叫home.js。</p>
+<p>home.js中我们需要配置一下require.config.<br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">require.config(&#123;</div><div class="line">    baseUrl: <span class="string">'/DomainJS/'</span>,</div><div class="line">    paths: &#123;</div><div class="line">        jquery: <span class="string">"lib/jquery-1.11.3.min"</span>,</div><div class="line">        <span class="string">"AMUI"</span>: <span class="string">"lib/amazeui.2.7.1.min"</span>,</div><div class="line">        <span class="string">"jquery.range"</span>: <span class="string">"lib/jquery.range"</span>,</div><div class="line">        <span class="string">"es5"</span>: <span class="string">"lib/es5"</span>,</div><div class="line">        <span class="string">"mapController"</span>: <span class="string">"mapController"</span>,</div><div class="line">        <span class="string">"addToolbar"</span>: <span class="string">"addToolbar"</span>,</div><div class="line">    &#125;,</div><div class="line">    shim: &#123;</div><div class="line">        <span class="string">"addToolbar"</span>: &#123;</div><div class="line">            deps: [<span class="string">"jquery"</span>]</div><div class="line">        &#125;,</div><div class="line">        <span class="string">"jquery.range"</span>: &#123;</div><div class="line">            deps: [<span class="string">"jquery"</span>]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>在这里我主要配置了一下baseURL(所有模块的查找根路径)，paths(名称映射)，shim(<br>为那些没有使用define()来声明依赖关系、设置模块的”浏览器全局变量注入”型脚本做依赖和导出配置。)</p>
+<p>关于require.config的详细内容可以看下下面这些文章：</p>
+<ol>
+<li><a href="https://segmentfault.com/a/1190000002401665" target="_blank" rel="external">RequireJS进阶:配置文件的学习</a> </li>
+<li><a href="https://segmentfault.com/a/1190000002403806" target="_blank" rel="external">RequireJS进阶:模块的优化及配置的详解</a></li>
+</ol>
+<p>配置做完了，我们也可以开始真正写我们的逻辑代码了,我们使用require来加载我们需要的库。<br>代码如下：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">require(['domready!', 'jquery', 'AMUI', 'mapController', 'city', 'commuteGo'], </div><div class="line"></div><div class="line">function (<span class="name">doc</span>, $, AMUI, mapController, city, commuteGo) &#123;</div><div class="line">    city.initAllCityInfo()<span class="comment">;</span></div><div class="line">    mapController.init()<span class="comment">;</span></div><div class="line"></div><div class="line">    $(<span class="string">"input[name='locationType']"</span>).bind('click', </div><div class="line">    mapController.locationMethodOnChange)</div><div class="line"></div><div class="line">    $(<span class="string">"input[name='vehicle']"</span>).bind('click', commuteGo.go)</div><div class="line"></div><div class="line">    $('#Get58Data').bind('click', function(<span class="name">e</span>) &#123;</div><div class="line">        e.preventDefault()<span class="comment">;</span></div><div class="line">     </div><div class="line">        mapController.Get58DataClick()<span class="comment">;</span></div><div class="line">        e.stopPropagation()<span class="comment">;</span></div><div class="line">    &#125;)<span class="comment">;</span></div><div class="line"></div><div class="line"> </div><div class="line">    $.ajax(&#123;</div><div class="line">        type: <span class="string">"post"</span>,</div><div class="line">        url: <span class="string">"../Commom/GetPVCount"</span>,</div><div class="line">        data: &#123; &#125;,</div><div class="line">        success: function (<span class="name">result</span>)</div><div class="line">        &#123;</div><div class="line">            if (<span class="name">result</span>.IsSuccess)&#123;</div><div class="line">                $(<span class="string">"#lblPVCount"</span>).text(<span class="name">result</span>.PVCount)<span class="comment">;</span></div><div class="line">            &#125;else &#123;</div><div class="line">                $(<span class="string">"#lblPVCount"</span>).text(<span class="number">0</span>)<span class="comment">;</span></div><div class="line">                console.log(<span class="name">result</span>.Error)<span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)<span class="comment">;</span></div><div class="line"></div><div class="line">    $('#search-offcanvas').offCanvas(&#123; effect: 'overlay' &#125;)<span class="comment">;</span></div><div class="line"></div><div class="line">    $(<span class="string">".amap-sug-result"</span>).css(<span class="string">"z-index"</span>, <span class="number">9999</span>)<span class="comment">;</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>忽略function里面的具体逻辑，加载如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">require</span>([<span class="string">'domready!'</span>, <span class="string">'jquery'</span>, <span class="string">'AMUI'</span>, <span class="string">'mapController'</span>, <span class="string">'city'</span>, <span class="string">'commuteGo'</span>], </div><div class="line"><span class="function"><span class="keyword">function</span> (<span class="params">doc, $, AMUI, mapController, city, commuteGo</span>)</span>&#123;</div><div class="line"></div><div class="line"><span class="comment">//todo</span></div><div class="line"></div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>第一个参数为一个数组，表示所依赖的模块，此处为[‘domready!’, ‘jquery’, ‘AMUI’, ‘mapController’, ‘city’, ‘commuteGo’]；</p>
+<p>第二个参数为回调函数，当前面指定的模块都全部加载成功之后，便调用此函数。加载的模块会以参数形式传入此函数，从而在回调函数内部就可以使用这些模块啦。</p>
+<p>require()异步加载所需模块的时候，此时浏览器并不会失去响应；当前面的模块加载成功之后，执行回调函数才会运行我们的逻辑代码，因此解决了依赖性问题。</p>
+<p>讲完了模块加载，我们下面讲一下模块编写。</p>
+<h3 id="AMD模块编写"><a href="#AMD模块编写" class="headerlink" title="AMD模块编写"></a>AMD模块编写</h3><p>require.js加载的模块的采用的AMD规范。所以我们的模块必须按照AMD的规定来写。</p>
+<p>关于AMD规范详情可以看这个文章：<a href="http://www.ruanyifeng.com/blog/2012/10/asynchronous_module_definition.html" target="_blank" rel="external">Javascript模块化编程（二）：AMD规范</a></p>
+<p>模块有两个情况，不依赖其他模块和依赖其他模块。</p>
+<h4 id="不依赖其他模块"><a href="#不依赖其他模块" class="headerlink" title="不依赖其他模块"></a>不依赖其他模块</h4><p>直接define定义，使用function回调。</p>
+<p><a href="https://github.com/liguobao/58HouseSearch/blob/master/58HouseSearch/DomainJS/helper.js" target="_blank" rel="external">58HouseSearch/DomainJS/helper.js</a><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">define(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">//获取URL中的参数</span></div><div class="line">    <span class="keyword">var</span> getQueryString=  <span class="function"><span class="keyword">function</span> (<span class="params">name</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> reg = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">"(^|&amp;)"</span> + name + <span class="string">"=([^&amp;]*)(&amp;|$)"</span>);</div><div class="line">        <span class="keyword">var</span> r = <span class="built_in">window</span>.location.search.substr(<span class="number">1</span>).match(reg);</div><div class="line">        <span class="keyword">if</span> (r != <span class="literal">null</span>) <span class="keyword">return</span> <span class="built_in">unescape</span>(r[<span class="number">2</span>]); <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        getQueryString: getQueryString,</div><div class="line">    &#125;;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<h4 id="依赖其他模块"><a href="#依赖其他模块" class="headerlink" title="依赖其他模块"></a>依赖其他模块</h4><p>define中如同require一样，用数组表明需要加载的模块，function回调。</p>
+<p><a href="https://github.com/liguobao/58HouseSearch/blob/master/58HouseSearch/DomainJS/marker.js" target="_blank" rel="external">58HouseSearch/DomainJS/marker.js</a><br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">define(['mapSignleton', 'city', 'transfer'], </div><div class="line">function(<span class="name">mapSignleton</span>, city, transfer) &#123;</div><div class="line">    var _map = mapSignleton.map<span class="comment">;</span></div><div class="line">    var _workMarker = null<span class="comment">;</span></div><div class="line">    var _markerArray = []<span class="comment">;</span></div><div class="line">    var load = function(<span class="name">x</span>, y, locationName) &#123;</div><div class="line">        _workMarker = new AMap.Marker(&#123;</div><div class="line">            map: _map,</div><div class="line">            title: locationName,</div><div class="line">            icon: 'http<span class="symbol">://webapi</span>.amap.com/theme/v1.<span class="number">3</span>/markers/n/mark_r.png',</div><div class="line">            position: [x, y]</div><div class="line">        &#125;)<span class="comment">;</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var add = function(<span class="name">address</span>, rent, href, markBG) &#123;</div><div class="line">        new AMap.Geocoder(&#123;</div><div class="line">            city: city.name,</div><div class="line">            radius: <span class="number">1000</span></div><div class="line">        &#125;).getLocation(<span class="name">address</span>, function(<span class="name">status</span>, result) &#123;</div><div class="line"></div><div class="line">            if (<span class="name">status</span> === <span class="string">"complete"</span> <span class="symbol">&amp;&amp;</span> result.info === 'OK') &#123;</div><div class="line">                var geocode = result.geocodes[<span class="number">0</span>]<span class="comment">;</span></div><div class="line">                var rentMarker = new AMap.Marker(&#123;</div><div class="line">                    map: _map,</div><div class="line">                    title: address,</div><div class="line">                    icon: markBG ? 'IMG/Little/' +</div><div class="line">                    markBG : 'http<span class="symbol">://webapi</span>.amap.com/theme/v1.<span class="number">3</span>/markers/n/mark_b.png',</div><div class="line">                    position: [geocode.location.getLng(), geocode.location.getLat()]</div><div class="line">                &#125;)<span class="comment">;</span></div><div class="line">                _markerArray.push(<span class="name">rentMarker</span>)<span class="comment">;</span></div><div class="line"></div><div class="line">                rentMarker.content = <span class="string">"&lt;div&gt;&lt;a target = '_blank' href='"</span> </div><div class="line">                + href + <span class="string">"'&gt;房源："</span> + address + <span class="string">"  租金："</span> + rent + <span class="string">"&lt;/a&gt;&lt;div&gt;"</span></div><div class="line">                rentMarker.on('click', function(<span class="name">e</span>) &#123;</div><div class="line">                    transfer.add(<span class="name">e</span>, address)<span class="comment">;</span></div><div class="line">                &#125;)<span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line">    &#125;<span class="comment">;</span></div><div class="line"></div><div class="line">    var clearArray = function() &#123;</div><div class="line">        if (<span class="name">_markerArray</span> <span class="symbol">&amp;&amp;</span> _markerArray.length &gt; <span class="number">0</span>) </div><div class="line">        _map.remove(<span class="name">_markerArray</span>)<span class="comment">;</span></div><div class="line">        _markerArray = []<span class="comment">;</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var clear = function() &#123;</div><div class="line">        if (<span class="name">_workMarker</span>) &#123;</div><div class="line">            _map.remove(<span class="name">_workMarker</span>)<span class="comment">;</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return &#123;</div><div class="line">        load: load,</div><div class="line">        add: add,</div><div class="line">        clearArray: clearArray,</div><div class="line">        clear: clear</div><div class="line">    &#125;<span class="comment">;</span></div><div class="line">&#125;)<span class="comment">;</span></div></pre></td></tr></table></figure></p>
+<p>这样的话，一个供require调用的模块也就写好了。</p>
+<p>最后感谢小伙伴<a href="https://www.zhihu.com/people/piratf" target="_blank" rel="external">Larry Sean</a> 帮忙重构代码。</p>
+<p>全文完。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;最早接触javascript的时候，javascript代码直接扔在script标签里面就完事了。&lt;/p&gt;
+&lt;p&gt;反正代码不
+    
+    </summary>
+    
+      <category term="javascript" scheme="http://codelover.link/categories/javascript/"/>
+    
+    
+      <category term="javascript" scheme="http://codelover.link/tags/javascript/"/>
+    
+      <category term="requirejs" scheme="http://codelover.link/tags/requirejs/"/>
+    
+  </entry>
   
   <entry>
     <title>Microsoft .NET Core 1.0.0 VS 2015 Tooling Preview 2 0x80070003</title>
@@ -554,6 +630,36 @@
   </entry>
   
   <entry>
+    <title>CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”</title>
+    <link href="http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw%E2%80%9Ccan%E2%80%98t%20find%20.Net%20Framework%20Data%20Provider%E2%80%9D%7F/"/>
+    <id>http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/</id>
+    <published>2016-04-19T16:00:00.000Z</published>
+    <updated>2016-10-15T05:20:24.627Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、下载 mysql-connector-net 安装</p>
+<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
+<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
+<p>一般DLL所在目录是：</p>
+<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
+<p>3、重启CodeSmith生效</p>
+<p><br><br><br></p>
+<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
+<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1、下载 mysql-connector-net 安装&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/downloads/connector/net/6.9.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;mysql-
+    
+    </summary>
+    
+      <category term="CodeSmith" scheme="http://codelover.link/categories/CodeSmith/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Jexus支持HTTPS协议</title>
     <link href="http://codelover.link/2016/04/20/Jexus-support-HTTPS/"/>
     <id>http://codelover.link/2016/04/20/Jexus-support-HTTPS/</id>
@@ -610,36 +716,6 @@
     </summary>
     
       <category term="jexus" scheme="http://codelover.link/categories/jexus/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”</title>
-    <link href="http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw%E2%80%9Ccan%E2%80%98t%20find%20.Net%20Framework%20Data%20Provider%E2%80%9D%7F/"/>
-    <id>http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/</id>
-    <published>2016-04-19T16:00:00.000Z</published>
-    <updated>2016-10-15T05:20:24.627Z</updated>
-    
-    <content type="html"><![CDATA[<p>1、下载 mysql-connector-net 安装</p>
-<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
-<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
-<p>一般DLL所在目录是：</p>
-<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
-<p>3、重启CodeSmith生效</p>
-<p><br><br><br></p>
-<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
-<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;1、下载 mysql-connector-net 安装&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/downloads/connector/net/6.9.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;mysql-
-    
-    </summary>
-    
-      <category term="CodeSmith" scheme="http://codelover.link/categories/CodeSmith/"/>
     
     
   </entry>
@@ -1307,76 +1383,6 @@ public static void test1()
 {
     int index = 0;
     Func&amp;lt;IEnumerable&amp;lt;int&amp;gt;&amp;gt; sequence =
-    
-    </summary>
-    
-      <category term=".net" scheme="http://codelover.link/categories/net/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>.NET 类字段与类属性</title>
-    <link href="http://codelover.link/2016/02/10/classfield-property/"/>
-    <id>http://codelover.link/2016/02/10/classfield-property/</id>
-    <published>2016-02-09T16:00:00.000Z</published>
-    <updated>2016-10-15T05:20:24.876Z</updated>
-    
-    <content type="html"><![CDATA[<p>#.NET 类字段与类属性<br>@(.NET)[基础|字段|属性]</p>
-<p>##字段<br>字段表示只读或可读/可写的数据值。<br>字段可以是静态的，这种字段被认为是类型状态的一部分。<br>字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。<br>强烈建议把字段声明为私有，防止类型或对象的状态被类型外部代码破坏。</p>
-<p>##属性<br>属性允许用简单的、字段风格的语法设置或查询类型或对象的逻辑状态，同时保证状态不被破坏。<br>作用于类型称为静态属性，作用于对象称为实例属性。<br>属性可以无参，也可以有多个参数（相当少见，但集合类用的多）。 </p>
-<pre><code>using System;
-
-public sealed class SomeType
-{                            //  1  
-// Nested class  
-   private class SomeNestedType { }                //  2  
-
-   // Constant, read­only, and static read/write field   
-   private const Int32 c_SomeConstant = 1;            //  3     
-
-   private readonly String m_SomeReadOnlyField = &quot;2&quot;;     //  4    
-
-   private static Int32 s_SomeReadWriteField = 3;      //  5  
-
-   // Type constructor  
-   static SomeType() { }                                  //  6  
-
-   // Instance constructors  
-   public SomeType(Int32 x) { }                           //  7  
-
-   public SomeType() { }                                  //  8 
-
-   // Instance and static methods  
-   private String InstanceMethod() { return null; }       // 9   
-
-   public static void Main() { }                        // 10 
-
-   // Instance property  
-   public Int32 SomeProp
-   {                                // 11      
-       get { return 0; }                                // 12      
-       set { }                                          // 13  
-   }
-
-   // Instance parameterful property (indexer) 
-   public Int32 this[String s]
-   {                          // 14       
-       get { return 0; }                                // 15        
-       set { }                                          // 16  
-   }
-
-   // Instance event  
-   public event EventHandler SomeEvent;                  // 17  
-}
-</code></pre><p><img src="https://kekaeq-ch3301.files.1drv.com/y3meEWWaK-o9SNfr_fT71Xr3YrPqO1LIswWqMvlHyUxWeH8P0PtXsQlfRkDnGshlMJIy2gPsxNet14efOPOuX-dHmZhCTg8PXyELJR9tnayye4LeEQ6F997b8pSI84wBR6nmmOF8IAr92oKWk36-f8alkEj9TrDQbiMoKGQwO5MTFY/20150105.jpg?psid=1" alt="enter image description here"></p>
-<p><img src="https://kekaeq-ch3301.files.1drv.com/y3mN8FseIEbAaQfT8ynEIc4nYsOUK0p0IN7Hp39imVSZXNQXlSfAYmvaC-9bDM3Hq6rPCV1XgrgvoST8wXejwARXaDmXptZpb_nyWwUzWK1rzaJ6fSsYfnP0icRKUclaVxnlltOJSQiuTFO7_fCfabmv0AsrgL5sLo6GdVJmpd-L10/QQ%E5%9B%BE%E7%89%8720151003165909.jpg?psid=1" alt="enter image description here"></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;#.NET 类字段与类属性&lt;br&gt;@(.NET)[基础|字段|属性]&lt;/p&gt;
-&lt;p&gt;##字段&lt;br&gt;字段表示只读或可读/可写的数据值。&lt;br&gt;字段可以是静态的，这种字段被认为是类型状态的一部分。&lt;br&gt;字段也可以是实例（非静态），这种字段被认为是对象状态的一部分。&lt;br&gt;强
     
     </summary>
     
