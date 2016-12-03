@@ -260,6 +260,165 @@
             
               
                 
+                <a class="post-title-link" href="/2016/03/03/Join/" itemprop="url">
+                  .NET-join用法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-03T00:00:00+08:00" content="2016-03-03">
+              2016-03-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/net/" itemprop="url" rel="index">
+                    <span itemprop="name">.net</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/03/Join/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/03/Join/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#.NET   Join<br> 连接：内连接、外连接、左连接、右连接。<br>SQL的Join这里就不多说了，<br>今天主要是看一下LINQ的Join用法，以及Enumerable.Join()的用法。</p>
+<p>Join用于连接数据，首先就是数据之间有联系咯。</p>
+<p>先说Enumerable.Join()。<br>参数类型如下：<br>            public static IEnumerable<tresult> Join<touter, tinner,="" tkey,="" tresult=""><br>            (<br>                     this IEnumerable<touter> outer,<br>                    IEnumerable<tinner> inner,<br>                    Func<touter, tkey=""> outerKeySelector,<br>                    Func<tinner, tkey=""> innerKeySelector,<br>                    Func<touter, tinner,="" tresult=""> resultSelector<br>            )<br>类型参数<br>TOuter<br>第一个序列中的元素的类型。<br>TInner<br>第二个序列中的元素的类型。<br>TKey<br>键选择器函数返回的键的类型。<br>TResult<br>结果元素的类型。<br>参数<br>outer<br>类型：System.Collections.Generic.IEnumerable<touter><br>要联接的第一个序列。<br>inner<br>类型：System.Collections.Generic.IEnumerable<tinner><br>要与第一个序列联接的序列。<br>outerKeySelector<br>类型：System.Func<touter, tkey=""><br>用于从第一个序列的每个元素提取联接键的函数。<br>innerKeySelector<br>类型：System.Func<tinner, tkey=""><br>用于从第二个序列的每个元素提取联接键的函数。<br>resultSelector<br>类型：System.Func<touter, tinner,="" tresult=""><br>用于从两个匹配元素创建结果元素的函数。<br>返回值<br>类型：System.Collections.Generic.IEnumerable<tresult><br>IEnumerable&lt;T&gt; that has elements of type TResult that are obtained by performing an inner join on two sequences.” xml:space=”preserve”&gt;一个具有 TResult 类型元素的 IEnumerable<t>，这些元素是通过对两个序列执行内部联接得来的。<br>使用说明<br>在 Visual Basic 和 C# 中，可以在 IEnumerable<touter> 类型的任何对象上将此方法作为实例方法来调用。当使用实例方法语法调用此方法时，请省略第一个参数。有关详细信息，请参阅 扩展方法 (Visual Basic) 或 扩展方法（C# 编程指南）。</touter></t></tresult></touter,></tinner,></touter,></tinner></touter></touter,></tinner,></touter,></tinner></touter></touter,></tresult></p>
+<p>先上一个MSDN的例子。</p>
+<pre><code>     public static void JoinEx1()         
+     {
+       Person magnus = new Person { Name = &quot;Hedlund, Magnus&quot; };
+       Pet barley = new Pet { Name = &quot;Barley&quot;, Owner = terry };
+       Person terry = new Person { Name = &quot;Adams, Terry&quot; };
+       Person charlotte = new Person { Name = &quot;Weiss, 
+       Charlotte&quot; };
+       Pet boots = new Pet { Name = &quot;Boots&quot;, Owner = terry };
+       Pet whiskers = new Pet { Name = &quot;Whiskers&quot;, 
+       Owner = charlotte};
+       Pet daisy = new Pet { Name = &quot;Daisy&quot;, Owner = magnus };
+
+    List&lt;Person&gt; people = new List&lt;Person&gt; 
+    { magnus, terry, charlotte };
+    List&lt;Pet&gt; pets = new List&lt;Pet&gt; 
+    { barley, boots, whiskers, daisy };
+
+    // Create a list of Person-Pet pairs where 
+    // each element is an anonymous type that contains a
+    // Pet&apos;s name and the name of the Person that owns the Pet.
+    var query =
+        people.Join(
+                    pets,//需要Join的另一个数据源
+          person =&gt; person,//自己用来比较的key， lambda 表达式
+     pet =&gt; pet.Owner,//另一个数据源用来比较的key， lambda 表达式
+(person, pet) =&gt;new { OwnerName = person.Name, Pet = pet.Name } 
+               //想要取出来的数据，支持匿名对象， lambda 表达式);
+    foreach (var obj in query)
+    {
+      Console.WriteLine( &quot;{0} - {1}&quot;,obj.OwnerName,obj.Pet);
+    }
+}
+</code></pre><p> LINQ的Join<br>同样是上面的数据，如果换成LINQ的Join，写法如下：<br>            var query = from person in people // 第一个数据源<br>                      join pet in pets            //第二个数据源<br>                      on person equals pet.Owner  //Join条件<br>                      select  new { OwnerName = person.Name, Pet = pet.Name };<br>                      //要到得到的数据。</p>
+<p>上面两种写法得到的结果都是内链接结果，至于左连接、右连接、外连接….<br>等我下次有心情再更新吧，再不走家里的键盘又要坏了。 </p>
+<p>一些资料链接：<br><a href="https://msdn.microsoft.com/zh-cn/library/bb311040.aspx" target="_blank" rel="external">https://msdn.microsoft.com/zh-cn/library/bb311040.aspx</a><br><a href="https://msdn.microsoft.com/zh-cn/library/bb534675%28v=vs.110%29.aspx?f=255&amp;MSPPError=-2147217396" target="_blank" rel="external">https://msdn.microsoft.com/zh-cn/library/bb534675%28v=vs.110%29.aspx?f=255&amp;MSPPError=-2147217396</a><br><a href="http://www.cnblogs.com/Ivony/archive/2008/08/18/1270555.html" target="_blank" rel="external">http://www.cnblogs.com/Ivony/archive/2008/08/18/1270555.html</a><br><a href="http://www.cnblogs.com/Ivony/archive/2008/08/28/1278643.html" target="_blank" rel="external">http://www.cnblogs.com/Ivony/archive/2008/08/28/1278643.html</a><br><a href="http://www.cnblogs.com/Ivony/archive/2008/10/14/1309807.html" target="_blank" rel="external">http://www.cnblogs.com/Ivony/archive/2008/10/14/1309807.html</a> ; </p>
+<p>LINQ GroupJoin 实现左连接<br>var queryGroup = from person in people // 第一个数据源<br>                                join pet in pets //第二个数据源<br>                                on person equals pet.Owner into ps //加了into,华丽变身GroupJoin<br>                                select new { OwnerName = person.Name, Pet = ps }; //要到得到的数据。 </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/02/15/can't-modify-linq-object/" itemprop="url">
                   .NET-lmabda避免修改绑定变量
                 </a>
@@ -1169,7 +1328,7 @@ public sealed class SomeType
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-count">26</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1186,7 +1345,7 @@ public sealed class SomeType
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://codelover.link/2016/12/04/how_to_make_crawler_base_netcore/</loc>
+    
+    <lastmod>2016-12-03T16:39:43.104Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://codelover.link/2016/11/01/webchat_JS_SDK/</loc>
     
-    <lastmod>2016-11-07T15:43:29.678Z</lastmod>
+    <lastmod>2016-11-07T15:46:59.941Z</lastmod>
     
   </url>
   

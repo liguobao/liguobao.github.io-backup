@@ -1,0 +1,749 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="asp.net core,crawler," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="codelover's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="写在前面自从上一个项目58HouseSearch从.NET迁移到.NET core之后，磕磕碰碰磨蹭了一个月才正式上线到新版本。然后最近又开了个新坑，搞了个Dy2018Crawler用来爬dy2018电影天堂上面的电影资源。这里也借机简单介绍一下如何基于.NET Core写一个爬虫。PS：如有偏错，敬请指明…PPS:该去电影院还是多去电影院，毕竟美人良时可无价。
+准备工作（.NET Core准备）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手把手教你用.NET Core写爬虫">
+<meta property="og:url" content="http://codelover.link/2016/12/04/how_to_make_crawler_base_netcore/index.html">
+<meta property="og:site_name" content="codelover's blog">
+<meta property="og:description" content="写在前面自从上一个项目58HouseSearch从.NET迁移到.NET core之后，磕磕碰碰磨蹭了一个月才正式上线到新版本。然后最近又开了个新坑，搞了个Dy2018Crawler用来爬dy2018电影天堂上面的电影资源。这里也借机简单介绍一下如何基于.NET Core写一个爬虫。PS：如有偏错，敬请指明…PPS:该去电影院还是多去电影院，毕竟美人良时可无价。
+准备工作（.NET Core准备）">
+<meta property="og:image" content="https://www.microsoft.com/net/images/screenshots/FileNewProject.png">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/123.png">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/chromeF12_Select_HTML.png">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/chrome_dy2018_lstmovie_divclass.png">
+<meta property="og:image" content="http://7xrayk.com1.z0.glb.clouddn.com/chrome_dy2018_a.png">
+<meta property="og:updated_time" content="2016-12-03T16:39:43.104Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手把手教你用.NET Core写爬虫">
+<meta name="twitter:description" content="写在前面自从上一个项目58HouseSearch从.NET迁移到.NET core之后，磕磕碰碰磨蹭了一个月才正式上线到新版本。然后最近又开了个新坑，搞了个Dy2018Crawler用来爬dy2018电影天堂上面的电影资源。这里也借机简单介绍一下如何基于.NET Core写一个爬虫。PS：如有偏错，敬请指明…PPS:该去电影院还是多去电影院，毕竟美人良时可无价。
+准备工作（.NET Core准备）">
+<meta name="twitter:image" content="https://www.microsoft.com/net/images/screenshots/FileNewProject.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6254113771573216000,
+      author: 'codelover'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://codelover.link/2016/12/04/how_to_make_crawler_base_netcore/"/>
+
+  <title> 手把手教你用.NET Core写爬虫 | codelover's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">codelover's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                手把手教你用.NET Core写爬虫
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-12-04T00:00:00+08:00" content="2016-12-04">
+              2016-12-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/asp-net-core/" itemprop="url" rel="index">
+                    <span itemprop="name">asp.net core</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/04/how_to_make_crawler_base_netcore/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/04/how_to_make_crawler_base_netcore/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>自从上一个项目<a href="https://github.com/liguobao/58HouseSearch" target="_blank" rel="external">58HouseSearch</a>从.NET迁移到.NET core之后，磕磕碰碰磨蹭了一个月才正式上线到新版本。<br>然后最近又开了个新坑，搞了个<a href="http://codelover.win/" target="_blank" rel="external">Dy2018Crawler</a>用来爬dy2018电影天堂上面的电影资源。这里也借机简单介绍一下如何基于.NET Core写一个爬虫。<br>PS：如有偏错，敬请指明…<br>PPS:该去电影院还是多去电影院，毕竟美人良时可无价。</p>
+<h3 id="准备工作（-NET-Core准备）"><a href="#准备工作（-NET-Core准备）" class="headerlink" title="准备工作（.NET Core准备）"></a>准备工作（.NET Core准备）</h3><p>首先，肯定是先安装.NET Core咯。下载及安装教程在这里：<a href="https://www.microsoft.com/net/core" target="_blank" rel="external">.NET - Powerful Open Source Development</a>。无论你是Windows、linux还是mac，统统可以玩。</p>
+<p>我这里的环境是：Windows10 + VS2015 community updata3 + .NET Core 1.1.0 SDK + .NET Core 1.0.1 tools Preview 2.</p>
+<p>理论上，只需要安装一下 .NET Core 1.1.0 SDK 即可开发.NET Core程序，至于用什么工具写代码都无关紧要了。</p>
+<p>安装好以上工具之后，在VS2015的新建项目就可以看到.NET Core的模板了。如下图：</p>
+<p><img src="https://www.microsoft.com/net/images/screenshots/FileNewProject.png" alt=""></p>
+<p>为了简单起见，我们创建的时候，直接选择VS .NET Core tools自带的模板。</p>
+<h3 id="一个爬虫的自我修养"><a href="#一个爬虫的自我修养" class="headerlink" title="一个爬虫的自我修养"></a>一个爬虫的自我修养</h3><h4 id="分析网页"><a href="#分析网页" class="headerlink" title="分析网页"></a>分析网页</h4><p>写爬虫之前，我们首先要先去了解一下即将要爬取的网页数据组成。</p>
+<p>具体到网页的话，便是分析我们要抓取的数据在HTML里面是用什么标签抑或有什么样的标记，然后使用这个标记把数据从HTML中提取出来。在我这里的话，用的更多的是HTML标签的ID和CSS属性。</p>
+<p>以本文章想要爬取的dy2018.com为例,简单描述一下这个过程。dy2018.com主页如下图：</p>
+<p><img src="http://7xrayk.com1.z0.glb.clouddn.com/123.png" alt=""></p>
+<p>在chrome里面，按F12进入开发者模式，接着如下图使用鼠标选择对应页面数据，然后去分析页面HTML组成。</p>
+<p><img src="http://7xrayk.com1.z0.glb.clouddn.com/chromeF12_Select_HTML.png" alt=""></p>
+<p>接着我们开始分析页面数据:</p>
+<p><img src="http://7xrayk.com1.z0.glb.clouddn.com/chrome_dy2018_lstmovie_divclass.png" alt=""></p>
+<p><img src="http://7xrayk.com1.z0.glb.clouddn.com/chrome_dy2018_a.png" alt=""></p>
+<p>经过简单分析HTML，我们得到以下结论：</p>
+<ol>
+<li><p>www.dy2018.com首页的电影数据存储在一个class为co_content222的div标签里面</p>
+</li>
+<li><p>电影详情链接为a标签，标签显示文本就是电影名称，URL即详情URL</p>
+</li>
+</ol>
+<p>那么总结下来，我们的工作就是：找到class=’co_content222’ 的div标签，从里面提取所有的a标签数据。</p>
+<h4 id="开始写代码…"><a href="#开始写代码…" class="headerlink" title="开始写代码…"></a>开始写代码…</h4><p>之前在写<a href="https://zhuanlan.zhihu.com/p/22764927" target="_blank" rel="external">58HouseSearch项目迁移到asp.net core</a>简单提过AngleSharp库，一个基于.NET（C#）开发的专门为解析xHTML源码的DLL组件。</p>
+<ol>
+<li><p>AngleSharp主页在这里：<a href="https://anglesharp.github.io/" target="_blank" rel="external">https://anglesharp.github.io/</a>，</p>
+</li>
+<li><p>博客园文章：<a href="http://www.cnblogs.com/pandait/p/AngleSharp.html" target="_blank" rel="external">解析HTML利器AngleSharp介绍</a>，</p>
+</li>
+<li><p>Nuget地址:<a href="https://www.nuget.org/packages/AngleSharp" target="_blank" rel="external">Nuget AngleSharp</a> 安装命令：Install-Package AngleSharp</p>
+</li>
+</ol>
+<h5 id="获取电影列表数据"><a href="#获取电影列表数据" class="headerlink" title="获取电影列表数据"></a>获取电影列表数据</h5><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> HtmlParser htmlParser = <span class="keyword">new</span> HtmlParser();</div><div class="line"></div><div class="line"><span class="keyword">private</span>  ConcurrentDictionary&lt;<span class="keyword">string</span>, MovieInfo&gt; _cdMovieInfo = <span class="keyword">new</span> ConcurrentDictionary&lt;<span class="keyword">string</span>, MovieInfo&gt;();</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">AddToHotMovieList</span>(<span class="params"></span>)</span></div><div class="line">&#123;</div><div class="line">	<span class="comment">//此操作不阻塞当前其他操作，所以使用Task</span></div><div class="line">	<span class="comment">// _cdMovieInfo 为线程安全字典，存储了当期所有的电影数据</span></div><div class="line">	Task.Factory.StartNew(()=&gt; </div><div class="line">	&#123;</div><div class="line">	    <span class="keyword">try</span></div><div class="line">	    &#123;</div><div class="line">	        <span class="comment">//通过URL获取HTML</span></div><div class="line">	        <span class="keyword">var</span> htmlDoc = HTTPHelper.GetHTMLByURL(<span class="string">"http://www.dy2018.com/"</span>);</div><div class="line">	        <span class="comment">//HTML 解析成 IDocument</span></div><div class="line">	        <span class="keyword">var</span> dom = htmlParser.Parse(htmlDoc);</div><div class="line">	        <span class="comment">//从dom中提取所有class='co_content222'的div标签</span></div><div class="line">	        <span class="comment">//QuerySelectorAll方法接受 选择器语法 </span></div><div class="line">	        <span class="keyword">var</span> lstDivInfo = dom.QuerySelectorAll(<span class="string">"div.co_content222"</span>);</div><div class="line">	        <span class="keyword">if</span> (lstDivInfo != <span class="literal">null</span>)</div><div class="line">	        &#123;</div><div class="line">	            <span class="comment">//前三个DIV为新电影</span></div><div class="line">	            <span class="keyword">foreach</span> (<span class="keyword">var</span> divInfo <span class="keyword">in</span> lstDivInfo.Take(<span class="number">3</span>))</div><div class="line">	            &#123;</div><div class="line">	                <span class="comment">//获取div中所有的a标签且a标签中含有"/i/"的</span></div><div class="line">	                <span class="comment">//Contains("/i/") 条件的过滤是因为在测试中发现这一块div中的a标签有可能是广告链接</span></div><div class="line">	                divInfo.QuerySelectorAll(<span class="string">"a"</span>).Where(a =&gt; </div><div class="line">	                a.GetAttribute(<span class="string">"href"</span>).Contains(<span class="string">"/i/"</span>))</div><div class="line">	                .ToList().ForEach(</div><div class="line">	                a =&gt;</div><div class="line">	                &#123;</div><div class="line">	                    <span class="comment">//拼接成完整链接</span></div><div class="line">	                    <span class="keyword">var</span> onlineURL = <span class="string">"http://www.dy2018.com"</span> + a.GetAttribute(<span class="string">"href"</span>);</div><div class="line">	                    <span class="comment">//看一下是否已经存在于现有数据中</span></div><div class="line">	                    <span class="keyword">if</span> (!_cdMovieInfo.ContainsKey(onlineURL))</div><div class="line">	                    &#123;</div><div class="line">	                        <span class="comment">//获取电影的详细信息</span></div><div class="line">	                        MovieInfo movieInfo = FillMovieInfoFormWeb(a, onlineURL);</div><div class="line">	                        <span class="comment">//下载链接不为空才添加到现有数据</span></div><div class="line">	                        <span class="keyword">if</span> (movieInfo.XunLeiDownLoadURLList != <span class="literal">null</span> </div><div class="line">	                        &amp;&amp; movieInfo.XunLeiDownLoadURLList.Count != <span class="number">0</span>)</div><div class="line">	                        &#123;</div><div class="line">	                             _cdMovieInfo.TryAdd</div><div class="line">	                             (movieInfo.Dy2018OnlineUrl,movieInfo);</div><div class="line">	                        &#125;</div><div class="line">	                    &#125;</div><div class="line">	                &#125;);</div><div class="line">	            &#125;</div><div class="line">	        &#125;</div><div class="line">	</div><div class="line">	    &#125;</div><div class="line">	    <span class="keyword">catch</span>(Exception ex)</div><div class="line">	    &#123;</div><div class="line">	</div><div class="line">	    &#125;</div><div class="line">	&#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="获取电影详细信息"><a href="#获取电影详细信息" class="headerlink" title="获取电影详细信息"></a>获取电影详细信息</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"> <span class="function"><span class="keyword">private</span> MovieInfo <span class="title">FillMovieInfoFormWeb</span>(<span class="params">AngleSharp.Dom.IElement a, </span></span></div><div class="line"> <span class="keyword">string</span> onlineURL)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">var</span> movieHTML = HTTPHelper.GetHTMLByURL(onlineURL);</div><div class="line">    <span class="keyword">var</span> movieDoc = htmlParser.Parse(movieHTML);</div><div class="line">    <span class="comment">//http://www.dy2018.com/i/97462.html 分析过程见上，不再赘述</span></div><div class="line">    <span class="comment">//电影的详细介绍 在id为Zoom的标签中</span></div><div class="line">    <span class="keyword">var</span> zoom = movieDoc.GetElementById(<span class="string">"Zoom"</span>);</div><div class="line">    <span class="comment">//下载链接在 bgcolor='#fdfddf'的td中，有可能有多个链接</span></div><div class="line">    <span class="keyword">var</span> lstDownLoadURL = movieDoc.QuerySelectorAll(<span class="string">"[bgcolor='#fdfddf']"</span>);</div><div class="line">    <span class="comment">//发布时间 在class='updatetime'的span标签中</span></div><div class="line">    <span class="keyword">var</span> updatetime = movieDoc.QuerySelector(<span class="string">"span.updatetime"</span>); </div><div class="line">    <span class="keyword">var</span> pubDate = DateTime.Now;</div><div class="line">    <span class="keyword">if</span>(updatetime!=<span class="literal">null</span> &amp;&amp; !<span class="keyword">string</span>.IsNullOrEmpty(updatetime.InnerHtml))</div><div class="line">    &#123;</div><div class="line">        <span class="comment">//内容带有“发布时间：”字样，</span></div><div class="line">        <span class="comment">//replace成""之后再去转换，转换失败不影响流程</span></div><div class="line">        DateTime.TryParse(updatetime.InnerHtml.Replace(<span class="string">"发布时间："</span>, </div><div class="line">        <span class="string">""</span>), <span class="keyword">out</span> pubDate);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line"></div><div class="line">    <span class="keyword">var</span> movieInfo = <span class="keyword">new</span> MovieInfo()</div><div class="line">    &#123;</div><div class="line">        <span class="comment">//InnerHtml中可能还包含font标签，做多一个Replace</span></div><div class="line">        MovieName = a.InnerHtml.Replace(<span class="string">"&lt;font color=\"#0c9000\"&gt;"</span>,<span class="string">""</span>)</div><div class="line">        .Replace(<span class="string">"&lt;font color=\"	#0c9000\"&gt;"</span>,<span class="string">""</span>)</div><div class="line">        .Replace(<span class="string">"&lt;/font&gt;"</span>, <span class="string">""</span>),</div><div class="line">        Dy2018OnlineUrl = onlineURL,</div><div class="line">        MovieIntro = zoom != <span class="literal">null</span> ? WebUtility.HtmlEncode(zoom.InnerHtml) : <span class="string">"暂无介绍..."</span>,</div><div class="line">        <span class="comment">//可能没有简介，虽然好像不怎么可能</span></div><div class="line">        XunLeiDownLoadURLList = lstDownLoadURL != <span class="literal">null</span> ?</div><div class="line">        lstDownLoadURL.Select(d =&gt; d.FirstElementChild.InnerHtml).ToList() : <span class="literal">null</span>,</div><div class="line">        <span class="comment">//可能没有下载链接</span></div><div class="line">        PubDate = pubDate,</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">return</span> movieInfo;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="HTTPHelper"><a href="#HTTPHelper" class="headerlink" title="HTTPHelper"></a>HTTPHelper</h4><p>这边有个小坑，dy2018网页编码格式是GB2312,.NET Core默认不支持GB2312，使用Encoding.GetEncoding(“GB2312”)的时候会抛出异常。</p>
+<p>解决方案是手动安装System.Text.Encoding.CodePages包(Install-Package System.Text.Encoding.CodePages),</p>
+<p>然后在Starup.cs的Configure方法中加入Encoding.RegisterProvider(CodePagesEncodingProvider.Instance),接着就可以正常使用Encoding.GetEncoding(“GB2312”)了。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> System;</div><div class="line"><span class="keyword">using</span> System.Net.Http;</div><div class="line"><span class="keyword">using</span> System.Net.Http.Headers;</div><div class="line"><span class="keyword">using</span> System.Text;</div><div class="line"></div><div class="line"><span class="keyword">namespace</span> <span class="title">Dy2018Crawler</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">HTTPHelper</span></div><div class="line">    &#123;</div><div class="line"></div><div class="line">        <span class="keyword">public</span> <span class="keyword">static</span> HttpClient Client &#123; <span class="keyword">get</span>; &#125; = <span class="keyword">new</span> HttpClient();</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">GetHTMLByURL</span>(<span class="params"><span class="keyword">string</span> url</span>)</span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">try</span></div><div class="line">            &#123;</div><div class="line">                System.Net.WebRequest wRequest = System.Net.WebRequest.Create(url);</div><div class="line">                wRequest.ContentType = <span class="string">"text/html; charset=gb2312"</span>;</div><div class="line"></div><div class="line">                wRequest.Method = <span class="string">"get"</span>;</div><div class="line">                wRequest.UseDefaultCredentials = <span class="literal">true</span>;</div><div class="line">                <span class="comment">// Get the response instance.</span></div><div class="line">                <span class="keyword">var</span> task = wRequest.GetResponseAsync();</div><div class="line">                System.Net.WebResponse wResp = task.Result;</div><div class="line">                System.IO.Stream respStream = wResp.GetResponseStream();</div><div class="line">                <span class="comment">//dy2018这个网站编码方式是GB2312,</span></div><div class="line">                <span class="keyword">using</span> (System.IO.StreamReader reader =</div><div class="line">                <span class="keyword">new</span> System.IO.StreamReader(respStream,</div><div class="line">                Encoding.GetEncoding(<span class="string">"GB2312"</span>)))</div><div class="line">                &#123;</div><div class="line">                    <span class="keyword">return</span> reader.ReadToEnd();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">catch</span> (Exception ex)</div><div class="line">            &#123;</div><div class="line">                Console.WriteLine(ex.ToString());</div><div class="line">                <span class="keyword">return</span> <span class="keyword">string</span>.Empty;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">       </div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="定时任务的实现"><a href="#定时任务的实现" class="headerlink" title="定时任务的实现"></a>定时任务的实现</h3><p>定时任务我这里使用的是<a href="https://www.nuget.org/packages/Pomelo.AspNetCore.TimedJob/1.1.0-rtm-10026" target="_blank" rel="external">Pomelo.AspNetCore.TimedJob</a>。</p>
+<p>Pomelo.AspNetCore.TimedJob是一个.NET Core实现的定时任务job库，支持毫秒级定时任务、从数据库读取定时配置、同步异步定时任务等功能。</p>
+<p>由.NET Core社区大神兼前微软MVP<a href="https://www.nuget.org/profiles/AmamiyaYuuko" target="_blank" rel="external">AmamiyaYuuko</a>(入职微软之后就卸任MVP…)开发维护，不过好像没有开源，回头问下看看能不能开源掉。</p>
+<p>nuget上有各种版本，按需自取。地址：<a href="https://www.nuget.org/packages/Pomelo.AspNetCore.TimedJob/1.1.0-rtm-10026" target="_blank" rel="external">https://www.nuget.org/packages/Pomelo.AspNetCore.TimedJob/1.1.0-rtm-10026</a></p>
+<p>作者自己的介绍文章：<a href="http://www.1234.sh/post/pomelo-extensions-timed-jobs" target="_blank" rel="external">Timed Job - Pomelo扩展包系列</a></p>
+<h4 id="Startup-cs相关代码"><a href="#Startup-cs相关代码" class="headerlink" title="Startup.cs相关代码"></a>Startup.cs相关代码</h4><p>我这边使用的话，首先肯定是先安装对应的包：Install-Package Pomelo.AspNetCore.TimedJob -Pre</p>
+<p>然后在Startup.cs的ConfigureServices函数里面添加Service,在Configure函数里面Use一下。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// This method gets called by the runtime. Use this method to add services to the container.</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ConfigureServices</span>(<span class="params">IServiceCollection services</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// Add framework services.</span></div><div class="line">    services.AddMvc();</div><div class="line">    <span class="comment">//Add TimedJob services</span></div><div class="line">    services.AddTimedJob();</div><div class="line">&#125;</div><div class="line"></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Configure</span>(<span class="params">IApplicationBuilder app, </span></span></div><div class="line"> IHostingEnvironment env, ILoggerFactory loggerFactory)</div><div class="line">&#123;</div><div class="line">    <span class="comment">//使用TimedJob</span></div><div class="line">    app.UseTimedJob();</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (env.IsDevelopment())</div><div class="line">    &#123;</div><div class="line">        app.UseDeveloperExceptionPage();</div><div class="line">        app.UseBrowserLink();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span></div><div class="line">    &#123;</div><div class="line">        app.UseExceptionHandler(<span class="string">"/Home/Error"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    app.UseStaticFiles();</div><div class="line"></div><div class="line">    app.UseMvc(routes =&gt;</div><div class="line">    &#123;</div><div class="line">        routes.MapRoute(</div><div class="line">            name: <span class="string">"default"</span>,</div><div class="line">            template: <span class="string">"&#123;controller=Home&#125;/&#123;action=Index&#125;/&#123;id?&#125;"</span>);</div><div class="line">    &#125;);</div><div class="line">    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Job相关代码"><a href="#Job相关代码" class="headerlink" title="Job相关代码"></a>Job相关代码</h4><p>接着新建一个类，明明为XXXJob.cs,引用命名空间using Pomelo.AspNetCore.TimedJob，XXXJob继承于Job，添加以下代码。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AutoGetMovieListJob</span>:<span class="title">Job</span></div><div class="line"> &#123;</div><div class="line">     </div><div class="line">     <span class="comment">// Begin 起始时间；Interval执行时间间隔，单位是毫秒，建议使用以下格式，此处为3小时；</span></div><div class="line">     <span class="comment">//SkipWhileExecuting是否等待上一个执行完成，true为等待；</span></div><div class="line">     [Invoke(Begin = <span class="string">"2016-11-29 22:10"</span>, Interval = <span class="number">1000</span> * <span class="number">3600</span>*<span class="number">3</span>, SkipWhileExecuting =<span class="literal">true</span>)]</div><div class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Run</span>(<span class="params"></span>)</span></div><div class="line">     &#123;</div><div class="line">          <span class="comment">//Job要执行的逻辑代码</span></div><div class="line">          </div><div class="line">         <span class="comment">//LogHelper.Info("Start crawling");</span></div><div class="line">         <span class="comment">//AddToLatestMovieList(100);</span></div><div class="line">         <span class="comment">//AddToHotMovieList();</span></div><div class="line">         <span class="comment">//LogHelper.Info("Finish crawling");</span></div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="项目发布相关"><a href="#项目发布相关" class="headerlink" title="项目发布相关"></a>项目发布相关</h3><h4 id="新增runtimes节点"><a href="#新增runtimes节点" class="headerlink" title="新增runtimes节点"></a>新增runtimes节点</h4><p>使用VS2015新建的模板工程，project.json配置默认是没有runtimes节点的.</p>
+<p>我们想要发布到非Windows平台的时候，需要手动配置一下此节点以便生成。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">  <span class="string">"runtimes"</span>: &#123;</div><div class="line">  <span class="string">"win7-x64"</span>: &#123;&#125;,</div><div class="line">  <span class="string">"win7-x86"</span>: &#123;&#125;,</div><div class="line">  <span class="string">"osx.10.10-x64"</span>: &#123;&#125;,</div><div class="line">  <span class="string">"osx.10.11-x64"</span>: &#123;&#125;,</div><div class="line">  <span class="string">"ubuntu.14.04-x64"</span>: &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="删除-注释scripts节点"><a href="#删除-注释scripts节点" class="headerlink" title="删除/注释scripts节点"></a>删除/注释scripts节点</h4><p>生成时会调用node.js脚本构建前端代码，这个不能确保每个环境都有bower存在…注释完事。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//"scripts": &#123;</span></div><div class="line"><span class="comment">//  "prepublish": [ "bower install", "dotnet bundle" ],</span></div><div class="line"><span class="comment">//  "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]</span></div><div class="line"><span class="comment">//&#125;,</span></div></pre></td></tr></table></figure></p>
+<h4 id="删除-注释dependencies节点里面的type"><a href="#删除-注释dependencies节点里面的type" class="headerlink" title="删除/注释dependencies节点里面的type"></a>删除/注释dependencies节点里面的type</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="string">"dependencies"</span>: &#123;</div><div class="line">    <span class="string">"Microsoft.NETCore.App"</span>: &#123;</div><div class="line">      <span class="string">"version"</span>: <span class="string">"1.1.0"</span></div><div class="line">      <span class="comment">//"type": "platform"</span></div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+<p>project.json的相关配置说明可以看下这个官方文档：<a href="https://github.com/aspnet/Home/wiki/Project.json-file" target="_blank" rel="external">Project.json-file</a>,<br>或者张善友老师的文章<a href="http://www.cnblogs.com/shanyou/p/5693453.html" target="_blank" rel="external">.NET Core系列 ： 2 、project.json 这葫芦里卖的什么药</a></p>
+<h4 id="开发编译发布"><a href="#开发编译发布" class="headerlink" title="开发编译发布"></a>开发编译发布</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//还原各种包文件</div><div class="line">dotnet restore;</div><div class="line"></div><div class="line">//发布到C:\code\website\Dy2018Crawler文件夹</div><div class="line">dotnet publish -r ubuntu.14.04-x64 -c Release -o &quot;C:\code\website\Dy2018Crawler&quot;;</div></pre></td></tr></table></figure>
+<p>最后，照旧开源……以上代码都在下面找到：</p>
+<p>Gayhub地址：<a href="https://github.com/liguobao/Dy2018Crawler" target="_blank" rel="external">https://github.com/liguobao/Dy2018Crawler</a></p>
+<p>在线地址：<a href="http://codelover.win/" target="_blank" rel="external">http://codelover.win/</a></p>
+<p>PS:回头写个爬片大家滋持不啊…</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/asp-net-core/" rel="tag">#asp.net core</a>
+          
+            <a href="/tags/crawler/" rel="tag">#crawler</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/01/webchat_JS_SDK/" rel="next" title="ASP.NET MVC 微信JS-SDK认证">
+                <i class="fa fa-chevron-left"></i> ASP.NET MVC 微信JS-SDK认证
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/04/how_to_make_crawler_base_netcore/"
+           data-title="手把手教你用.NET Core写爬虫" data-url="http://codelover.link/2016/12/04/how_to_make_crawler_base_netcore/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xrayk.com1.z0.glb.clouddn.com/%E5%A4%A7%E7%86%8A%E5%B0%8F%E7%86%8A.jpg"
+               alt="李国宝" />
+          <p class="site-author-name" itemprop="name">李国宝</p>
+          <p class="site-description motion-element" itemprop="description">一直走在吃软饭路上的软狗</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liguobao" target="_blank" title="GitHub">
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/codelover" target="_blank" title="知乎">
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.1234.sh" title="あまみや ゆうこ" target="_blank">あまみや ゆうこ</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://piratf.ml" title="潘雄飞的博客 - 我是魔法师啦啦啦。" target="_blank">潘雄飞的博客 - 我是魔法师啦啦啦。</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://codesky.me" title="CodeSky 代码之空" target="_blank">CodeSky 代码之空</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作（-NET-Core准备）"><span class="nav-number">2.</span> <span class="nav-text">准备工作（.NET Core准备）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个爬虫的自我修养"><span class="nav-number">3.</span> <span class="nav-text">一个爬虫的自我修养</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分析网页"><span class="nav-number">3.1.</span> <span class="nav-text">分析网页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开始写代码…"><span class="nav-number">3.2.</span> <span class="nav-text">开始写代码…</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取电影列表数据"><span class="nav-number">3.2.1.</span> <span class="nav-text">获取电影列表数据</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取电影详细信息"><span class="nav-number">3.3.</span> <span class="nav-text">获取电影详细信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPHelper"><span class="nav-number">3.4.</span> <span class="nav-text">HTTPHelper</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定时任务的实现"><span class="nav-number">4.</span> <span class="nav-text">定时任务的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Startup-cs相关代码"><span class="nav-number">4.1.</span> <span class="nav-text">Startup.cs相关代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Job相关代码"><span class="nav-number">4.2.</span> <span class="nav-text">Job相关代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目发布相关"><span class="nav-number">5.</span> <span class="nav-text">项目发布相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#新增runtimes节点"><span class="nav-number">5.1.</span> <span class="nav-text">新增runtimes节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除-注释scripts节点"><span class="nav-number">5.2.</span> <span class="nav-text">删除/注释scripts节点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除-注释dependencies节点里面的type"><span class="nav-number">5.3.</span> <span class="nav-text">删除/注释dependencies节点里面的type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开发编译发布"><span class="nav-number">5.4.</span> <span class="nav-text">开发编译发布</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李国宝</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"codelover"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
