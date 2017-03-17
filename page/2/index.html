@@ -260,6 +260,178 @@
             
               
                 
+                <a class="post-title-link" href="/2016/07/28/asp.net-core-startup/" itemprop="url">
+                  ASP.NET Core 启动方式（Hosting）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-28T00:00:00+08:00" content="2016-07-28">
+              2016-07-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/net-core/" itemprop="url" rel="index">
+                    <span itemprop="name">.net core</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/28/asp.net-core-startup/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/28/asp.net-core-startup/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>之前版本的ASP.NET程序必须依赖IIS来启动，而IIS上会为挂载在其中的ASP.NET 注册一个ISAPI filter。每当http请求过来时，IIS则会启动w3wp的worker process来开始整个ASP.NET runtime程序。相信大家都这样的流程都有相应的了解。在.net core之前，ASP.NET的主要场景都是运行在Windows平台的，IIS也就是web server的首选了。虽然也有类似于jexus的linux webserver可用，但是基于mono的.NET 总体还是不够Microsoft 原生的强。</p>
+<p>不过到了现在，一切都不同了。</p>
+<p>新版ASP.NET Core有了.NET Core的支援后已经开始了它的跨平台之旅了，因此ASP.NET Core的启动方式也得开始重新设计以适应新需求了。</p>
+<h3 id="1、Kestrel-和-IIS-platform-handler"><a href="#1、Kestrel-和-IIS-platform-handler" class="headerlink" title="1、Kestrel 和 IIS platform handler"></a>1、Kestrel 和 IIS platform handler</h3><p>在 ASP.NET Core 中，整个runtime都是重写过的，所以它和IIS之间的关系也有所改变。而ASP.NET Core为了跨平台，它现在的执行方式就如一般的Console app一样。ASP.NET Core自带一个高性能的I/O组件 - Kestrel，使得它可以不依赖IIS的存在便启动了runtime。不过Kestrel 也只是一个I/O组件，并没有想IIS提供其它的功能来保护和管理ASP.NET 应用程序。ASP.NET Core同样可以通过IIS进行处理。但是如果通过IIS来进行处理的话，这个时候我们便需要一个“中间人”的角色来负责这个功能了。这个“中间人”的名字叫 Http Platform Handler，主要表现在web.config文档中的设置，其中包括启动ASP.NET Core 程序的的路径和名称，需要传入的参数以及一些其他的设置选项。Http Platform Handler的具体设置例子如下：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;system.webServer&gt;</div><div class="line">    &lt;handlers&gt;</div><div class="line">      &lt;add name=<span class="string">"httpPlatformHandler"</span> path=<span class="string">"*"</span> verb=<span class="string">"*"</span></div><div class="line">      modules=<span class="string">"httpPlatformHandler"</span> resourceType=<span class="string">"Unspecified"</span>/&gt;</div><div class="line">    &lt;/handlers&gt;</div><div class="line">    &lt;httpPlatform processPath=<span class="string">"WebApp.exe"</span> arguments=<span class="string">""</span> </div><div class="line">    stdoutLogEnabled=<span class="string">"false"</span> startupTimeLimit=<span class="string">"3600"</span>/&gt;</div><div class="line">  &lt;/system.webServer&gt;</div></pre></td></tr></table></figure></p>
+<p>关于Http Platform Handler的相关资料可以看这个链接：<br><a href="http://www.iis.net/downloads/microsoft/httpplatformhandler" target="_blank" rel="external">http://www.iis.net/downloads/microsoft/httpplatformhandler</a></p>
+<p>从上面的例子可以看出来，ASP.NET Core编译之后便是一个EXE程序，使得你可以直接运行。因此，当HTTP请求进来时，IIS先接受请求，然后根据你设置的web.config的内容将请求转发给WebApp.exe（你的ASP.NET Core程序），然后WebApp.exe开始执行时便会启动Kestrel，接着这个HTTP请求便进入了ASP.NET Core runtime的世界。这样看来，IIS这时候只是一个简单的proxy/forwarder角色。</p>
+<p>PS：在我翻译整理这个文章的时候，世界已经发生了变化：下个版本的asp.net core 将会有全新的IIS module来取代Http Platform Handler。</p>
+<p>具体详细资料见：<a href="https://github.com/aspnet/IISIntegration/issues/105" target="_blank" rel="external">https://github.com/aspnet/IISIntegration/issues/105</a></p>
+<h3 id="2、Main"><a href="#2、Main" class="headerlink" title="2、Main()"></a>2、Main()</h3><p>ASP.NET Core和其他的.NET 程序一样拥有一个static void Main(),这是整个runtime的进入点。下面看一个样例：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></div><div class="line">       &#123;</div><div class="line">           <span class="keyword">var</span> host = <span class="keyword">new</span> WebHostBuilder()</div><div class="line">               .UseServer(<span class="string">"Microsoft.AspNetCore.Server.Kestrel"</span>)</div><div class="line">               .UseContentRoot(Directory.GetCurrentDirectory())</div><div class="line">               .UseDefaultConfiguration(args)</div><div class="line">               .UseIISPlatformHandlerUrl()</div><div class="line">               .UseStartup&lt;Startup&gt;()</div><div class="line">               .Build();</div><div class="line"></div><div class="line">           host.Run();</div><div class="line">       &#125;</div></pre></td></tr></table></figure></p>
+<p>ASP.NET Core host engine 的建立者是 WebHostBuilder．</p>
+<p>它实质上是一个了 IWebHostBuilder interface，其中 UseServer() 是用于指定使用什么样的 server。</p>
+<p>其中 UseServer() 有一个扩展方法UseServer(string assemblyName)。这样的话我们可以直接传入Kestrel的程序集名称:”Microsoft.AspNetCore.Server.Kestrel”。当然，这只是其中一种选项。你也可以自己实现一个自己的 server，只要你的 server 实现了 IServerFactory interface 即可。这样的设计提供了一个很大的弹性空间让我们自行选择hosting server（托管服务）。</p>
+<h3 id="UseContentRoot"><a href="#UseContentRoot" class="headerlink" title="UseContentRoot()"></a>UseContentRoot()</h3><ul>
+<li>这个扩展方法是让我们指定应用程序的工作目录（working directory），如果我们没有指定的话，则会默认为我们的应用（webapp.exe）所在目录为工作目录。</li>
+</ul>
+<h3 id="UseDefaultConfiguration"><a href="#UseDefaultConfiguration" class="headerlink" title="UseDefaultConfiguration()"></a>UseDefaultConfiguration()</h3><ul>
+<li>这个扩展方法使得我们在IWebHostBuilder 建立可以传入一些参数，比如 application key, environment name, server factory location, content root path 等等．因此，当我们在运行 WebApp.exe 的时候，同时可以带入我们需要用到的hosting参数（PS：这样的做法就像运行命令行程序时带入参数，多好玩）。这些参数也可以写在appsettings.json里面通过Configuration来读取。<br>所以，UseDefaultConfiguration() 也不一定非要存在于 Main() 之中。（？？？个人不是很理解）</li>
+</ul>
+<p>PS：原作者原话，”如果我沒记错的话，在写这个文章的时候，UseDefaultConfiguration() 已经被改为成了UseDefaultHostingConfiguration()．显然这个名称更能清楚明白．”(？？？个人还没实践)</p>
+<h3 id="UseIISPlatofmrHandleUrl"><a href="#UseIISPlatofmrHandleUrl" class="headerlink" title="UseIISPlatofmrHandleUrl()"></a>UseIISPlatofmrHandleUrl()</h3><ul>
+<li>这个 IWebHostBuilder 的 扩展方法比较特殊。如果你要把 ASP.NET Core 放在 IIS 下，这个扩展方法会读取 IIS http platform handler 的 server port 和 application path，用于作为 ASP.NET Core 的启动位置，如 <a href="http://localhost:5000/start．如果你沒用" target="_blank" rel="external">http://localhost:5000/start．如果你沒用</a> IIS，这个扩展方法对你来说基本是用不上的．</li>
+</ul>
+<h3 id="UseStartup-lt-gt"><a href="#UseStartup-lt-gt" class="headerlink" title="UseStartup&lt;&gt;()"></a>UseStartup&lt;&gt;()</h3><ul>
+<li>这是 WebHostBuilder 里相当重要的一个扩展方法。它的方法签名如下：</li>
+</ul>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> IWebHostBuilder UseStartup&lt;TStartup&gt;</div><div class="line">(<span class="keyword">this</span> IWebHostBuilder hostBuilder) <span class="keyword">where</span> TStartup : <span class="keyword">class</span></div></pre></td></tr></table></figure>
+<p>这里你可以很清楚地看到 &lt;&gt; 里面要放的就是一个 class。</p>
+<p>在我们这里的范例中，它的名字是 Startup，里面最重要的就是需要定义要使用那些服务(service)以及要使用那些中间件(middleware)。</p>
+<h3 id="3、Startup"><a href="#3、Startup" class="headerlink" title="3、Startup"></a>3、Startup</h3><p>这是一个非常非常重要的class,在ASP.NET Core范例中一般都把它命名成Startup。其实我们把它命名成其他名字也是可以的，或者设定多个Startup。上面的内容可以看到，UseStartup()指定了谁是starup class。然后在Build()便会实例化starup class，之后便执行里面两个重要的方法：ConfigureServices() 和 Configure()。</p>
+<p>我们先來看 Startup 的构造函数.</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">Startup</span>(<span class="params">IHostingEnvironment env</span>)</span></div><div class="line">       &#123;</div><div class="line">           <span class="comment">// Set up configuration sources.</span></div><div class="line">           <span class="keyword">var</span> builder = <span class="keyword">new</span> ConfigurationBuilder()</div><div class="line">               .AddJsonFile(<span class="string">"appsettings.json"</span>)</div><div class="line">               .AddJsonFile(<span class="string">$"appsettings.<span class="subst">&#123;env.EnvironmentName&#125;</span>.json"</span>, optional: <span class="literal">true</span>)</div><div class="line">               .AddEnvironmentVariables();</div><div class="line">           Configuration = builder.Build().ReloadOnChanged(<span class="string">"appsettings.json"</span>);</div><div class="line">       &#125;</div></pre></td></tr></table></figure>
+<p>Host engine 在被执行 Build()时已经知道 startup type 是 Startup class，所以在 Build() 的时候会先创建期示例。在我们这里的是调用Startup类带参数的构造函数。</p>
+<p>在我们这个例子中选择的是传入IHostingEnvironment示例，它为我们带来了环境变量（EnvironmentName）。</p>
+<p>我们这里主要目的是把Configuration实例化。这是一个蛮重要的基础组件，以后会有文章来说明它。</p>
+<p>在这里我们特别说明一下，上面的示例代码中，我们执行了两次 AddJsonFile()，而且第二个json file的参数和第一个的还不太一样。这样的目的是为了让开发者可以把开发环境使用的环境参数和其他环境使用的参数有所区别。比如，你使用的开发环境用的是appsettings.json，这个文件只存在于你的电脑中。另一个文档是appsettings.production.json，这是正式环境使用的参数设定文档。第二個 AddJsonFile() 第二個参数是 true，也就是可能不存在的意思。所以若遇到重复名称参数时，appsettings.production.json 会覆盖 appsettings.json 的內容。这样使得开发环境和生产环境得以区分。</p>
+<p>接下来，在 IWebHostBuilder 的 Build()里面会执行 host engine 初始化的程序，其中就会去找Startup class里面的两个方法： ConfigureServices() 和 Configure()。</p>
+<p> ConfigureSerivces() 是定义了这个 web application 要使用那些服务，然后将这些服务放在 service container (IServiceCollection) 裡面。如下面的样例：</p>
+ <figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ConfigureServices</span>(<span class="params">IServiceCollection services</span>)</span></div><div class="line">     &#123;</div><div class="line">         <span class="comment">// add entity framework</span></div><div class="line">         services.AddEntityFramework()</div><div class="line">                 .AddDbContext&lt;BlogsContext&gt;(o =&gt; o.UseSqlServer(Configuration[<span class="string">"Data1:DefaultConnection:ConnectionString"</span>]))</div><div class="line">          </div><div class="line">         <span class="comment">// Add framework services.</span></div><div class="line">         services.AddMvc();</div><div class="line">     &#125;</div></pre></td></tr></table></figure>
+<p>它定义了entity framework和mvc两个服务。这里所谓的服务（services）的意思也就是通过它们带入更庞大的程序代码。这听起来好像有点搞笑，但也真的如此。像Entity framework 里面有这么多的代码，一定都需要带入许多定义好的物件或者参数，而不只是一个程序的进去点而已，所以services 的目的就是在这里。</p>
+<p>Configure() 主要是定义了中间件（middleware）以及它们的顺序．</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Configure</span>(<span class="params">IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory</span>)</span></div><div class="line">&#123;</div><div class="line">    loggerFactory.AddConsole(Configuration.GetSection(<span class="string">"Logging"</span>));</div><div class="line">    loggerFactory.AddDebug();</div><div class="line"></div><div class="line">    app.UseStaticFiles();</div><div class="line"></div><div class="line">    app.UseMvcWithDefaultRoute();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="4、Build-和-Run"><a href="#4、Build-和-Run" class="headerlink" title="4、Build 和 Run"></a>4、Build 和 Run</h3><p>最后，在IHostWebBuilder里最后的两个动作便是：Build and Run. </p>
+<h3 id="Build"><a href="#Build" class="headerlink" title="Build()"></a>Build()</h3><ul>
+<li>这个方法做的工作便是建立 hosting service，把 Startup 中定义的的 services 和 middleware 接收过来，然后确定content root path 和 application name，接着一句前面这些资料再加上Configuration过来的数据来初始化host engine (WebHost.cs)．</li>
+</ul>
+<h3 id="Run"><a href="#Run" class="headerlink" title="Run()"></a>Run()</h3><ul>
+<li>这个是启动 host engine 的 扩展方法，它在启动之前加入了一个 CancelKeyPress 的事件．因为在 Run() 方法 中传入入了 CancellationTokenSource() ，让我们有一个方法可以随时中断host engine的执行。</li>
+</ul>
+<p>目前的做法就用是 CancelKeyPress 事件，所以你可以按下 Ctrl+C  來中止 host engine 的执行．</p>
+<p>比较特別的是，这一段中止的文字说明居然是用 hard code，參考如下:</p>
+<p>host.Run(cts.Token, “Application started. Press Ctrl+C to shut down.”);</p>
+<p>不过这样的话，这里你也不能写中文…</p>
+<p>本文整理于<a href="https://dotblogs.com.tw/aspnetshare/2016/03/28/20160327" target="_blank" rel="external">https://dotblogs.com.tw/aspnetshare/2016/03/28/20160327</a>并已征得作者同意。<br>感谢Bruce的分享。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/20/don’t-throw-exception-in-foreach/" itemprop="url">
                   避免在函数或者操作中抛出异常
                 </a>
@@ -522,6 +694,134 @@
             
               
                 
+                <a class="post-title-link" href="/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/" itemprop="url">
+                  CodeSmith 连接MySQL数据库报“can't find .net framework data provider”
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-20T00:00:00+08:00" content="2016-04-20">
+              2016-04-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/CodeSmith/" itemprop="url" rel="index">
+                    <span itemprop="name">CodeSmith</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>1、下载 mysql-connector-net 安装</p>
+<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
+<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
+<p>一般DLL所在目录是：</p>
+<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
+<p>3、重启CodeSmith生效</p>
+<p><br><br><br></p>
+<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
+<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/04/20/Jexus-support-HTTPS/" itemprop="url">
                   Jexus支持HTTPS协议
                 </a>
@@ -631,134 +931,6 @@
 <p>完了之后，通过HTTPS即可访问。</p>
 <p>最后上一个HTTPS证书的图证明一下这个是可行的。<br><img src="http://7xread.com1.z0.glb.clouddn.com/24842774-311e-4e55-a6b5-b88a89edc754" alt="图片描述"></p>
 <p>撒花，下次再见。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/" itemprop="url">
-                  CodeSmith 连接MySQL数据库报“can't find .net framework data provider”
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-20T00:00:00+08:00" content="2016-04-20">
-              2016-04-20
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/CodeSmith/" itemprop="url" rel="index">
-                    <span itemprop="name">CodeSmith</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1、下载 mysql-connector-net 安装</p>
-<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
-<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
-<p>一般DLL所在目录是：</p>
-<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
-<p>3、重启CodeSmith生效</p>
-<p><br><br><br></p>
-<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
-<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
 
           
         
@@ -1580,168 +1752,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/15/LINQ-advantage/" itemprop="url">
-                  C#LINQ 优点 总结(转载)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-15T00:00:00+08:00" content="2016-03-15">
-              2016-03-15
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/net/" itemprop="url" rel="index">
-                    <span itemprop="name">.net</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/15/LINQ-advantage/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/15/LINQ-advantage/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>原文链接：<a href="http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html" target="_blank" rel="external">http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html</a></p>
-<p>这几天在读一本LINQ方面的书《Essential LINQ》,在这里和大家分享下。</p>
-<p>由于对LINQ的深入总结需要大量的篇幅，因此在这里分成几个部分来讲。</p>
-<p>（*我看《Essential LINQ》是英文版的，有些名词不能翻译成正统的中文解释请给予谅解）</p>
-<p>LINQ的优点：</p>
-<p>LINQ基本有以下七个优点，让我来一一举例说明：</p>
-<p>#####1.Integrated：所谓的Integrated（集成化），LINQ是从以下方面体现集成的：</p>
-<p>(1):把查询语法融入了C#(VB)这些语言中，让他变成了一种语法。这样就能和C#中的其他语法一样支持：</p>
-<p>语句高亮显示，类型检查，允许使用debugger调试</p>
-<p>(2):把以前复杂的查询前的工作都集成封装起来，让开发人员侧重于查询。</p>
-<p>(3):集成后的语法更加的清晰易懂，可读性较高。</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">比较： </div><div class="line"><span class="comment">//原来的格式</span></div><div class="line">SqlConnection sqlConn = <span class="keyword">new</span> SqlConnection(connectionString);&gt;</div><div class="line">sqlConn.Open();</div><div class="line">SqlCommand command = <span class="keyword">new</span> SqlCommand();</div><div class="line">command.Connection = sqlConn;</div><div class="line">command.CommandText = <span class="string">"Select * From Customer"</span>;</div><div class="line">SqlDataReader dataReader = command.ExecuteReader(CommandBehavior.CloseConnection);</div><div class="line"> </div><div class="line"><span class="comment">//LINQ的格式</span></div><div class="line">NORTHWNDDataContext dc = <span class="keyword">new</span> NORTHWNDDataContext();</div><div class="line"><span class="keyword">var</span> query = <span class="keyword">from</span> c <span class="keyword">in</span> dc.Customers</div><div class="line">            <span class="keyword">select</span> c;</div></pre></td></tr></table></figure>
-<p>#####2.Unitive：所谓Unitive(统一化)就指不管对任何类型外部和内部数据源(对象集合,xlm,数据库数据)都使用统一的查询语法。</p>
-<p>使用统一化查询语言的好处在于以下几点：</p>
-<p>你不用因为要使用不太熟悉的数据源而花很多精力去了解它，你可以快速简单的使用LINQ语法对起查询。<br>由于使用了统一的语法，可以使代码维护变的更加简单。<br>以下代码体现了LINQ的统一化：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//数据源:对象集合</span></div><div class="line"><span class="keyword">var</span> query = <span class="function"><span class="keyword">from</span> c <span class="keyword">in</span> <span class="title">GetCustomers</span>(<span class="params"></span>)</span></div><div class="line">            <span class="keyword">select</span> c;</div><div class="line"> </div><div class="line"><span class="comment">//数据源:SQL</span></div><div class="line"><span class="keyword">var</span> query1 = <span class="keyword">from</span> c <span class="keyword">in</span> dc.Customers</div><div class="line">             <span class="keyword">select</span> c;</div><div class="line"><span class="comment">//数据源:XML</span></div><div class="line"><span class="keyword">var</span> query2 = <span class="keyword">from</span> c <span class="keyword">in</span> customers.Descendants(<span class="string">"Customer"</span>)</div><div class="line">             <span class="keyword">select</span> c;</div></pre></td></tr></table></figure></p>
-<p>#####3.Extensible：所谓Extensible(可扩展)指以下2个方面:</p>
-<p>(1).可查询数据源的扩展。 LINQ提供了个LINQ provider model，你可以为LINQ创建或提供provider让LINQ支持更多的数据源。</p>
-<p>(2).可扩展查询方法。开发者可以根据自己的需求为LINQ重写和扩展查询方法。</p>
-<p>以下是些第三方的LINQ provider：</p>
-<p>LINQ Extender, LINQ to JavaScript, LINQ to JSON, LINQ to MySQL, LINQ to Flickr, LINQ to Google</p>
-<p>#####4.Declarative：所谓Declarative(声明式)，简单的来说指的是开发人员只要告诉程序做什么，程序自己判断怎么做。</p>
-<p>Declarative programming(声明式编程)的优点体现在以下2点：</p>
-<p>(1).提高了开发速度。因为开发者不用书写大量的代码来具体化执行步骤，只许告诉程序做什么。</p>
-<p>(2).提高代码优化空间。因为开发者不用参与干涉对程序执行的具体步骤，这样就提供给编译器更多的空间去优化代码。</p>
-<p>举例SQL来说，LINQ生成的SQL语句往往比一对SQL水平一般的开发者能写出更好的SQL语句。</p>
-<p>比较Declarative programming 与 Imperative programming：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//声明式编程</span></div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; lists = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; &#123; <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;, <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">4</span>, <span class="number">5</span> &#125; &#125;;</div><div class="line"><span class="keyword">var</span> query = from list <span class="keyword">in</span> lists</div><div class="line">            from <span class="built_in">num</span> <span class="keyword">in</span> list</div><div class="line">            where <span class="built_in">num</span> % <span class="number">3</span> == <span class="number">0</span></div><div class="line">            orderby <span class="built_in">num</span> descending</div><div class="line">            select <span class="built_in">num</span>;</div><div class="line"> </div><div class="line"><span class="comment">//命令式编程</span></div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; list1 = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;();</div><div class="line">list1.Add(<span class="number">1</span>);</div><div class="line">list1.Add(<span class="number">2</span>);</div><div class="line">list1.Add(<span class="number">3</span>);</div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; list2 = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;();</div><div class="line">list2.Add(<span class="number">4</span>);</div><div class="line">list2.Add(<span class="number">5</span>);</div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; lists1 = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt;();</div><div class="line">lists1.Add(list1);</div><div class="line">lists1.Add(list2);</div><div class="line"> </div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; newList = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;();</div><div class="line">foreach (<span class="keyword">var</span> item <span class="keyword">in</span> lists1)</div><div class="line">      foreach (<span class="keyword">var</span> <span class="built_in">num</span> <span class="keyword">in</span> item)</div><div class="line">        <span class="keyword">if</span> (<span class="built_in">num</span> % <span class="number">3</span> == <span class="number">0</span>)</div><div class="line">            newList.Add(<span class="built_in">num</span>);</div><div class="line">newList.Reverse();</div></pre></td></tr></table></figure></p>
-<p>#####5.Hierarchical：所谓Hierarchical(层次化)指使用面向对象的方式抽象数据。</p>
-<p>SQL是关系型数据库，它以关系的方式描述数据以数据的联系，但我们的程序设计成面向对象的因此我们在程序里得到的数据库数据往往都是</p>
-<p>rectangular grid（平面的显示数据）。但是LINQ通过所谓的O-R Mapping方式，把关系型转换成对象与对象方式描述数据。</p>
-<p>这样带来的好处是：开发者能直接以对象的方式去操作数据，对习惯面向对象的开发者来说面向对象模型更易理解。</p>
-<p>#####6.Composable：所谓Composable(可组成)指LINQ可以把一个复杂的查询拆分成多个简单查询。</p>
-<p>LINQ返回的结果都是基于接口：IEnumerable<t>，因此能对查询结果继续查询，而且LINQ具有延迟执行的特性因此拆分执行不会影响效率。</t></p>
-<p>优点在于：</p>
-<p>(1).方便调试。把复杂的查询拆分成简单的查询，然后逐个调试。</p>
-<p>(2).便于代码维护。把代码拆分后能使代码变的更易理解。</p>
-<p>以下代码体现了可组成性：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//以下代码体现了Composable</span></div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; lists = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; &#123; <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;</div><div class="line"> &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;, <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">4</span>, <span class="number">5</span> &#125; &#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> query1 = from list <span class="keyword">in</span> lists</div><div class="line">             from <span class="built_in">num</span> <span class="keyword">in</span> list</div><div class="line">             select <span class="built_in">num</span>;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> query2 = from <span class="built_in">num</span> <span class="keyword">in</span> query1</div><div class="line">             where <span class="built_in">num</span> % <span class="number">3</span> == <span class="number">0</span></div><div class="line">             select <span class="built_in">num</span>;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> query3 = from <span class="built_in">num</span> <span class="keyword">in</span> query2</div><div class="line">             orderby <span class="built_in">num</span> descending</div><div class="line">             select <span class="built_in">num</span>;</div></pre></td></tr></table></figure></p>
-<p>######7.Transformative：所谓Transformative(可转换)指的是LINQ能把一种数据源的内容转换到其他数据源。</p>
-<p>方便用户做数据移植。</p>
-<p>以下代码体现了转换的特性：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//把关系型数据转换成XML型</span></div><div class="line">	<span class="keyword">var</span> query = <span class="keyword">new</span> XElement(<span class="string">"Orders"</span>,</div><div class="line">            <span class="keyword">from</span> c <span class="keyword">in</span> dc.Customers</div><div class="line">            <span class="keyword">where</span> c.City == <span class="string">"Paris"</span></div><div class="line">            <span class="function"><span class="keyword">select</span> new <span class="title">XElement</span>(<span class="params"><span class="string">"Order"</span>,</span></span></div><div class="line">                new XAttribute(<span class="string">"Address"</span>, c.Address)));</div></pre></td></tr></table></figure></p>
-<p>以上就是LINQ的几大优点，很高兴能在这里和大家分享。有任何不足之处请给予补充和纠正，谢谢光临小舍。</p>
-<p>//2011/1/28 补充(LINQ TO SQL)</p>
-<p>在LINQ TO SQL 方面，如果使用LINQ TO SQL可以有效的防止SQL注入，LINQ TO SQL 会把注入的代码当做无用的参数处理。</p>
-<p><a href="http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html" target="_blank" rel="external">http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html</a> </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1787,7 +1797,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-count">27</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1804,7 +1814,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1886,7 +1896,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

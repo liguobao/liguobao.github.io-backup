@@ -260,6 +260,168 @@
             
               
                 
+                <a class="post-title-link" href="/2016/03/15/LINQ-advantage/" itemprop="url">
+                  C#LINQ 优点 总结(转载)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-15T00:00:00+08:00" content="2016-03-15">
+              2016-03-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/net/" itemprop="url" rel="index">
+                    <span itemprop="name">.net</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/15/LINQ-advantage/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/15/LINQ-advantage/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>原文链接：<a href="http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html" target="_blank" rel="external">http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html</a></p>
+<p>这几天在读一本LINQ方面的书《Essential LINQ》,在这里和大家分享下。</p>
+<p>由于对LINQ的深入总结需要大量的篇幅，因此在这里分成几个部分来讲。</p>
+<p>（*我看《Essential LINQ》是英文版的，有些名词不能翻译成正统的中文解释请给予谅解）</p>
+<p>LINQ的优点：</p>
+<p>LINQ基本有以下七个优点，让我来一一举例说明：</p>
+<p>#####1.Integrated：所谓的Integrated（集成化），LINQ是从以下方面体现集成的：</p>
+<p>(1):把查询语法融入了C#(VB)这些语言中，让他变成了一种语法。这样就能和C#中的其他语法一样支持：</p>
+<p>语句高亮显示，类型检查，允许使用debugger调试</p>
+<p>(2):把以前复杂的查询前的工作都集成封装起来，让开发人员侧重于查询。</p>
+<p>(3):集成后的语法更加的清晰易懂，可读性较高。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">比较： </div><div class="line"><span class="comment">//原来的格式</span></div><div class="line">SqlConnection sqlConn = <span class="keyword">new</span> SqlConnection(connectionString);&gt;</div><div class="line">sqlConn.Open();</div><div class="line">SqlCommand command = <span class="keyword">new</span> SqlCommand();</div><div class="line">command.Connection = sqlConn;</div><div class="line">command.CommandText = <span class="string">"Select * From Customer"</span>;</div><div class="line">SqlDataReader dataReader = command.ExecuteReader(CommandBehavior.CloseConnection);</div><div class="line"> </div><div class="line"><span class="comment">//LINQ的格式</span></div><div class="line">NORTHWNDDataContext dc = <span class="keyword">new</span> NORTHWNDDataContext();</div><div class="line"><span class="keyword">var</span> query = <span class="keyword">from</span> c <span class="keyword">in</span> dc.Customers</div><div class="line">            <span class="keyword">select</span> c;</div></pre></td></tr></table></figure>
+<p>#####2.Unitive：所谓Unitive(统一化)就指不管对任何类型外部和内部数据源(对象集合,xlm,数据库数据)都使用统一的查询语法。</p>
+<p>使用统一化查询语言的好处在于以下几点：</p>
+<p>你不用因为要使用不太熟悉的数据源而花很多精力去了解它，你可以快速简单的使用LINQ语法对起查询。<br>由于使用了统一的语法，可以使代码维护变的更加简单。<br>以下代码体现了LINQ的统一化：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//数据源:对象集合</span></div><div class="line"><span class="keyword">var</span> query = <span class="function"><span class="keyword">from</span> c <span class="keyword">in</span> <span class="title">GetCustomers</span>(<span class="params"></span>)</span></div><div class="line">            <span class="keyword">select</span> c;</div><div class="line"> </div><div class="line"><span class="comment">//数据源:SQL</span></div><div class="line"><span class="keyword">var</span> query1 = <span class="keyword">from</span> c <span class="keyword">in</span> dc.Customers</div><div class="line">             <span class="keyword">select</span> c;</div><div class="line"><span class="comment">//数据源:XML</span></div><div class="line"><span class="keyword">var</span> query2 = <span class="keyword">from</span> c <span class="keyword">in</span> customers.Descendants(<span class="string">"Customer"</span>)</div><div class="line">             <span class="keyword">select</span> c;</div></pre></td></tr></table></figure></p>
+<p>#####3.Extensible：所谓Extensible(可扩展)指以下2个方面:</p>
+<p>(1).可查询数据源的扩展。 LINQ提供了个LINQ provider model，你可以为LINQ创建或提供provider让LINQ支持更多的数据源。</p>
+<p>(2).可扩展查询方法。开发者可以根据自己的需求为LINQ重写和扩展查询方法。</p>
+<p>以下是些第三方的LINQ provider：</p>
+<p>LINQ Extender, LINQ to JavaScript, LINQ to JSON, LINQ to MySQL, LINQ to Flickr, LINQ to Google</p>
+<p>#####4.Declarative：所谓Declarative(声明式)，简单的来说指的是开发人员只要告诉程序做什么，程序自己判断怎么做。</p>
+<p>Declarative programming(声明式编程)的优点体现在以下2点：</p>
+<p>(1).提高了开发速度。因为开发者不用书写大量的代码来具体化执行步骤，只许告诉程序做什么。</p>
+<p>(2).提高代码优化空间。因为开发者不用参与干涉对程序执行的具体步骤，这样就提供给编译器更多的空间去优化代码。</p>
+<p>举例SQL来说，LINQ生成的SQL语句往往比一对SQL水平一般的开发者能写出更好的SQL语句。</p>
+<p>比较Declarative programming 与 Imperative programming：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//声明式编程</span></div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; lists = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; &#123; <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;, <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">4</span>, <span class="number">5</span> &#125; &#125;;</div><div class="line"><span class="keyword">var</span> query = from list <span class="keyword">in</span> lists</div><div class="line">            from <span class="built_in">num</span> <span class="keyword">in</span> list</div><div class="line">            where <span class="built_in">num</span> % <span class="number">3</span> == <span class="number">0</span></div><div class="line">            orderby <span class="built_in">num</span> descending</div><div class="line">            select <span class="built_in">num</span>;</div><div class="line"> </div><div class="line"><span class="comment">//命令式编程</span></div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; list1 = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;();</div><div class="line">list1.Add(<span class="number">1</span>);</div><div class="line">list1.Add(<span class="number">2</span>);</div><div class="line">list1.Add(<span class="number">3</span>);</div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; list2 = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;();</div><div class="line">list2.Add(<span class="number">4</span>);</div><div class="line">list2.Add(<span class="number">5</span>);</div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; lists1 = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt;();</div><div class="line">lists1.Add(list1);</div><div class="line">lists1.Add(list2);</div><div class="line"> </div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; newList = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;();</div><div class="line">foreach (<span class="keyword">var</span> item <span class="keyword">in</span> lists1)</div><div class="line">      foreach (<span class="keyword">var</span> <span class="built_in">num</span> <span class="keyword">in</span> item)</div><div class="line">        <span class="keyword">if</span> (<span class="built_in">num</span> % <span class="number">3</span> == <span class="number">0</span>)</div><div class="line">            newList.Add(<span class="built_in">num</span>);</div><div class="line">newList.Reverse();</div></pre></td></tr></table></figure></p>
+<p>#####5.Hierarchical：所谓Hierarchical(层次化)指使用面向对象的方式抽象数据。</p>
+<p>SQL是关系型数据库，它以关系的方式描述数据以数据的联系，但我们的程序设计成面向对象的因此我们在程序里得到的数据库数据往往都是</p>
+<p>rectangular grid（平面的显示数据）。但是LINQ通过所谓的O-R Mapping方式，把关系型转换成对象与对象方式描述数据。</p>
+<p>这样带来的好处是：开发者能直接以对象的方式去操作数据，对习惯面向对象的开发者来说面向对象模型更易理解。</p>
+<p>#####6.Composable：所谓Composable(可组成)指LINQ可以把一个复杂的查询拆分成多个简单查询。</p>
+<p>LINQ返回的结果都是基于接口：IEnumerable<t>，因此能对查询结果继续查询，而且LINQ具有延迟执行的特性因此拆分执行不会影响效率。</t></p>
+<p>优点在于：</p>
+<p>(1).方便调试。把复杂的查询拆分成简单的查询，然后逐个调试。</p>
+<p>(2).便于代码维护。把代码拆分后能使代码变的更易理解。</p>
+<p>以下代码体现了可组成性：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//以下代码体现了Composable</span></div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; lists = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; &#123; <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;</div><div class="line"> &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;, <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">4</span>, <span class="number">5</span> &#125; &#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> query1 = from list <span class="keyword">in</span> lists</div><div class="line">             from <span class="built_in">num</span> <span class="keyword">in</span> list</div><div class="line">             select <span class="built_in">num</span>;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> query2 = from <span class="built_in">num</span> <span class="keyword">in</span> query1</div><div class="line">             where <span class="built_in">num</span> % <span class="number">3</span> == <span class="number">0</span></div><div class="line">             select <span class="built_in">num</span>;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> query3 = from <span class="built_in">num</span> <span class="keyword">in</span> query2</div><div class="line">             orderby <span class="built_in">num</span> descending</div><div class="line">             select <span class="built_in">num</span>;</div></pre></td></tr></table></figure></p>
+<p>######7.Transformative：所谓Transformative(可转换)指的是LINQ能把一种数据源的内容转换到其他数据源。</p>
+<p>方便用户做数据移植。</p>
+<p>以下代码体现了转换的特性：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//把关系型数据转换成XML型</span></div><div class="line">	<span class="keyword">var</span> query = <span class="keyword">new</span> XElement(<span class="string">"Orders"</span>,</div><div class="line">            <span class="keyword">from</span> c <span class="keyword">in</span> dc.Customers</div><div class="line">            <span class="keyword">where</span> c.City == <span class="string">"Paris"</span></div><div class="line">            <span class="function"><span class="keyword">select</span> new <span class="title">XElement</span>(<span class="params"><span class="string">"Order"</span>,</span></span></div><div class="line">                new XAttribute(<span class="string">"Address"</span>, c.Address)));</div></pre></td></tr></table></figure></p>
+<p>以上就是LINQ的几大优点，很高兴能在这里和大家分享。有任何不足之处请给予补充和纠正，谢谢光临小舍。</p>
+<p>//2011/1/28 补充(LINQ TO SQL)</p>
+<p>在LINQ TO SQL 方面，如果使用LINQ TO SQL可以有效的防止SQL注入，LINQ TO SQL 会把注入的代码当做无用的参数处理。</p>
+<p><a href="http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html" target="_blank" rel="external">http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html</a> </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/03/03/Join/" itemprop="url">
                   .NET-join用法
                 </a>
@@ -1050,128 +1212,6 @@ public sealed class SomeType
             
               
                 
-                <a class="post-title-link" href="/2016/01/01/hexo_memorandum/" itemprop="url">
-                  hexo memorandum
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-01-01T00:00:00+08:00" content="2016-01-01">
-              2016-01-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/memorandum/" itemprop="url" rel="index">
-                    <span itemprop="name">memorandum</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/01/01/hexo_memorandum/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/01/hexo_memorandum/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Markdown-语法说明-简体中文版"><a href="#Markdown-语法说明-简体中文版" class="headerlink" title="Markdown 语法说明 (简体中文版)"></a><a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">Markdown 语法说明 (简体中文版)</a></h2><h2 id="Markdown-Basics-（快速入门）"><a href="#Markdown-Basics-（快速入门）" class="headerlink" title="Markdown: Basics （快速入门）"></a><a href="http://wowubuntu.com/markdown/basic.html" target="_blank" rel="external">Markdown: Basics （快速入门）</a></h2><h2 id="使用GitHub和Hexo搭建免费静态Blog-本博客案例"><a href="#使用GitHub和Hexo搭建免费静态Blog-本博客案例" class="headerlink" title="使用GitHub和Hexo搭建免费静态Blog(本博客案例)"></a><a href="http://wsgzao.github.io/post/hexo-guide/" target="_blank" rel="external">使用GitHub和Hexo搭建免费静态Blog(本博客案例)</a></h2><h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">npm install hexo-cli -g</div><div class="line">npm install hexo --save</div><div class="line"></div><div class="line">#如果命令无法运行，可以尝试更换taobao的npm源</div><div class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</div></pre></td></tr></table></figure>
-<h3 id="安装Hexo插件"><a href="#安装Hexo插件" class="headerlink" title="安装Hexo插件"></a>安装Hexo插件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">npm install hexo-generator-index --save</div><div class="line">npm install hexo-generator-archive --save</div><div class="line">npm install hexo-generator-category --save</div><div class="line">npm install hexo-generator-tag --save</div><div class="line">npm install hexo-server --save</div><div class="line">npm install hexo-deployer-git --save</div><div class="line">npm install hexo-deployer-heroku --save</div><div class="line">npm install hexo-deployer-rsync --save</div><div class="line">npm install hexo-deployer-openshift --save</div><div class="line">npm install hexo-renderer-marked@<span class="number">0.2</span> --save</div><div class="line">npm install hexo-renderer-stylus@<span class="number">0.2</span> --save</div><div class="line">npm install hexo-generator-feed@<span class="number">1</span> --save</div><div class="line">npm install hexo-generator-sitemap@<span class="number">1</span> --save</div></pre></td></tr></table></figure>
-<h2 id="win下面的git客户端提示FIlename-too-long解决方法"><a href="#win下面的git客户端提示FIlename-too-long解决方法" class="headerlink" title="win下面的git客户端提示FIlename too long解决方法"></a><a href="https://www.mxgw.info/t/filename-too-long-in-git.html" target="_blank" rel="external">win下面的git客户端提示FIlename too long解决方法</a></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git config --global core.longpaths <span class="literal">true</span></div></pre></td></tr></table></figure>
-<h2 id="git-ssh-配置和使用"><a href="#git-ssh-配置和使用" class="headerlink" title="git-ssh 配置和使用"></a><a href="https://segmentfault.com/a/1190000002645623" target="_blank" rel="external">git-ssh 配置和使用</a></h2>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/01/01/mibook_touchpap_gesture/" itemprop="url">
                   小米触摸板手势说明
                 </a>
@@ -1283,6 +1323,128 @@ public sealed class SomeType
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/01/01/hexo_memorandum/" itemprop="url">
+                  hexo memorandum
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-01T00:00:00+08:00" content="2016-01-01">
+              2016-01-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/memorandum/" itemprop="url" rel="index">
+                    <span itemprop="name">memorandum</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/01/hexo_memorandum/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/01/hexo_memorandum/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Markdown-语法说明-简体中文版"><a href="#Markdown-语法说明-简体中文版" class="headerlink" title="Markdown 语法说明 (简体中文版)"></a><a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">Markdown 语法说明 (简体中文版)</a></h2><h2 id="Markdown-Basics-（快速入门）"><a href="#Markdown-Basics-（快速入门）" class="headerlink" title="Markdown: Basics （快速入门）"></a><a href="http://wowubuntu.com/markdown/basic.html" target="_blank" rel="external">Markdown: Basics （快速入门）</a></h2><h2 id="使用GitHub和Hexo搭建免费静态Blog-本博客案例"><a href="#使用GitHub和Hexo搭建免费静态Blog-本博客案例" class="headerlink" title="使用GitHub和Hexo搭建免费静态Blog(本博客案例)"></a><a href="http://wsgzao.github.io/post/hexo-guide/" target="_blank" rel="external">使用GitHub和Hexo搭建免费静态Blog(本博客案例)</a></h2><h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">npm install hexo-cli -g</div><div class="line">npm install hexo --save</div><div class="line"></div><div class="line">#如果命令无法运行，可以尝试更换taobao的npm源</div><div class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</div></pre></td></tr></table></figure>
+<h3 id="安装Hexo插件"><a href="#安装Hexo插件" class="headerlink" title="安装Hexo插件"></a>安装Hexo插件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">npm install hexo-generator-index --save</div><div class="line">npm install hexo-generator-archive --save</div><div class="line">npm install hexo-generator-category --save</div><div class="line">npm install hexo-generator-tag --save</div><div class="line">npm install hexo-server --save</div><div class="line">npm install hexo-deployer-git --save</div><div class="line">npm install hexo-deployer-heroku --save</div><div class="line">npm install hexo-deployer-rsync --save</div><div class="line">npm install hexo-deployer-openshift --save</div><div class="line">npm install hexo-renderer-marked@<span class="number">0.2</span> --save</div><div class="line">npm install hexo-renderer-stylus@<span class="number">0.2</span> --save</div><div class="line">npm install hexo-generator-feed@<span class="number">1</span> --save</div><div class="line">npm install hexo-generator-sitemap@<span class="number">1</span> --save</div></pre></td></tr></table></figure>
+<h2 id="win下面的git客户端提示FIlename-too-long解决方法"><a href="#win下面的git客户端提示FIlename-too-long解决方法" class="headerlink" title="win下面的git客户端提示FIlename too long解决方法"></a><a href="https://www.mxgw.info/t/filename-too-long-in-git.html" target="_blank" rel="external">win下面的git客户端提示FIlename too long解决方法</a></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git config --global core.longpaths <span class="literal">true</span></div></pre></td></tr></table></figure>
+<h2 id="git-ssh-配置和使用"><a href="#git-ssh-配置和使用" class="headerlink" title="git-ssh 配置和使用"></a><a href="https://segmentfault.com/a/1190000002645623" target="_blank" rel="external">git-ssh 配置和使用</a></h2><h2 id="https-unbug-github-io-codelf-谁用谁知道"><a href="#https-unbug-github-io-codelf-谁用谁知道" class="headerlink" title="https://unbug.github.io/codelf/ 谁用谁知道"></a><a href="https://unbug.github.io/codelf/" target="_blank" rel="external">https://unbug.github.io/codelf/ 谁用谁知道</a></h2>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -1328,7 +1490,7 @@ public sealed class SomeType
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-count">27</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1345,7 +1507,7 @@ public sealed class SomeType
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1427,7 +1589,7 @@ public sealed class SomeType
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

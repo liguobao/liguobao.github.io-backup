@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://codelover.link/"/>
-  <updated>2016-12-03T16:39:43.104Z</updated>
+  <updated>2017-03-17T15:13:57.045Z</updated>
   <id>http://codelover.link/</id>
   
   <author>
@@ -16,11 +16,96 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>用Visual Studio Code Debug世界上最好的语言</title>
+    <link href="http://codelover.link/2017/03/17/visualstudiocode_for_php_debug/"/>
+    <id>http://codelover.link/2017/03/17/visualstudiocode_for_php_debug/</id>
+    <published>2017-03-16T16:00:00.000Z</published>
+    <updated>2017-03-17T15:13:57.045Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这阵子因缘巧合接手了一个辣鸡项目，是用世界上最好的拍黄片写的，项目基本是另一个小伙伴在撸码，我就兼职打杂和发布做点运维的工作。</p>
+<p>然后昨天项目上了测试版之后，一用起来Error满天飞了。让小伙伴查了很久都没有头绪，实在尴尬，只好自己动手了…</p>
+<p>作为一个后端狗，虽然知道PHP大体原理和框架，看着项目的业务逻辑也大体知道个所以然，在此之前还是没撸过代码的。</p>
+<p>看代码基本是Visual Studio Code或者HBuilder工具，本地跑代码很白痴的在用phpStudy。</p>
+<p>Error出来了，第一反应就是debug咯…然后问了下小伙伴他以前怎么玩的，答曰：echo。</p>
+<p>一口老血都…</p>
+<p>查了下谷歌发现，Visual Studio Code + 插件是完全可以用来调试PHP的，所以就撸起了。</p>
+<h3 id="Visual-Studio-Code-php-debug插件-phpStudy-xdebug"><a href="#Visual-Studio-Code-php-debug插件-phpStudy-xdebug" class="headerlink" title="Visual Studio Code + php-debug插件 + phpStudy + xdebug"></a>Visual Studio Code + php-debug插件 + phpStudy + xdebug</h3><h4 id="安装Visual-Studio-Code"><a href="#安装Visual-Studio-Code" class="headerlink" title="安装Visual Studio Code"></a>安装Visual Studio Code</h4><p>首先肯定是先下载<a href="http://code.visualstudio.com/" target="_blank" rel="external">Visual Studio Code</a> 咯。</p>
+<p>安装好之后，随便在一个文件夹内鼠标“右键”，都能看到Open with code，打开之后如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/b1cee12e-6215-4f04-9dea-3721400e238b" alt="Open with code"></p>
+<h4 id="安装Visual-Studio-Code-php-debug插件"><a href="#安装Visual-Studio-Code-php-debug插件" class="headerlink" title="安装Visual Studio Code php-debug插件"></a>安装Visual Studio Code php-debug插件</h4><p>装好VS Code之后，接下来是安装一下PHP-Debug插件了。我们在插件商城搜索一下php，排名第二的PHP Debug就是我们要的插件了。<br>如下图：<br><img src="http://7xread.com1.z0.glb.clouddn.com/3f798ea9-bba9-4768-9f58-14257ddc1999" alt="PHP-Debug"></p>
+<p>装好了之后重启一下vs code即可。</p>
+<h4 id="phpStudy"><a href="#phpStudy" class="headerlink" title="phpStudy"></a>phpStudy</h4><p>对于我这种懒人来说，去配置什么PHP运行环境肯定是不愿意的，那么类似的集成环境有么？</p>
+<p>小伙伴和我说，你下个<a href="http://www.phpstudy.net/" target="_blank" rel="external">phpStudy</a>撸就算了，别去倒腾什么版本了。</p>
+<p>然后…</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/6c8ea274-9da5-4168-ba80-f6a0f6e173c3" alt="phpStudy"></p>
+<p>下载好了安装完了，打开程序如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/7d2d12e2-783f-4402-8900-0315905c6948" alt="phpStudy"></p>
+<p>看了下功能，其实这个软件就是集成了各种版本的PHP，可以方便切换PHP版本；同时自带一个Apache和MySQL，各种配置管理起来也挺方便的。<br>（感觉dalao们应该不怎么会用这么白痴的东西，233…</p>
+<p>装好之后，启动一下服务，点击一下phpMyAdmin，看看它打开的网站是否能登录到本地的MySQL数据库。</p>
+<p>如果可以，说明PHP环境应该是正常的了；如果有问题，请自行谷歌了…</p>
+<p>接着切换PHP版本到意向版本，点击一下运行模式旁边的“切换版本”就可以选择版本了。</p>
+<h4 id="xdebug设置"><a href="#xdebug设置" class="headerlink" title="xdebug设置"></a>xdebug设置</h4><p><a href="https://xdebug.org/" target="_blank" rel="external">xdebug</a>是什么呢？<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Xdebug作为PHP调试工具，提供了丰富的调试函数，</div><div class="line">也可将Xdebug安装配置为zend studio、editplus调试PHP的第三方插件，</div><div class="line"></div><div class="line">通过开启自动跟踪(auto_trace)和分析器功能，可以直观的看到PHP源代码的性能数据，</div><div class="line">以便优化PHP代码。</div><div class="line"></div><div class="line">引用自：[PHP调试工具Xdebug安装配置教程]</div><div class="line">(http:<span class="regexp">//</span>www.cnblogs.com<span class="regexp">/qiantuwuliang/</span>archive<span class="regexp">/2011/</span><span class="number">01</span><span class="regexp">/23/</span><span class="number">1942382</span>.html)</div></pre></td></tr></table></figure></p>
+<p>我们可以在<a href="https://xdebug.org/" target="_blank" rel="external">xdebug.org</a>（自备梯子）上面下载到PHP各个版本的xdebug dll使用。</p>
+<p>不过当我打开phpStudy的php-ini打算手动开启debug的时候，非常高兴得发现已经phpStudy已自带了对应版本的xdebug，而且路径都配好了。</p>
+<p>phpStudy的php.ini在“其他选项-打开配置文件-php-ini”，如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/76b103cd-399c-4bce-a716-098adbd4d212" alt="php.ini"></p>
+<p>把文档拉到最后，看得到xdebug的配置如下：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/00285d82-f76f-4fd8-8ba6-f429de194809" alt="xdebug"></p>
+<p>phpStudy已经帮我们配置好xdebug dll的路径了，我们只需要手动在zend_extension上面添加远程调试和自动启动配置即可，代码如下：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">xdebug.remote_enable = <span class="number">1</span></div><div class="line">xdebug.remote_autostart= <span class="number">1</span></div></pre></td></tr></table></figure>
+<p>完整配置如下：<br><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[XDebug]</div><div class="line">;xdebug.profiler_output_dir="C:<span class="symbol">\p</span>hpStudy<span class="symbol">\t</span>mp<span class="symbol">\x</span>debug"</div><div class="line">;xdebug.trace_output_dir="C:<span class="symbol">\p</span>hpStudy<span class="symbol">\t</span>mp<span class="symbol">\x</span>debug"</div><div class="line">xdebug.remote_enable = 1</div><div class="line">xdebug.remote_autostart= 1</div><div class="line">;你的PHP版本的php_xdebug.dll，phpStudy自动设置的</div><div class="line">zend_extension="C:<span class="symbol">\p</span>hpStudy<span class="symbol">\p</span>hp<span class="symbol">\p</span>hp-5.5.38<span class="symbol">\e</span>xt<span class="symbol">\p</span>hp_xdebug.dll"</div></pre></td></tr></table></figure></p>
+<p>保存文件，重启一下phpStudy服务。</p>
+<h4 id="Visual-Studio-Code-设置用户配置和调试配置"><a href="#Visual-Studio-Code-设置用户配置和调试配置" class="headerlink" title="Visual Studio Code 设置用户配置和调试配置"></a>Visual Studio Code 设置用户配置和调试配置</h4><p>这个时候，我们随便在PHP文件夹中打开vs code，vs code会自动提示我们：Cannot validate since no PHP executable is set. Use the setting ‘php.validate.executablePath’ to configure the PHP executable.</p>
+<p>嗯，没有设置PHP执行文件，可以通过设置php.validate.executablePath属性来配置它。</p>
+<p>这个在哪配置呢？在“文件-首选项-设置”，打开之后如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/df4428e9-9ef2-435a-a5f5-ae8bade00a39" alt="php.validate.executablePath"></p>
+<p>这个php.validate.executablePath对应就是当前phpStudy中运行的php.exe的路径，可以在phpStudy-其他选项菜单-打开文件位置-PHP中找到此路径。</p>
+<p>保存好了之后，回到Visual Studio Code界面，转到Debug，选择添加配置，之后选择PHP，生成如下图的launch.json：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/e1b74467-9142-4a2f-bf5e-89aa2c2e0127" alt="Listen for XDebug"></p>
+<p>不用改任何东西，直接开撸…</p>
+<h4 id="开启Debug"><a href="#开启Debug" class="headerlink" title="开启Debug"></a>开启Debug</h4><p>确保phpStudy启动了，网站也正常运行起来了,然后在Visual Studio Code中启动调试，打上要的断点，接着启动调试。</p>
+<p>如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/7ac86cce-edc6-49a6-abb6-44f74c55a027" alt="图片描述"></p>
+<p>接着访问你要调试的页面对应的PHP代码，打上你的断点，华丽丽的Debug出来了…</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/7f7739df-02d4-47e5-8e42-67b9bd9f75ee" alt="异常"></p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/41913030-362c-45cb-a187-08eed7728e8c" alt="命中断点"></p>
+<p>F10单步调试，F11跳入函数，F5直接运行之类的快捷键自己玩吧。</p>
+<h4 id="其他运行环境下的配置"><a href="#其他运行环境下的配置" class="headerlink" title="其他运行环境下的配置"></a>其他运行环境下的配置</h4><p>基本没什么区别，配置php.ini，下载到对应版本的xdebug.dll，php.validate.executablePath配置正确就完事。</p>
+<p>其他参考链接：</p>
+<ol>
+<li><p><a href="http://blog.csdn.net/ruihanchen/article/details/7705842" target="_blank" rel="external"> 如何使用XDebug调试php</a></p>
+</li>
+<li><p><a href="http://www.chenxuanyi.cn/xampp-phpstorm-xdebug.html" target="_blank" rel="external">XAMPP环境下用phpStorm+XDebug进行断点调试的配置</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/dc_726/article/details/9905517" target="_blank" rel="external">PHPStorm下XDebug配置</a></p>
+</li>
+</ol>
+<h4 id="PS-果然是世界上最好的语言…-逃"><a href="#PS-果然是世界上最好的语言…-逃" class="headerlink" title="PS:果然是世界上最好的语言…(逃"></a>PS:果然是世界上最好的语言…(逃</h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h4&gt;&lt;p&gt;这阵子因缘巧合接手了一个辣鸡项目，是用世界上最好的拍黄片写的，项目基本是另一个小伙伴在撸码，我就兼职打杂和发布做点运维的工作。&lt;/p&gt;
+&lt;p
+    
+    </summary>
+    
+      <category term="Visual Studio" scheme="http://codelover.link/categories/Visual-Studio/"/>
+    
+    
+      <category term="VisualStudio" scheme="http://codelover.link/tags/VisualStudio/"/>
+    
+      <category term="PHP" scheme="http://codelover.link/tags/PHP/"/>
+    
+      <category term="Debug" scheme="http://codelover.link/tags/Debug/"/>
+    
+  </entry>
+  
+  <entry>
     <title>手把手教你用.NET Core写爬虫</title>
     <link href="http://codelover.link/2016/12/04/how_to_make_crawler_base_netcore/"/>
     <id>http://codelover.link/2016/12/04/how_to_make_crawler_base_netcore/</id>
     <published>2016-12-03T16:00:00.000Z</published>
-    <updated>2016-12-03T16:39:43.104Z</updated>
+    <updated>2016-12-03T17:31:21.389Z</updated>
     
     <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>自从上一个项目<a href="https://github.com/liguobao/58HouseSearch" target="_blank" rel="external">58HouseSearch</a>从.NET迁移到.NET core之后，磕磕碰碰磨蹭了一个月才正式上线到新版本。<br>然后最近又开了个新坑，搞了个<a href="http://codelover.win/" target="_blank" rel="external">Dy2018Crawler</a>用来爬dy2018电影天堂上面的电影资源。这里也借机简单介绍一下如何基于.NET Core写一个爬虫。<br>PS：如有偏错，敬请指明…<br>PPS:该去电影院还是多去电影院，毕竟美人良时可无价。</p>
 <h3 id="准备工作（-NET-Core准备）"><a href="#准备工作（-NET-Core准备）" class="headerlink" title="准备工作（.NET Core准备）"></a>准备工作（.NET Core准备）</h3><p>首先，肯定是先安装.NET Core咯。下载及安装教程在这里：<a href="https://www.microsoft.com/net/core" target="_blank" rel="external">.NET - Powerful Open Source Development</a>。无论你是Windows、linux还是mac，统统可以玩。</p>
@@ -776,6 +861,36 @@
   </entry>
   
   <entry>
+    <title>CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”</title>
+    <link href="http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw%E2%80%9Ccan%E2%80%98t%20find%20.Net%20Framework%20Data%20Provider%E2%80%9D%7F/"/>
+    <id>http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/</id>
+    <published>2016-04-19T16:00:00.000Z</published>
+    <updated>2016-10-15T05:20:24.627Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、下载 mysql-connector-net 安装</p>
+<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
+<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
+<p>一般DLL所在目录是：</p>
+<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
+<p>3、重启CodeSmith生效</p>
+<p><br><br><br></p>
+<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
+<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1、下载 mysql-connector-net 安装&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/downloads/connector/net/6.9.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;mysql-
+    
+    </summary>
+    
+      <category term="CodeSmith" scheme="http://codelover.link/categories/CodeSmith/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Jexus支持HTTPS协议</title>
     <link href="http://codelover.link/2016/04/20/Jexus-support-HTTPS/"/>
     <id>http://codelover.link/2016/04/20/Jexus-support-HTTPS/</id>
@@ -832,36 +947,6 @@
     </summary>
     
       <category term="jexus" scheme="http://codelover.link/categories/jexus/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”</title>
-    <link href="http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw%E2%80%9Ccan%E2%80%98t%20find%20.Net%20Framework%20Data%20Provider%E2%80%9D%7F/"/>
-    <id>http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/</id>
-    <published>2016-04-19T16:00:00.000Z</published>
-    <updated>2016-10-15T05:20:24.627Z</updated>
-    
-    <content type="html"><![CDATA[<p>1、下载 mysql-connector-net 安装</p>
-<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
-<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
-<p>一般DLL所在目录是：</p>
-<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
-<p>3、重启CodeSmith生效</p>
-<p><br><br><br></p>
-<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
-<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;1、下载 mysql-connector-net 安装&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/downloads/connector/net/6.9.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;mysql-
-    
-    </summary>
-    
-      <category term="CodeSmith" scheme="http://codelover.link/categories/CodeSmith/"/>
     
     
   </entry>
@@ -1173,69 +1258,6 @@
     </summary>
     
       <category term="GC" scheme="http://codelover.link/categories/GC/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>C#LINQ 优点 总结(转载)</title>
-    <link href="http://codelover.link/2016/03/15/LINQ-advantage/"/>
-    <id>http://codelover.link/2016/03/15/LINQ-advantage/</id>
-    <published>2016-03-14T16:00:00.000Z</published>
-    <updated>2016-10-15T05:20:24.794Z</updated>
-    
-    <content type="html"><![CDATA[<p>原文链接：<a href="http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html" target="_blank" rel="external">http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html</a></p>
-<p>这几天在读一本LINQ方面的书《Essential LINQ》,在这里和大家分享下。</p>
-<p>由于对LINQ的深入总结需要大量的篇幅，因此在这里分成几个部分来讲。</p>
-<p>（*我看《Essential LINQ》是英文版的，有些名词不能翻译成正统的中文解释请给予谅解）</p>
-<p>LINQ的优点：</p>
-<p>LINQ基本有以下七个优点，让我来一一举例说明：</p>
-<p>#####1.Integrated：所谓的Integrated（集成化），LINQ是从以下方面体现集成的：</p>
-<p>(1):把查询语法融入了C#(VB)这些语言中，让他变成了一种语法。这样就能和C#中的其他语法一样支持：</p>
-<p>语句高亮显示，类型检查，允许使用debugger调试</p>
-<p>(2):把以前复杂的查询前的工作都集成封装起来，让开发人员侧重于查询。</p>
-<p>(3):集成后的语法更加的清晰易懂，可读性较高。</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">比较： </div><div class="line"><span class="comment">//原来的格式</span></div><div class="line">SqlConnection sqlConn = <span class="keyword">new</span> SqlConnection(connectionString);&gt;</div><div class="line">sqlConn.Open();</div><div class="line">SqlCommand command = <span class="keyword">new</span> SqlCommand();</div><div class="line">command.Connection = sqlConn;</div><div class="line">command.CommandText = <span class="string">"Select * From Customer"</span>;</div><div class="line">SqlDataReader dataReader = command.ExecuteReader(CommandBehavior.CloseConnection);</div><div class="line"> </div><div class="line"><span class="comment">//LINQ的格式</span></div><div class="line">NORTHWNDDataContext dc = <span class="keyword">new</span> NORTHWNDDataContext();</div><div class="line"><span class="keyword">var</span> query = <span class="keyword">from</span> c <span class="keyword">in</span> dc.Customers</div><div class="line">            <span class="keyword">select</span> c;</div></pre></td></tr></table></figure>
-<p>#####2.Unitive：所谓Unitive(统一化)就指不管对任何类型外部和内部数据源(对象集合,xlm,数据库数据)都使用统一的查询语法。</p>
-<p>使用统一化查询语言的好处在于以下几点：</p>
-<p>你不用因为要使用不太熟悉的数据源而花很多精力去了解它，你可以快速简单的使用LINQ语法对起查询。<br>由于使用了统一的语法，可以使代码维护变的更加简单。<br>以下代码体现了LINQ的统一化：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//数据源:对象集合</span></div><div class="line"><span class="keyword">var</span> query = <span class="function"><span class="keyword">from</span> c <span class="keyword">in</span> <span class="title">GetCustomers</span>(<span class="params"></span>)</span></div><div class="line">            <span class="keyword">select</span> c;</div><div class="line"> </div><div class="line"><span class="comment">//数据源:SQL</span></div><div class="line"><span class="keyword">var</span> query1 = <span class="keyword">from</span> c <span class="keyword">in</span> dc.Customers</div><div class="line">             <span class="keyword">select</span> c;</div><div class="line"><span class="comment">//数据源:XML</span></div><div class="line"><span class="keyword">var</span> query2 = <span class="keyword">from</span> c <span class="keyword">in</span> customers.Descendants(<span class="string">"Customer"</span>)</div><div class="line">             <span class="keyword">select</span> c;</div></pre></td></tr></table></figure></p>
-<p>#####3.Extensible：所谓Extensible(可扩展)指以下2个方面:</p>
-<p>(1).可查询数据源的扩展。 LINQ提供了个LINQ provider model，你可以为LINQ创建或提供provider让LINQ支持更多的数据源。</p>
-<p>(2).可扩展查询方法。开发者可以根据自己的需求为LINQ重写和扩展查询方法。</p>
-<p>以下是些第三方的LINQ provider：</p>
-<p>LINQ Extender, LINQ to JavaScript, LINQ to JSON, LINQ to MySQL, LINQ to Flickr, LINQ to Google</p>
-<p>#####4.Declarative：所谓Declarative(声明式)，简单的来说指的是开发人员只要告诉程序做什么，程序自己判断怎么做。</p>
-<p>Declarative programming(声明式编程)的优点体现在以下2点：</p>
-<p>(1).提高了开发速度。因为开发者不用书写大量的代码来具体化执行步骤，只许告诉程序做什么。</p>
-<p>(2).提高代码优化空间。因为开发者不用参与干涉对程序执行的具体步骤，这样就提供给编译器更多的空间去优化代码。</p>
-<p>举例SQL来说，LINQ生成的SQL语句往往比一对SQL水平一般的开发者能写出更好的SQL语句。</p>
-<p>比较Declarative programming 与 Imperative programming：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//声明式编程</span></div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; lists = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; &#123; <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;, <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">4</span>, <span class="number">5</span> &#125; &#125;;</div><div class="line"><span class="keyword">var</span> query = from list <span class="keyword">in</span> lists</div><div class="line">            from <span class="built_in">num</span> <span class="keyword">in</span> list</div><div class="line">            where <span class="built_in">num</span> % <span class="number">3</span> == <span class="number">0</span></div><div class="line">            orderby <span class="built_in">num</span> descending</div><div class="line">            select <span class="built_in">num</span>;</div><div class="line"> </div><div class="line"><span class="comment">//命令式编程</span></div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; list1 = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;();</div><div class="line">list1.Add(<span class="number">1</span>);</div><div class="line">list1.Add(<span class="number">2</span>);</div><div class="line">list1.Add(<span class="number">3</span>);</div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; list2 = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;();</div><div class="line">list2.Add(<span class="number">4</span>);</div><div class="line">list2.Add(<span class="number">5</span>);</div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; lists1 = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt;();</div><div class="line">lists1.Add(list1);</div><div class="line">lists1.Add(list2);</div><div class="line"> </div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; newList = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;();</div><div class="line">foreach (<span class="keyword">var</span> item <span class="keyword">in</span> lists1)</div><div class="line">      foreach (<span class="keyword">var</span> <span class="built_in">num</span> <span class="keyword">in</span> item)</div><div class="line">        <span class="keyword">if</span> (<span class="built_in">num</span> % <span class="number">3</span> == <span class="number">0</span>)</div><div class="line">            newList.Add(<span class="built_in">num</span>);</div><div class="line">newList.Reverse();</div></pre></td></tr></table></figure></p>
-<p>#####5.Hierarchical：所谓Hierarchical(层次化)指使用面向对象的方式抽象数据。</p>
-<p>SQL是关系型数据库，它以关系的方式描述数据以数据的联系，但我们的程序设计成面向对象的因此我们在程序里得到的数据库数据往往都是</p>
-<p>rectangular grid（平面的显示数据）。但是LINQ通过所谓的O-R Mapping方式，把关系型转换成对象与对象方式描述数据。</p>
-<p>这样带来的好处是：开发者能直接以对象的方式去操作数据，对习惯面向对象的开发者来说面向对象模型更易理解。</p>
-<p>#####6.Composable：所谓Composable(可组成)指LINQ可以把一个复杂的查询拆分成多个简单查询。</p>
-<p>LINQ返回的结果都是基于接口：IEnumerable<t>，因此能对查询结果继续查询，而且LINQ具有延迟执行的特性因此拆分执行不会影响效率。</t></p>
-<p>优点在于：</p>
-<p>(1).方便调试。把复杂的查询拆分成简单的查询，然后逐个调试。</p>
-<p>(2).便于代码维护。把代码拆分后能使代码变的更易理解。</p>
-<p>以下代码体现了可组成性：<br><figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//以下代码体现了Composable</span></div><div class="line"><span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; lists = <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;&gt; &#123; <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt;</div><div class="line"> &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;, <span class="keyword">new</span> <span class="built_in">List</span>&lt;<span class="built_in">int</span>&gt; &#123; <span class="number">4</span>, <span class="number">5</span> &#125; &#125;;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> query1 = from list <span class="keyword">in</span> lists</div><div class="line">             from <span class="built_in">num</span> <span class="keyword">in</span> list</div><div class="line">             select <span class="built_in">num</span>;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> query2 = from <span class="built_in">num</span> <span class="keyword">in</span> query1</div><div class="line">             where <span class="built_in">num</span> % <span class="number">3</span> == <span class="number">0</span></div><div class="line">             select <span class="built_in">num</span>;</div><div class="line"> </div><div class="line"><span class="keyword">var</span> query3 = from <span class="built_in">num</span> <span class="keyword">in</span> query2</div><div class="line">             orderby <span class="built_in">num</span> descending</div><div class="line">             select <span class="built_in">num</span>;</div></pre></td></tr></table></figure></p>
-<p>######7.Transformative：所谓Transformative(可转换)指的是LINQ能把一种数据源的内容转换到其他数据源。</p>
-<p>方便用户做数据移植。</p>
-<p>以下代码体现了转换的特性：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//把关系型数据转换成XML型</span></div><div class="line">	<span class="keyword">var</span> query = <span class="keyword">new</span> XElement(<span class="string">"Orders"</span>,</div><div class="line">            <span class="keyword">from</span> c <span class="keyword">in</span> dc.Customers</div><div class="line">            <span class="keyword">where</span> c.City == <span class="string">"Paris"</span></div><div class="line">            <span class="function"><span class="keyword">select</span> new <span class="title">XElement</span>(<span class="params"><span class="string">"Order"</span>,</span></span></div><div class="line">                new XAttribute(<span class="string">"Address"</span>, c.Address)));</div></pre></td></tr></table></figure></p>
-<p>以上就是LINQ的几大优点，很高兴能在这里和大家分享。有任何不足之处请给予补充和纠正，谢谢光临小舍。</p>
-<p>//2011/1/28 补充(LINQ TO SQL)</p>
-<p>在LINQ TO SQL 方面，如果使用LINQ TO SQL可以有效的防止SQL注入，LINQ TO SQL 会把注入的代码当做无用的参数处理。</p>
-<p><a href="http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html" target="_blank" rel="external">http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html</a> </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;原文链接：&lt;a href=&quot;http://www.cnblogs.com/c-jquery-linq-sql-net-problem/archive/2011/01/15/LINQ_Merit.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;htt
-    
-    </summary>
-    
-      <category term=".net" scheme="http://codelover.link/categories/net/"/>
     
     
   </entry>

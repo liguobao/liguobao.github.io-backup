@@ -1,0 +1,762 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="VisualStudio,PHP,Debug," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="codelover's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言这阵子因缘巧合接手了一个辣鸡项目，是用世界上最好的拍黄片写的，项目基本是另一个小伙伴在撸码，我就兼职打杂和发布做点运维的工作。
+然后昨天项目上了测试版之后，一用起来Error满天飞了。让小伙伴查了很久都没有头绪，实在尴尬，只好自己动手了…
+作为一个后端狗，虽然知道PHP大体原理和框架，看着项目的业务逻辑也大体知道个所以然，在此之前还是没撸过代码的。
+看代码基本是Visual Studio Co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用Visual Studio Code Debug世界上最好的语言">
+<meta property="og:url" content="http://codelover.link/2017/03/17/visualstudiocode_for_php_debug/index.html">
+<meta property="og:site_name" content="codelover's blog">
+<meta property="og:description" content="前言这阵子因缘巧合接手了一个辣鸡项目，是用世界上最好的拍黄片写的，项目基本是另一个小伙伴在撸码，我就兼职打杂和发布做点运维的工作。
+然后昨天项目上了测试版之后，一用起来Error满天飞了。让小伙伴查了很久都没有头绪，实在尴尬，只好自己动手了…
+作为一个后端狗，虽然知道PHP大体原理和框架，看着项目的业务逻辑也大体知道个所以然，在此之前还是没撸过代码的。
+看代码基本是Visual Studio Co">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/b1cee12e-6215-4f04-9dea-3721400e238b">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/3f798ea9-bba9-4768-9f58-14257ddc1999">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/6c8ea274-9da5-4168-ba80-f6a0f6e173c3">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/7d2d12e2-783f-4402-8900-0315905c6948">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/76b103cd-399c-4bce-a716-098adbd4d212">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/00285d82-f76f-4fd8-8ba6-f429de194809">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/df4428e9-9ef2-435a-a5f5-ae8bade00a39">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/e1b74467-9142-4a2f-bf5e-89aa2c2e0127">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/7ac86cce-edc6-49a6-abb6-44f74c55a027">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/7f7739df-02d4-47e5-8e42-67b9bd9f75ee">
+<meta property="og:image" content="http://7xread.com1.z0.glb.clouddn.com/41913030-362c-45cb-a187-08eed7728e8c">
+<meta property="og:updated_time" content="2017-03-17T15:13:57.045Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用Visual Studio Code Debug世界上最好的语言">
+<meta name="twitter:description" content="前言这阵子因缘巧合接手了一个辣鸡项目，是用世界上最好的拍黄片写的，项目基本是另一个小伙伴在撸码，我就兼职打杂和发布做点运维的工作。
+然后昨天项目上了测试版之后，一用起来Error满天飞了。让小伙伴查了很久都没有头绪，实在尴尬，只好自己动手了…
+作为一个后端狗，虽然知道PHP大体原理和框架，看着项目的业务逻辑也大体知道个所以然，在此之前还是没撸过代码的。
+看代码基本是Visual Studio Co">
+<meta name="twitter:image" content="http://7xread.com1.z0.glb.clouddn.com/b1cee12e-6215-4f04-9dea-3721400e238b">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6254113771573216000,
+      author: 'codelover'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://codelover.link/2017/03/17/visualstudiocode_for_php_debug/"/>
+
+  <title> 用Visual Studio Code Debug世界上最好的语言 | codelover's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">codelover's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                用Visual Studio Code Debug世界上最好的语言
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-17T00:00:00+08:00" content="2017-03-17">
+              2017-03-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Visual-Studio/" itemprop="url" rel="index">
+                    <span itemprop="name">Visual Studio</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/17/visualstudiocode_for_php_debug/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/17/visualstudiocode_for_php_debug/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这阵子因缘巧合接手了一个辣鸡项目，是用世界上最好的拍黄片写的，项目基本是另一个小伙伴在撸码，我就兼职打杂和发布做点运维的工作。</p>
+<p>然后昨天项目上了测试版之后，一用起来Error满天飞了。让小伙伴查了很久都没有头绪，实在尴尬，只好自己动手了…</p>
+<p>作为一个后端狗，虽然知道PHP大体原理和框架，看着项目的业务逻辑也大体知道个所以然，在此之前还是没撸过代码的。</p>
+<p>看代码基本是Visual Studio Code或者HBuilder工具，本地跑代码很白痴的在用phpStudy。</p>
+<p>Error出来了，第一反应就是debug咯…然后问了下小伙伴他以前怎么玩的，答曰：echo。</p>
+<p>一口老血都…</p>
+<p>查了下谷歌发现，Visual Studio Code + 插件是完全可以用来调试PHP的，所以就撸起了。</p>
+<h3 id="Visual-Studio-Code-php-debug插件-phpStudy-xdebug"><a href="#Visual-Studio-Code-php-debug插件-phpStudy-xdebug" class="headerlink" title="Visual Studio Code + php-debug插件 + phpStudy + xdebug"></a>Visual Studio Code + php-debug插件 + phpStudy + xdebug</h3><h4 id="安装Visual-Studio-Code"><a href="#安装Visual-Studio-Code" class="headerlink" title="安装Visual Studio Code"></a>安装Visual Studio Code</h4><p>首先肯定是先下载<a href="http://code.visualstudio.com/" target="_blank" rel="external">Visual Studio Code</a> 咯。</p>
+<p>安装好之后，随便在一个文件夹内鼠标“右键”，都能看到Open with code，打开之后如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/b1cee12e-6215-4f04-9dea-3721400e238b" alt="Open with code"></p>
+<h4 id="安装Visual-Studio-Code-php-debug插件"><a href="#安装Visual-Studio-Code-php-debug插件" class="headerlink" title="安装Visual Studio Code php-debug插件"></a>安装Visual Studio Code php-debug插件</h4><p>装好VS Code之后，接下来是安装一下PHP-Debug插件了。我们在插件商城搜索一下php，排名第二的PHP Debug就是我们要的插件了。<br>如下图：<br><img src="http://7xread.com1.z0.glb.clouddn.com/3f798ea9-bba9-4768-9f58-14257ddc1999" alt="PHP-Debug"></p>
+<p>装好了之后重启一下vs code即可。</p>
+<h4 id="phpStudy"><a href="#phpStudy" class="headerlink" title="phpStudy"></a>phpStudy</h4><p>对于我这种懒人来说，去配置什么PHP运行环境肯定是不愿意的，那么类似的集成环境有么？</p>
+<p>小伙伴和我说，你下个<a href="http://www.phpstudy.net/" target="_blank" rel="external">phpStudy</a>撸就算了，别去倒腾什么版本了。</p>
+<p>然后…</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/6c8ea274-9da5-4168-ba80-f6a0f6e173c3" alt="phpStudy"></p>
+<p>下载好了安装完了，打开程序如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/7d2d12e2-783f-4402-8900-0315905c6948" alt="phpStudy"></p>
+<p>看了下功能，其实这个软件就是集成了各种版本的PHP，可以方便切换PHP版本；同时自带一个Apache和MySQL，各种配置管理起来也挺方便的。<br>（感觉dalao们应该不怎么会用这么白痴的东西，233…</p>
+<p>装好之后，启动一下服务，点击一下phpMyAdmin，看看它打开的网站是否能登录到本地的MySQL数据库。</p>
+<p>如果可以，说明PHP环境应该是正常的了；如果有问题，请自行谷歌了…</p>
+<p>接着切换PHP版本到意向版本，点击一下运行模式旁边的“切换版本”就可以选择版本了。</p>
+<h4 id="xdebug设置"><a href="#xdebug设置" class="headerlink" title="xdebug设置"></a>xdebug设置</h4><p><a href="https://xdebug.org/" target="_blank" rel="external">xdebug</a>是什么呢？<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Xdebug作为PHP调试工具，提供了丰富的调试函数，</div><div class="line">也可将Xdebug安装配置为zend studio、editplus调试PHP的第三方插件，</div><div class="line"></div><div class="line">通过开启自动跟踪(auto_trace)和分析器功能，可以直观的看到PHP源代码的性能数据，</div><div class="line">以便优化PHP代码。</div><div class="line"></div><div class="line">引用自：[PHP调试工具Xdebug安装配置教程]</div><div class="line">(http:<span class="regexp">//</span>www.cnblogs.com<span class="regexp">/qiantuwuliang/</span>archive<span class="regexp">/2011/</span><span class="number">01</span><span class="regexp">/23/</span><span class="number">1942382</span>.html)</div></pre></td></tr></table></figure></p>
+<p>我们可以在<a href="https://xdebug.org/" target="_blank" rel="external">xdebug.org</a>（自备梯子）上面下载到PHP各个版本的xdebug dll使用。</p>
+<p>不过当我打开phpStudy的php-ini打算手动开启debug的时候，非常高兴得发现已经phpStudy已自带了对应版本的xdebug，而且路径都配好了。</p>
+<p>phpStudy的php.ini在“其他选项-打开配置文件-php-ini”，如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/76b103cd-399c-4bce-a716-098adbd4d212" alt="php.ini"></p>
+<p>把文档拉到最后，看得到xdebug的配置如下：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/00285d82-f76f-4fd8-8ba6-f429de194809" alt="xdebug"></p>
+<p>phpStudy已经帮我们配置好xdebug dll的路径了，我们只需要手动在zend_extension上面添加远程调试和自动启动配置即可，代码如下：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">xdebug.remote_enable = <span class="number">1</span></div><div class="line">xdebug.remote_autostart= <span class="number">1</span></div></pre></td></tr></table></figure>
+<p>完整配置如下：<br><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[XDebug]</div><div class="line">;xdebug.profiler_output_dir="C:<span class="symbol">\p</span>hpStudy<span class="symbol">\t</span>mp<span class="symbol">\x</span>debug"</div><div class="line">;xdebug.trace_output_dir="C:<span class="symbol">\p</span>hpStudy<span class="symbol">\t</span>mp<span class="symbol">\x</span>debug"</div><div class="line">xdebug.remote_enable = 1</div><div class="line">xdebug.remote_autostart= 1</div><div class="line">;你的PHP版本的php_xdebug.dll，phpStudy自动设置的</div><div class="line">zend_extension="C:<span class="symbol">\p</span>hpStudy<span class="symbol">\p</span>hp<span class="symbol">\p</span>hp-5.5.38<span class="symbol">\e</span>xt<span class="symbol">\p</span>hp_xdebug.dll"</div></pre></td></tr></table></figure></p>
+<p>保存文件，重启一下phpStudy服务。</p>
+<h4 id="Visual-Studio-Code-设置用户配置和调试配置"><a href="#Visual-Studio-Code-设置用户配置和调试配置" class="headerlink" title="Visual Studio Code 设置用户配置和调试配置"></a>Visual Studio Code 设置用户配置和调试配置</h4><p>这个时候，我们随便在PHP文件夹中打开vs code，vs code会自动提示我们：Cannot validate since no PHP executable is set. Use the setting ‘php.validate.executablePath’ to configure the PHP executable.</p>
+<p>嗯，没有设置PHP执行文件，可以通过设置php.validate.executablePath属性来配置它。</p>
+<p>这个在哪配置呢？在“文件-首选项-设置”，打开之后如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/df4428e9-9ef2-435a-a5f5-ae8bade00a39" alt="php.validate.executablePath"></p>
+<p>这个php.validate.executablePath对应就是当前phpStudy中运行的php.exe的路径，可以在phpStudy-其他选项菜单-打开文件位置-PHP中找到此路径。</p>
+<p>保存好了之后，回到Visual Studio Code界面，转到Debug，选择添加配置，之后选择PHP，生成如下图的launch.json：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/e1b74467-9142-4a2f-bf5e-89aa2c2e0127" alt="Listen for XDebug"></p>
+<p>不用改任何东西，直接开撸…</p>
+<h4 id="开启Debug"><a href="#开启Debug" class="headerlink" title="开启Debug"></a>开启Debug</h4><p>确保phpStudy启动了，网站也正常运行起来了,然后在Visual Studio Code中启动调试，打上要的断点，接着启动调试。</p>
+<p>如下图：</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/7ac86cce-edc6-49a6-abb6-44f74c55a027" alt="图片描述"></p>
+<p>接着访问你要调试的页面对应的PHP代码，打上你的断点，华丽丽的Debug出来了…</p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/7f7739df-02d4-47e5-8e42-67b9bd9f75ee" alt="异常"></p>
+<p><img src="http://7xread.com1.z0.glb.clouddn.com/41913030-362c-45cb-a187-08eed7728e8c" alt="命中断点"></p>
+<p>F10单步调试，F11跳入函数，F5直接运行之类的快捷键自己玩吧。</p>
+<h4 id="其他运行环境下的配置"><a href="#其他运行环境下的配置" class="headerlink" title="其他运行环境下的配置"></a>其他运行环境下的配置</h4><p>基本没什么区别，配置php.ini，下载到对应版本的xdebug.dll，php.validate.executablePath配置正确就完事。</p>
+<p>其他参考链接：</p>
+<ol>
+<li><p><a href="http://blog.csdn.net/ruihanchen/article/details/7705842" target="_blank" rel="external"> 如何使用XDebug调试php</a></p>
+</li>
+<li><p><a href="http://www.chenxuanyi.cn/xampp-phpstorm-xdebug.html" target="_blank" rel="external">XAMPP环境下用phpStorm+XDebug进行断点调试的配置</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/dc_726/article/details/9905517" target="_blank" rel="external">PHPStorm下XDebug配置</a></p>
+</li>
+</ol>
+<h4 id="PS-果然是世界上最好的语言…-逃"><a href="#PS-果然是世界上最好的语言…-逃" class="headerlink" title="PS:果然是世界上最好的语言…(逃"></a>PS:果然是世界上最好的语言…(逃</h4>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/VisualStudio/" rel="tag">#VisualStudio</a>
+          
+            <a href="/tags/PHP/" rel="tag">#PHP</a>
+          
+            <a href="/tags/Debug/" rel="tag">#Debug</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/04/how_to_make_crawler_base_netcore/" rel="next" title="手把手教你用.NET Core写爬虫">
+                <i class="fa fa-chevron-left"></i> 手把手教你用.NET Core写爬虫
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/17/visualstudiocode_for_php_debug/"
+           data-title="用Visual Studio Code Debug世界上最好的语言" data-url="http://codelover.link/2017/03/17/visualstudiocode_for_php_debug/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://7xrayk.com1.z0.glb.clouddn.com/%E5%A4%A7%E7%86%8A%E5%B0%8F%E7%86%8A.jpg"
+               alt="李国宝" />
+          <p class="site-author-name" itemprop="name">李国宝</p>
+          <p class="site-description motion-element" itemprop="description">一直走在吃软饭路上的软狗</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/liguobao" target="_blank" title="GitHub">
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/codelover" target="_blank" title="知乎">
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.1234.sh" title="あまみや ゆうこ" target="_blank">あまみや ゆうこ</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://piratf.ml" title="潘雄飞的博客 - 我是魔法师啦啦啦。" target="_blank">潘雄飞的博客 - 我是魔法师啦啦啦。</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://codesky.me" title="CodeSky 代码之空" target="_blank">CodeSky 代码之空</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Visual-Studio-Code-php-debug插件-phpStudy-xdebug"><span class="nav-number"></span> <span class="nav-text">Visual Studio Code + php-debug插件 + phpStudy + xdebug</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Visual-Studio-Code"><span class="nav-number">1.</span> <span class="nav-text">安装Visual Studio Code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Visual-Studio-Code-php-debug插件"><span class="nav-number">2.</span> <span class="nav-text">安装Visual Studio Code php-debug插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#phpStudy"><span class="nav-number">3.</span> <span class="nav-text">phpStudy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#xdebug设置"><span class="nav-number">4.</span> <span class="nav-text">xdebug设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Visual-Studio-Code-设置用户配置和调试配置"><span class="nav-number">5.</span> <span class="nav-text">Visual Studio Code 设置用户配置和调试配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开启Debug"><span class="nav-number">6.</span> <span class="nav-text">开启Debug</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他运行环境下的配置"><span class="nav-number">7.</span> <span class="nav-text">其他运行环境下的配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PS-果然是世界上最好的语言…-逃"><span class="nav-number">8.</span> <span class="nav-text">PS:果然是世界上最好的语言…(逃</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李国宝</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"codelover"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
