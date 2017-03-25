@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://codelover.link/"/>
-  <updated>2017-03-17T15:13:57.045Z</updated>
+  <updated>2017-03-25T05:32:05.983Z</updated>
   <id>http://codelover.link/</id>
   
   <author>
@@ -16,11 +16,46 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>ubuntu相关软件配置备忘录</title>
+    <link href="http://codelover.link/2017/03/25/linux_shell_backup/"/>
+    <id>http://codelover.link/2017/03/25/linux_shell_backup/</id>
+    <published>2017-03-24T16:00:00.000Z</published>
+    <updated>2017-03-25T05:32:05.983Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="端口占用相关"><a href="#端口占用相关" class="headerlink" title="端口占用相关"></a>端口占用相关</h4><figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//查找端口占用情况</span></div><div class="line"><span class="symbol">$</span> netstat -anp | grep <span class="string">"5000"</span></div><div class="line"> </div><div class="line"><span class="comment">//干掉某个进程</span></div><div class="line"><span class="symbol">$</span> kill <span class="number">-9</span> <span class="number">2553</span></div><div class="line"> </div><div class="line"><span class="comment">//后台运行 </span></div><div class="line"><span class="symbol">$</span> nohup command &amp;</div></pre></td></tr></table></figure>
+<h4 id="安装SS"><a href="#安装SS" class="headerlink" title="安装SS"></a>安装SS</h4><figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">$</span> apt-get update</div><div class="line"><span class="comment">//安装ss</span></div><div class="line"><span class="symbol">$</span> apt-get install python-pip </div><div class="line"><span class="symbol">$</span> pip install shadowsocks</div><div class="line"><span class="comment">//运行ss服务端</span></div><div class="line"><span class="symbol">$</span> nohup ssserver -s ip地址 -k 密码 &amp;</div></pre></td></tr></table></figure>
+<h4 id="安装MySQL5-7"><a href="#安装MySQL5-7" class="headerlink" title="安装MySQL5.7"></a>安装MySQL5.7</h4><figure class="highlight smali"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">http://tecadmin.net/install-mysql-5-on-ubuntu/</div><div class="line"></div><div class="line">$ sudo apt-get install software-properties-common</div><div class="line">$ sudo<span class="built_in"> add-apt-repository </span>-y ppa:ondrej/mysql-5.7</div><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install mysql-server</div><div class="line"></div><div class="line">//编辑此处，允许远程登录</div><div class="line">/etc/mysql/my.cnf</div><div class="line"></div><div class="line">bind-address		= 0.0.0.0</div><div class="line"></div><div class="line">//重启MySQL</div><div class="line">$ /etc/init.d/mysql restart</div></pre></td></tr></table></figure>
+<h4 id="MySQL添加用户"><a href="#MySQL添加用户" class="headerlink" title="MySQL添加用户"></a>MySQL添加用户</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//新增用户</div><div class="line"><span class="keyword">grant</span> all <span class="keyword">privileges</span>  <span class="keyword">on</span> *.* <span class="keyword">to</span> root@<span class="string">'%'</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">"root"</span>;</div><div class="line">//立即生效</div><div class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">grant</span> <span class="keyword">select</span>,<span class="keyword">insert</span>,<span class="keyword">update</span>,<span class="keyword">delete</span>,<span class="keyword">create</span>,<span class="keyword">drop</span> <span class="keyword">on</span>  <span class="keyword">to</span> joe@<span class="number">10.163</span><span class="number">.225</span><span class="number">.87</span> <span class="keyword">identified</span> <span class="keyword">by</span> ‘<span class="number">123</span>′;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">grant</span> all  <span class="keyword">on</span> xxxDB.* <span class="keyword">to</span> xxx@<span class="string">'%'</span>;</div></pre></td></tr></table></figure>
+<h4 id="MySQL提示“Checking-for-tables-which-need-an-upgrade-are-corrupt-or-were-not-closed-cleanly”"><a href="#MySQL提示“Checking-for-tables-which-need-an-upgrade-are-corrupt-or-were-not-closed-cleanly”" class="headerlink" title="MySQL提示“Checking for tables which need an upgrade, are corrupt or were not closed cleanly”"></a>MySQL提示“Checking for tables which need an upgrade, are corrupt or were not closed cleanly”</h4><p>操作步骤：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$ sudo service mysql <span class="built_in">stop</span> </div><div class="line">$ sudo /etc/init.d/apparmor reload</div><div class="line">$ sudo service mysql <span class="built_in">start</span></div><div class="line"></div><div class="line"></div><div class="line">或者：</div><div class="line"></div><div class="line">down vote</div><div class="line">This error occurs due <span class="built_in">to</span> multiple installations <span class="keyword">of</span> mysql. Run <span class="keyword">the</span> <span class="keyword">command</span>:</div><div class="line"></div><div class="line">$ ps -A|grep mysql</div><div class="line">Kill <span class="keyword">the</span> <span class="built_in">process</span> <span class="keyword">by</span> <span class="keyword">using</span>:</div><div class="line"></div><div class="line">$ sudo pkill mysql</div><div class="line"><span class="keyword">and</span> <span class="keyword">then</span> run <span class="keyword">command</span>:</div><div class="line"></div><div class="line">$ ps -A|grep mysqld</div><div class="line">Also Kill this <span class="built_in">process</span> <span class="keyword">by</span> running:</div><div class="line"></div><div class="line">$ sudo pkill mysqld</div><div class="line">Now you are fully <span class="built_in">set</span> just run <span class="keyword">the</span> following commands:</div><div class="line"></div><div class="line">$ service mysql restart</div><div class="line">mysql -u root -p</div></pre></td></tr></table></figure>
+<h4 id="7z相关操作"><a href="#7z相关操作" class="headerlink" title="7z相关操作"></a>7z相关操作</h4><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//压缩</span></div><div class="line">$ <span class="number">7</span>z a -t7z -r manager<span class="number">.7</span>z /home/manager<span class="comment">/*</span></div><div class="line">//解压</div><div class="line">$ 7z X xx.zip</div></pre></td></tr></table></figure>
+<h4 id="腾讯云修改密码-允许root登录"><a href="#腾讯云修改密码-允许root登录" class="headerlink" title="腾讯云修改密码,允许root登录"></a>腾讯云修改密码,允许root登录</h4><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ </span>sudo passwd root</div><div class="line"></div><div class="line"><span class="variable">$ </span>sudo vi /etc/ssh/sshd_config</div><div class="line"></div><div class="line"><span class="variable">$ </span>sudo service ssh  restart</div></pre></td></tr></table></figure>
+<h4 id="开机启动相关"><a href="#开机启动相关" class="headerlink" title="开机启动相关"></a>开机启动相关</h4><figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//查看开机启动相关程序</span></div><div class="line"><span class="symbol">$</span> ls /etc/rc*</div><div class="line"><span class="comment">//安装sysv-rc-conf</span></div><div class="line"><span class="symbol">$</span> sudo apt-get install sysv-rc-conf</div><div class="line"><span class="symbol">$</span> sudo sysv-rc-conf</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;端口占用相关&quot;&gt;&lt;a href=&quot;#端口占用相关&quot; class=&quot;headerlink&quot; title=&quot;端口占用相关&quot;&gt;&lt;/a&gt;端口占用相关&lt;/h4&gt;&lt;figure class=&quot;highlight gams&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutt
+    
+    </summary>
+    
+      <category term="ubuntu" scheme="http://codelover.link/categories/ubuntu/"/>
+    
+    
+      <category term="memorandum" scheme="http://codelover.link/tags/memorandum/"/>
+    
+      <category term="linux" scheme="http://codelover.link/tags/linux/"/>
+    
+      <category term="shell" scheme="http://codelover.link/tags/shell/"/>
+    
+  </entry>
+  
+  <entry>
     <title>用Visual Studio Code Debug世界上最好的语言</title>
     <link href="http://codelover.link/2017/03/17/visualstudiocode_for_php_debug/"/>
     <id>http://codelover.link/2017/03/17/visualstudiocode_for_php_debug/</id>
     <published>2017-03-16T16:00:00.000Z</published>
-    <updated>2017-03-17T15:13:57.045Z</updated>
+    <updated>2017-03-17T15:16:12.408Z</updated>
     
     <content type="html"><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这阵子因缘巧合接手了一个辣鸡项目，是用世界上最好的拍黄片写的，项目基本是另一个小伙伴在撸码，我就兼职打杂和发布做点运维的工作。</p>
 <p>然后昨天项目上了测试版之后，一用起来Error满天飞了。让小伙伴查了很久都没有头绪，实在尴尬，只好自己动手了…</p>
@@ -29,7 +64,7 @@
 <p>Error出来了，第一反应就是debug咯…然后问了下小伙伴他以前怎么玩的，答曰：echo。</p>
 <p>一口老血都…</p>
 <p>查了下谷歌发现，Visual Studio Code + 插件是完全可以用来调试PHP的，所以就撸起了。</p>
-<h3 id="Visual-Studio-Code-php-debug插件-phpStudy-xdebug"><a href="#Visual-Studio-Code-php-debug插件-phpStudy-xdebug" class="headerlink" title="Visual Studio Code + php-debug插件 + phpStudy + xdebug"></a>Visual Studio Code + php-debug插件 + phpStudy + xdebug</h3><h4 id="安装Visual-Studio-Code"><a href="#安装Visual-Studio-Code" class="headerlink" title="安装Visual Studio Code"></a>安装Visual Studio Code</h4><p>首先肯定是先下载<a href="http://code.visualstudio.com/" target="_blank" rel="external">Visual Studio Code</a> 咯。</p>
+<h4 id="Visual-Studio-Code-php-debug插件-phpStudy-xdebug"><a href="#Visual-Studio-Code-php-debug插件-phpStudy-xdebug" class="headerlink" title="Visual Studio Code + php-debug插件 + phpStudy + xdebug"></a>Visual Studio Code + php-debug插件 + phpStudy + xdebug</h4><h4 id="安装Visual-Studio-Code"><a href="#安装Visual-Studio-Code" class="headerlink" title="安装Visual Studio Code"></a>安装Visual Studio Code</h4><p>首先肯定是先下载<a href="http://code.visualstudio.com/" target="_blank" rel="external">Visual Studio Code</a> 咯。</p>
 <p>安装好之后，随便在一个文件夹内鼠标“右键”，都能看到Open with code，打开之后如下图：</p>
 <p><img src="http://7xread.com1.z0.glb.clouddn.com/b1cee12e-6215-4f04-9dea-3721400e238b" alt="Open with code"></p>
 <h4 id="安装Visual-Studio-Code-php-debug插件"><a href="#安装Visual-Studio-Code-php-debug插件" class="headerlink" title="安装Visual Studio Code php-debug插件"></a>安装Visual Studio Code php-debug插件</h4><p>装好VS Code之后，接下来是安装一下PHP-Debug插件了。我们在插件商城搜索一下php，排名第二的PHP Debug就是我们要的插件了。<br>如下图：<br><img src="http://7xread.com1.z0.glb.clouddn.com/3f798ea9-bba9-4768-9f58-14257ddc1999" alt="PHP-Debug"></p>
@@ -861,36 +896,6 @@
   </entry>
   
   <entry>
-    <title>CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”</title>
-    <link href="http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw%E2%80%9Ccan%E2%80%98t%20find%20.Net%20Framework%20Data%20Provider%E2%80%9D%7F/"/>
-    <id>http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/</id>
-    <published>2016-04-19T16:00:00.000Z</published>
-    <updated>2016-10-15T05:20:24.627Z</updated>
-    
-    <content type="html"><![CDATA[<p>1、下载 mysql-connector-net 安装</p>
-<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
-<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
-<p>一般DLL所在目录是：</p>
-<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
-<p>3、重启CodeSmith生效</p>
-<p><br><br><br></p>
-<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
-<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;1、下载 mysql-connector-net 安装&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/downloads/connector/net/6.9.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;mysql-
-    
-    </summary>
-    
-      <category term="CodeSmith" scheme="http://codelover.link/categories/CodeSmith/"/>
-    
-    
-  </entry>
-  
-  <entry>
     <title>Jexus支持HTTPS协议</title>
     <link href="http://codelover.link/2016/04/20/Jexus-support-HTTPS/"/>
     <id>http://codelover.link/2016/04/20/Jexus-support-HTTPS/</id>
@@ -947,6 +952,36 @@
     </summary>
     
       <category term="jexus" scheme="http://codelover.link/categories/jexus/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>CodeSmith 连接MySQL数据库报“can&#39;t find .net framework data provider”</title>
+    <link href="http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw%E2%80%9Ccan%E2%80%98t%20find%20.Net%20Framework%20Data%20Provider%E2%80%9D%7F/"/>
+    <id>http://codelover.link/2016/04/20/CodeSmith-connect-MySQL-throw“can‘t find .Net Framework Data Provider”/</id>
+    <published>2016-04-19T16:00:00.000Z</published>
+    <updated>2016-10-15T05:20:24.627Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、下载 mysql-connector-net 安装</p>
+<p><a href="https://dev.mysql.com/downloads/connector/net/6.9.html" target="_blank" rel="external">mysql-connector-net</a></p>
+<p>2、mysql-connector-net 安装完毕之后，到对应的安装目录下，把对应的MySQL .NET dll拷贝到 CodeSmith的bin目录和SchemaProviders目录。</p>
+<p>一般DLL所在目录是：</p>
+<p>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.9.8\Assemblies\v4.0</p>
+<p>3、重启CodeSmith生效</p>
+<p><br><br><br></p>
+<p>其余解决方案：<br><br><br><a href="http://blog.csdn.net/joke01/article/details/9469515" target="_blank" rel="external">codesmith无法连接Mysql的解决方法</a></p>
+<p><a href="http://www.cnblogs.com/tim190/archive/2013/01/18/2866161.html" target="_blank" rel="external">codesmith6.5连接Mysql提示“找不到请求的 .Net Framework Data Provider。可能没有安装。”解决方法</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1、下载 mysql-connector-net 安装&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dev.mysql.com/downloads/connector/net/6.9.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;mysql-
+    
+    </summary>
+    
+      <category term="CodeSmith" scheme="http://codelover.link/categories/CodeSmith/"/>
     
     
   </entry>
@@ -1214,46 +1249,6 @@
     
       &lt;p&gt;###托管堆基础&lt;br&gt; 简述：每个程序都要使用这样或那样的资源，包括文件、内存缓冲区、屏幕空间、网络连接…..事实上，在面向对象的环境中，每个类型都代表可供程序使用的一种资源。要使用这些资源，必须为代表资源的类型分配内存。&lt;/p&gt;
 &lt;p&gt; 以下是访问一个资源所需步骤：&lt;/
-    
-    </summary>
-    
-      <category term="GC" scheme="http://codelover.link/categories/GC/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>C#.NET托管堆和垃圾回收(续)</title>
-    <link href="http://codelover.link/2016/03/20/GC-2/"/>
-    <id>http://codelover.link/2016/03/20/GC-2/</id>
-    <published>2016-03-19T16:00:00.000Z</published>
-    <updated>2016-10-15T05:20:24.678Z</updated>
-    
-    <content type="html"><![CDATA[<p>##大对象<br> CLR将对象分成大对象和小对象。目前认为85000字节或者更大的对象是大对象。CLR以不同方式对待大小对象。</p>
-<ol>
-<li><p>大对象不是在小对象的地址空间分配的，而是在进程地址空间的其他地方分配。</p>
-</li>
-<li><p>目前版本的GC不“压缩”大对象，因为在内存中移动它们代价过高。但这可能在进程中的大对象之间造成地址空间碎片化，以至于抛出OutMemoryException。CLR将来的版本可能会压缩大对象。</p>
-</li>
-<li>大对象总是第2代，绝不可能是第0代或者第1代。所以只能为需要长时间存活的资源创建大对象。分配短时间存活的大对象会导致第2代被更频繁地回收，损失性能。大对象一般是大字符串（XML/JSON）或者用于I/O操作的字节数组（从文件/网络将字节读入缓冲区以便处理）。</li>
-</ol>
-<p>##垃圾回收模式<br> CLR启动时会选择一个GC模式，进程中之前该模式都不会改变。</p>
-<p> 有两个基本GC模式。</p>
-<p>###工作站<br>该模式针对客户端应用程序优化GC。GC造成的延时很低，应用程序线程挂起时间很短，避免用户感到焦虑。在该模式中,GC假定机器上运行的其他应用程序都不会消耗太多的CPU资源。</p>
-<p>###服务器<br> 该模式针对服务器端应用程序优化GC。被优化的主要是吞吐量和资源利用。GC假定机器上没有运行其他应用程序（无论客户端还是服务器应用程序），并假定机器的所有CPU都可以用来辅助完成GC。该模式造成托管堆被拆分成几个区域，每个CPU一个。开始垃圾回收时，垃圾回收器在每个CPU上运行一个特殊线程；每个线程都和其他线程并发回收它自己的区域。对于工作者线程行为一致的服务器应用程序，并发回收能很好进行。这个功能要求应用程序在多CPU计算机上运行，是线程能真正同时工作，从而得到性能上的提升。</p>
-<p>应用程序默认以“工作站”GC模式运行。寄宿了CLR的服务器应用程序（如ASP.NET ）可请求CLR加载服务器 GC.但如果应用程序在单处理器计算机上运行，CLR总是使用“工作站”GC模式。</p>
-<p>独立应用程序可以创建一个配置文件告诉CLR 使用CLR使用服务器回收器。配置文件要为应用程序添加gcServer元素。下面是一个示例配置文件：</p>
-<p><configuration><br>       <runtime><br>             <gcserver enabled="true"><br>      </gcserver></runtime><br></configuration><br>可以使用GCSettings类的只读Boolean属性IsServerGC得到CLR是否处于“服务器”GC模式。</p>
-<p>除了这两种模式，GC还支持两种子模式：并发(默认)或者非并发。<br>在并发方式中，垃圾回收器有一个额外的后台线程，它能在应用程序运行时并发标记对象。 程序运行时，垃圾回收器运行一个普通优先级的后台线程来查找不可达对象。找到之后，垃圾回收器再次挂起所以线程，判断是否要“压缩”内存。如决定压缩，内存会被压缩，根引用会被修正，应用程序线程恢复运行。这一次垃圾回收花费的时间比平常少，因为不可达对象集合已构造好了。但垃圾回收器也可能决定不压缩内存；事实上，垃圾回收器更倾向不压缩。可用内存多，垃圾回收器便不会压缩堆；这有利于增强性能，但会增大程序的工作集。使用并发垃圾回收器，应用程序消耗的内存通常比使用非并发垃圾回收器多。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;##大对象&lt;br&gt; CLR将对象分成大对象和小对象。目前认为85000字节或者更大的对象是大对象。CLR以不同方式对待大小对象。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;大对象不是在小对象的地址空间分配的，而是在进程地址空间的其他地方分配。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;目前版
     
     </summary>
     
